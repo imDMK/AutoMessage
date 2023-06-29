@@ -1,0 +1,27 @@
+package me.dmk.automessage.command.handler;
+
+import dev.rollczi.litecommands.command.LiteInvocation;
+import dev.rollczi.litecommands.handle.Handler;
+import me.dmk.automessage.notification.Notification;
+import me.dmk.automessage.notification.NotificationSender;
+import org.bukkit.command.CommandSender;
+import org.bukkit.entity.Player;
+
+public class NotificationHandler implements Handler<CommandSender, Notification> {
+
+    private final NotificationSender notificationSender;
+
+    public NotificationHandler(NotificationSender notificationSender) {
+        this.notificationSender = notificationSender;
+    }
+
+    @Override
+    public void handle(CommandSender sender, LiteInvocation invocation, Notification notification) {
+        if (sender instanceof Player player) {
+            this.notificationSender.sendMessage(player, notification);
+        }
+        else {
+            sender.sendMessage(notification.getMessage());
+        }
+    }
+}
