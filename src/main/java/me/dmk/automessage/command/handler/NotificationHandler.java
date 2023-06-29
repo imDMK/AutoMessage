@@ -17,11 +17,6 @@ public class NotificationHandler implements Handler<CommandSender, Notification>
 
     @Override
     public void handle(CommandSender sender, LiteInvocation invocation, Notification notification) {
-        if (sender instanceof Player player) {
-            this.notificationSender.sendMessage(player, notification);
-        }
-        else {
-            sender.sendMessage(notification.getMessage());
-        }
+        this.notificationSender.sendMessage(sender, notification);
     }
 }
