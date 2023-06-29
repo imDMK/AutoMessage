@@ -75,6 +75,7 @@ public class AutoMessageCommand {
         }
     }
 
+    @Async
     @Execute(route = "remove-notification")
     void removeNotification(Player player, @Arg Notification notification) {
         this.pluginConfiguration.autoMessages.remove(notification);
