@@ -56,7 +56,7 @@ public class AutoMessage extends JavaPlugin {
         this.notificationSender = new NotificationSender(this.bukkitAudiences, MiniMessage.miniMessage());
 
         TaskScheduler taskScheduler = new TaskSchedulerImpl(this, this.getServer());
-        taskScheduler.runTimerAsync(new AutoMessageTask(this.pluginConfiguration, this.bukkitAudiences, this.notificationSender), 0L, DurationUtil.toTicks(this.pluginConfiguration.autoMessagesDelay));
+        taskScheduler.runTimerAsync(new AutoMessageTask(this.pluginConfiguration, this.notificationSender), 0L, DurationUtil.toTicks(this.pluginConfiguration.autoMessagesDelay));
 
         if (this.pluginConfiguration.autoMessageCommandEnabled) {
             this.liteCommands = this.registerLiteCommands();

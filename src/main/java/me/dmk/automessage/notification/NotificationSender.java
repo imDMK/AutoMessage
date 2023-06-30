@@ -22,26 +22,37 @@ public class NotificationSender {
         return new NotificationBuilder(this);
     }
 
-    public void sendMessage(CommandSender sender, Notification notification) {
-        if (sender instanceof Player player) {
-            this.sendMessage(player, notification.getType(), notification.getMessage());
-        }
-        else {
-            sender.sendMessage(notification.getMessage());
-        }
+    public void broadcast(Notification notification) {
+        Audience audience = this.audienceProvider.players();
+
+        NotificationType type = notification.getType();
+        Component message = this.miniMessage.deserialize(notification.getMessage());
+
+        this.sendMessage(audience, type, message);
     }
 
-    public void sendMessage(Player player, NotificationType type, String message) {
+    public void sendMessage(CommandSender sender, Notification notification) {
+        Audience audience = this.createAudience(sender);
+
+        NotificationType type = notification.getType();
+        Component message = this.miniMessage.deserialize(notification.getMessage());
+
+        this.sendMessage(audience, type, message);
+    }
+
+    public void sendMessage(CommandSender sender, NotificationType type, String message) {
+        Audience audience = this.createAudience(sender);
         Component deserializedMessage = this.miniMessage.deserialize(message);
-        Audience audience = this.audienceProvider.player(player.getUniqueId());
 
         this.sendMessage(audience, type, deserializedMessage);
     }
 
-    public void sendMessage(Audience audience, Notification notification) {
-        Component message = this.miniMessage.deserialize(notification.getMessage());
+    public Audience createAudience(CommandSender sender) {
+        if (sender instanceof Player player) {
+            return this.audienceProvider.player(player.getUniqueId());
+        }
 
-        this.sendMessage(audience, notification.getType(), message);
+        return this.audienceProvider.console();
     }
 
     public void sendMessage(Audience audience, NotificationType type, Component message) {
