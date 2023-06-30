@@ -4,8 +4,6 @@ import me.dmk.automessage.configuration.PluginConfiguration;
 import me.dmk.automessage.notification.Notification;
 import me.dmk.automessage.notification.NotificationSender;
 import me.dmk.automessage.util.RandomUtil;
-import net.kyori.adventure.audience.Audience;
-import net.kyori.adventure.platform.AudienceProvider;
 
 import java.util.List;
 import java.util.Optional;
@@ -14,15 +12,12 @@ import java.util.concurrent.atomic.AtomicInteger;
 public class AutoMessageTask implements Runnable {
 
     private final PluginConfiguration pluginConfiguration;
-
-    private final AudienceProvider audienceProvider;
     private final NotificationSender notificationSender;
 
     private final AtomicInteger position = new AtomicInteger(0);
 
-    public AutoMessageTask(PluginConfiguration pluginConfiguration, AudienceProvider audienceProvider, NotificationSender notificationSender) {
+    public AutoMessageTask(PluginConfiguration pluginConfiguration, NotificationSender notificationSender) {
         this.pluginConfiguration = pluginConfiguration;
-        this.audienceProvider = audienceProvider;
         this.notificationSender = notificationSender;
     }
 
@@ -42,9 +37,7 @@ public class AutoMessageTask implements Runnable {
         }
 
         Notification selectedNotification = selectedNotificationOptional.get();
-        Audience audience = this.audienceProvider.players();
-
-        this.notificationSender.sendMessage(audience, selectedNotification);
+        this.notificationSender.broadcast(selectedNotification);
     }
 
     private Optional<Notification> selectNotification() {

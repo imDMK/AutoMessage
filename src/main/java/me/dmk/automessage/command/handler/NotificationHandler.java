@@ -5,7 +5,6 @@ import dev.rollczi.litecommands.handle.Handler;
 import me.dmk.automessage.notification.Notification;
 import me.dmk.automessage.notification.NotificationSender;
 import org.bukkit.command.CommandSender;
-import org.bukkit.entity.Player;
 
 public class NotificationHandler implements Handler<CommandSender, Notification> {
 
