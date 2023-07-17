@@ -31,13 +31,7 @@ public class AutoMessageTask implements Runnable {
             return;
         }
 
-        Optional<Notification> selectedNotificationOptional = this.selectNotification();
-        if (selectedNotificationOptional.isEmpty()) {
-            return;
-        }
-
-        Notification selectedNotification = selectedNotificationOptional.get();
-        this.notificationSender.broadcast(selectedNotification);
+        this.selectNotification().ifPresent(this.notificationSender::broadcast);
     }
 
     private Optional<Notification> selectNotification() {
@@ -52,11 +46,11 @@ public class AutoMessageTask implements Runnable {
     }
 
     private Optional<Notification> selectNextNotification() {
-        List<Notification> notifications = this.pluginConfiguration.autoMessages;
+        List<Notification> autoMessages = this.pluginConfiguration.autoMessages;
 
-        int position = this.position.getAndIncrement() % notifications.size();
+        int position = this.position.getAndIncrement() % autoMessages.size();
 
-        return notifications.stream()
+        return autoMessages.stream()
                 .skip(position)
                 .findFirst();
     }
