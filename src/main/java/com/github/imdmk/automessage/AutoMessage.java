@@ -32,10 +32,12 @@ import eu.okaeri.configs.ConfigManager;
 import eu.okaeri.configs.serdes.commons.SerdesCommons;
 import eu.okaeri.configs.yaml.bukkit.YamlBukkitConfigurer;
 import net.kyori.adventure.platform.bukkit.BukkitAudiences;
+import org.bstats.bukkit.Metrics;
 import org.bukkit.Server;
 import org.bukkit.command.CommandSender;
 import org.bukkit.entity.Player;
 import org.bukkit.plugin.Plugin;
+import org.bukkit.plugin.java.JavaPlugin;
 
 import java.io.File;
 import java.time.Duration;
@@ -56,6 +58,8 @@ public class AutoMessage  {
     private final TaskScheduler taskScheduler;
 
     private LiteCommands<CommandSender> liteCommands;
+
+    private final Metrics metrics;
 
     public AutoMessage(Plugin plugin) {
         Stopwatch stopwatch = Stopwatch.createStarted();
@@ -90,6 +94,9 @@ public class AutoMessage  {
             this.taskScheduler.runLaterAsync(updateService::check, DurationUtil.toTicks(Duration.ofSeconds(3)));
         }
 
+        /* Metrics */
+        this.metrics = new Metrics((JavaPlugin) plugin, 19487);
+
         logger.info("Enabled plugin in " + stopwatch.stop().elapsed(TimeUnit.MILLISECONDS) + "ms.");
     }
 
@@ -99,6 +106,8 @@ public class AutoMessage  {
         if (this.liteCommands != null) {
             this.liteCommands.getPlatform().unregisterAll();
         }
+
+        this.metrics.shutdown();
     }
 
     private PluginConfiguration createConfiguration(File dataFolder) {
