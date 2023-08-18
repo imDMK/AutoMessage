@@ -9,6 +9,7 @@ import com.github.imdmk.automessage.notification.implementation.ChatNotification
 import com.github.imdmk.automessage.notification.implementation.TitleNotification;
 import com.github.imdmk.automessage.notification.implementation.bossbar.BossBarNotification;
 import dev.rollczi.litecommands.argument.Arg;
+import dev.rollczi.litecommands.argument.By;
 import dev.rollczi.litecommands.argument.Name;
 import dev.rollczi.litecommands.argument.joiner.Joiner;
 import dev.rollczi.litecommands.command.execute.Execute;
@@ -17,7 +18,6 @@ import net.kyori.adventure.bossbar.BossBar;
 import org.bukkit.command.CommandSender;
 
 import java.time.Duration;
-import java.util.Arrays;
 
 @Route(name = "automessage create")
 public class AutoMessageCreateCommand {
@@ -50,13 +50,9 @@ public class AutoMessageCreateCommand {
 
     @Execute(route = "TITLE")
     void createTitle(CommandSender sender, @Joiner @Name("message") String message) {
-        System.out.println(message);
-
         String[] splitMessage = message.split("\\|");
 
-        System.out.println(Arrays.toString(splitMessage));
-
-        if (splitMessage[0] == null || splitMessage[1] == null) {
+        if (splitMessage.length < 2) {
             this.notificationSender.sendNotification(sender, this.notificationConfiguration.invalidTitleMessageNotification);
             return;
         }
@@ -69,8 +65,8 @@ public class AutoMessageCreateCommand {
     }
 
     @Execute(route = "BOSSBAR")
-    void createBossBar(CommandSender sender, @Arg @Name("time") Duration time, @Arg @Name("progress") float progress, @Arg @Name("color") BossBar.Color color, @Arg @Name("overlay") BossBar.Overlay overlay, @Joiner @Name("name") String name) {
-        BossBarNotification bossBarNotification = new BossBarNotification(name, time, progress, color, overlay);
+    void createBossBar(CommandSender sender, @Arg @Name("time") Duration time, @Arg @By("bossBarProgress") @Name("progress") float progress, @Arg @Name("timeChangesProgress") boolean timeChangesProgress, @Arg @Name("color") BossBar.Color color, @Arg @Name("overlay") BossBar.Overlay overlay, @Joiner @Name("name") String name) {
+        BossBarNotification bossBarNotification = new BossBarNotification(name, time, progress, timeChangesProgress, color, overlay);
 
         this.notificationConfiguration.autoMessages.add(bossBarNotification);
 

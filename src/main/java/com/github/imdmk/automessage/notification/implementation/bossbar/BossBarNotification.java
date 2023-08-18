@@ -8,7 +8,7 @@ import net.kyori.adventure.bossbar.BossBar;
 
 import java.time.Duration;
 
-public record BossBarNotification(String name, Duration time, float progress, BossBar.Color color,
+public record BossBarNotification(String name, Duration time, float progress, boolean timeChangesProgress, BossBar.Color color,
                                   BossBar.Overlay overlay) implements Notification {
 
     public BossBar create() {
@@ -23,9 +23,10 @@ public record BossBarNotification(String name, Duration time, float progress, Bo
     @Override
     public String format() {
         return this.type().name()
-                + ", message: " + this.name
-                + ", name: " + DurationUtil.toHumanReadable(this.time)
+                + ", name: " + this.name
+                + ", time: " + DurationUtil.toHumanReadable(this.time)
                 + ", progress: " + this.progress
+                + ", timeChangesProgress: " + this.timeChangesProgress
                 + ", color: " + this.color.name().toUpperCase()
                 + ", overlay: " + this.overlay.name().toUpperCase();
     }

@@ -3,6 +3,8 @@ package com.github.imdmk.automessage.notification;
 import com.github.imdmk.automessage.notification.implementation.ActionBarNotification;
 import com.github.imdmk.automessage.notification.implementation.ChatNotification;
 import com.github.imdmk.automessage.notification.implementation.TitleNotification;
+import com.github.imdmk.automessage.notification.implementation.bossbar.BossBarAudience;
+import com.github.imdmk.automessage.notification.implementation.bossbar.BossBarAudienceManager;
 import com.github.imdmk.automessage.notification.implementation.bossbar.BossBarNotification;
 import net.kyori.adventure.audience.Audience;
 import net.kyori.adventure.bossbar.BossBar;
@@ -13,14 +15,18 @@ import net.kyori.adventure.title.Title;
 import org.bukkit.command.CommandSender;
 import org.bukkit.entity.Player;
 
+import java.time.Instant;
+
 public class NotificationSender {
 
     private final AudienceProvider audienceProvider;
     private final MiniMessage miniMessage;
+    private final BossBarAudienceManager bossBarAudienceManager;
 
-    public NotificationSender(AudienceProvider audienceProvider) {
+    public NotificationSender(AudienceProvider audienceProvider, BossBarAudienceManager bossBarAudienceManager) {
         this.audienceProvider = audienceProvider;
         this.miniMessage = MiniMessage.miniMessage();
+        this.bossBarAudienceManager = bossBarAudienceManager;
     }
 
     public void broadcast(Notification notification) {
@@ -63,10 +69,18 @@ public class NotificationSender {
 
             case BOSSBAR -> {
                 BossBarNotification bossBarNotification = (BossBarNotification) notification;
-
                 BossBar bossBar = bossBarNotification.create();
 
                 audience.showBossBar(bossBar);
+
+                BossBarAudience bossBarAudience = new BossBarAudience(
+                        bossBar,
+                        audience,
+                        Instant.now().plus(bossBarNotification.time()),
+                        bossBarNotification.timeChangesProgress()
+                );
+
+                this.bossBarAudienceManager.add(bossBarAudience);
             }
 
             default -> throw new IllegalStateException("Unexpected notification type: " + notification.type());

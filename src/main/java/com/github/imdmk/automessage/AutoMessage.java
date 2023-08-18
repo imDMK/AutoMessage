@@ -4,6 +4,7 @@ import com.github.imdmk.automessage.command.AutoMessageCommand;
 import com.github.imdmk.automessage.command.AutoMessageCreateCommand;
 import com.github.imdmk.automessage.command.AutoMessageListCommand;
 import com.github.imdmk.automessage.command.AutoMessageRemoveCommand;
+import com.github.imdmk.automessage.command.argument.BossBarProgressArgument;
 import com.github.imdmk.automessage.command.argument.NotificationArgument;
 import com.github.imdmk.automessage.command.argument.NotificationTypeArgument;
 import com.github.imdmk.automessage.command.handler.MissingPermissionHandler;
@@ -15,7 +16,7 @@ import com.github.imdmk.automessage.notification.Notification;
 import com.github.imdmk.automessage.notification.NotificationSender;
 import com.github.imdmk.automessage.notification.NotificationType;
 import com.github.imdmk.automessage.notification.configuration.NotificationSerializer;
-import com.github.imdmk.automessage.notification.implementation.bossbar.BossBarManager;
+import com.github.imdmk.automessage.notification.implementation.bossbar.BossBarAudienceManager;
 import com.github.imdmk.automessage.notification.implementation.bossbar.BossBarTask;
 import com.github.imdmk.automessage.notification.task.AutoNotificationTask;
 import com.github.imdmk.automessage.scheduler.TaskScheduler;
@@ -45,10 +46,10 @@ public class AutoMessage  {
 
     private final PluginConfiguration pluginConfiguration;
 
+    private final BossBarAudienceManager bossBarAudienceManager;
+
     private final BukkitAudiences bukkitAudiences;
     private final NotificationSender notificationSender;
-
-    private final BossBarManager bossBarManager;
 
     private final TaskScheduler taskScheduler;
 
@@ -63,19 +64,18 @@ public class AutoMessage  {
         /* Configuration */
         this.pluginConfiguration = this.createConfiguration(plugin.getDataFolder());
 
+        /* Managers */
+        this.bossBarAudienceManager = new BossBarAudienceManager();
+
         /* Adventure */
         this.bukkitAudiences = BukkitAudiences.create(plugin);
-        this.notificationSender = new NotificationSender(this.bukkitAudiences);
-
-        /* Managers */
-        this.bossBarManager = new BossBarManager();
+        this.notificationSender = new NotificationSender(this.bukkitAudiences, this.bossBarAudienceManager);
 
         /* Tasks */
         this.taskScheduler = new TaskSchedulerImpl(plugin, this.server);
 
-        long delay = DurationUtil.toTicks(this.pluginConfiguration.notificationConfiguration.autoMessagesDelay);
-        this.taskScheduler.runTimerAsync(new AutoNotificationTask(this.pluginConfiguration.notificationConfiguration, this.notificationSender), delay, delay);
-        this.taskScheduler.runTimerAsync(new BossBarTask(this.bukkitAudiences, this.bossBarManager), 0L, DurationUtil.toTicks(Duration.ofSeconds(1)));
+        this.taskScheduler.runTimerAsync(new AutoNotificationTask(this.pluginConfiguration.notificationConfiguration, this.notificationSender), 10L, DurationUtil.toTicks(this.pluginConfiguration.notificationConfiguration.autoMessagesDelay));
+        this.taskScheduler.runTimerAsync(new BossBarTask(this.bossBarAudienceManager), 0L, DurationUtil.toTicks(Duration.ofSeconds(1)));
 
         /* Commands */
         if (this.pluginConfiguration.autoMessageCommandEnabled) {
@@ -113,6 +113,7 @@ public class AutoMessage  {
         return LiteBukkitAdventurePlatformFactory.builder(this.server, "AutoMessage", false, this.bukkitAudiences, true)
                 .contextualBind(Player.class, new BukkitOnlyPlayerContextual<>("Command only for player"))
 
+                .argument(float.class, "bossBarProgress", new BossBarProgressArgument(this.pluginConfiguration.notificationConfiguration))
                 .argument(NotificationType.class, new NotificationTypeArgument(this.pluginConfiguration.notificationConfiguration))
                 .argument(Notification.class, new NotificationArgument(this.pluginConfiguration.notificationConfiguration))
 

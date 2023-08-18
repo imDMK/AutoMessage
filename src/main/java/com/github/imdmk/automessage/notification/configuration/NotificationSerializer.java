@@ -59,6 +59,7 @@ public class NotificationSerializer implements ObjectSerializer<Notification> {
                 data.add("name", bossBarNotification.name(), String.class);
                 data.add("time", bossBarNotification.time(), Duration.class);
                 data.add("progress", bossBarNotification.progress(), float.class);
+                data.add("timeChangesProgress", bossBarNotification.timeChangesProgress(), boolean.class);
                 data.add("color", bossBarNotification.color(), BossBar.Color.class);
                 data.add("overlay", bossBarNotification.overlay(), BossBar.Overlay.class);
             }
@@ -101,10 +102,11 @@ public class NotificationSerializer implements ObjectSerializer<Notification> {
                 String name = data.get("name", String.class);
                 Duration time = data.get("time", Duration.class);
                 float progress = data.get("progress", float.class);
+                boolean timeChangesProgress = data.get("timeChangesProgress", boolean.class);
                 BossBar.Color color = data.get("color", BossBar.Color.class);
                 BossBar.Overlay overlay =  data.get("overlay", BossBar.Overlay.class);
 
-                return new BossBarNotification(name, time, progress, color, overlay);
+                return new BossBarNotification(name, time, progress, timeChangesProgress, color, overlay);
             }
 
             case DISABLED -> {
