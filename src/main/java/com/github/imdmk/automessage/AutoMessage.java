@@ -1,6 +1,7 @@
 package com.github.imdmk.automessage;
 
 import com.github.imdmk.automessage.command.AutoMessageCommand;
+import com.github.imdmk.automessage.command.AutoMessageCommandEditor;
 import com.github.imdmk.automessage.command.AutoMessageCreateCommand;
 import com.github.imdmk.automessage.command.AutoMessageListCommand;
 import com.github.imdmk.automessage.command.AutoMessageRemoveCommand;
@@ -132,6 +133,8 @@ public class AutoMessage  {
                         new AutoMessageListCommand(this.pluginConfiguration.notificationConfiguration, this.notificationSender),
                         new AutoMessageRemoveCommand(this.pluginConfiguration.notificationConfiguration, this.notificationSender)
                 )
+
+                .commandEditor("automessage", new AutoMessageCommandEditor(this.pluginConfiguration))
 
                 .register();
     }
