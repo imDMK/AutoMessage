@@ -21,6 +21,7 @@ import com.github.imdmk.automessage.notification.implementation.bossbar.audience
 import com.github.imdmk.automessage.notification.task.AutoNotificationTask;
 import com.github.imdmk.automessage.scheduler.TaskScheduler;
 import com.github.imdmk.automessage.scheduler.TaskSchedulerImpl;
+import com.github.imdmk.automessage.update.UpdateService;
 import com.github.imdmk.automessage.util.DurationUtil;
 import com.google.common.base.Stopwatch;
 import dev.rollczi.litecommands.LiteCommands;
@@ -83,6 +84,10 @@ public class AutoMessage  {
         }
 
         /* Update service */
+        if (this.pluginConfiguration.checkForUpdate) {
+            UpdateService updateService = new UpdateService(plugin.getDescription(), logger);
+            this.taskScheduler.runLaterAsync(updateService::check, DurationUtil.toTicks(Duration.ofSeconds(3)));
+        }
 
         logger.info("Enabled plugin in " + stopwatch.stop().elapsed(TimeUnit.MILLISECONDS) + "ms.");
     }
