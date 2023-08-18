@@ -1,4 +1,4 @@
-package com.github.imdmk.automessage.notification.implementation.bossbar;
+package com.github.imdmk.automessage.notification.implementation.bossbar.audience;
 
 import net.kyori.adventure.audience.Audience;
 import net.kyori.adventure.bossbar.BossBar;

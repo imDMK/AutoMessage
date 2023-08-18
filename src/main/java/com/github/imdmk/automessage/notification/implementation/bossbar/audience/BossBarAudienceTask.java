@@ -1,4 +1,4 @@
-package com.github.imdmk.automessage.notification.implementation.bossbar;
+package com.github.imdmk.automessage.notification.implementation.bossbar.audience;
 
 import net.kyori.adventure.audience.Audience;
 import net.kyori.adventure.bossbar.BossBar;
@@ -6,17 +6,17 @@ import net.kyori.adventure.bossbar.BossBar;
 import java.time.Duration;
 import java.time.Instant;
 
-public class BossBarTask implements Runnable {
+public class BossBarAudienceTask implements Runnable {
 
     private final BossBarAudienceManager bossBarAudienceManager;
 
-    public BossBarTask(BossBarAudienceManager bossBarAudienceManager) {
+    public BossBarAudienceTask(BossBarAudienceManager bossBarAudienceManager) {
         this.bossBarAudienceManager = bossBarAudienceManager;
     }
 
     @Override
     public void run() {
-        for (BossBarAudience bossBarAudience : this.bossBarAudienceManager.getBossBars()) {
+        for (BossBarAudience bossBarAudience : this.bossBarAudienceManager.getBossBarAudiences()) {
             Audience audience = bossBarAudience.audience();
             BossBar bossBar = bossBarAudience.bossBar();
 
