@@ -31,7 +31,9 @@ public class AutoMessageListCommand {
             return;
         }
 
-        AtomicInteger position = new AtomicInteger(1);
+        this.notificationSender.sendNotification(sender, this.notificationConfiguration.autoMessagesListFirstNotification);
+
+        AtomicInteger position = new AtomicInteger(0);
 
         for (Notification notification : autoMessages) {
             position.incrementAndGet();

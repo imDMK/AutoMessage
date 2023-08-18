@@ -10,7 +10,6 @@ import eu.okaeri.configs.annotation.Comment;
 import net.kyori.adventure.bossbar.BossBar;
 
 import java.time.Duration;
-import java.util.ArrayList;
 import java.util.List;
 
 public class NotificationConfiguration extends OkaeriConfig {
@@ -39,12 +38,12 @@ public class NotificationConfiguration extends OkaeriConfig {
             "# Automatic message list",
             "# If you have trouble configuring the messages, please refer to the project's github."
     })
-    public List<Notification> autoMessages = new ArrayList<>(List.of(
+    public List<Notification> autoMessages = List.of(
             new ChatNotification("<red>This is first message"),
             new ActionBarNotification("<yellow>This is second message"),
             new TitleNotification("<yellow>Third message", "<red>This is third message"),
-            new BossBarNotification("<red>Fourth message announcement!", Duration.ofSeconds(5), BossBar.MAX_PROGRESS, BossBar.Color.RED, BossBar.Overlay.PROGRESS)
-    ));
+            new BossBarNotification("<red>Fourth message announcement!", Duration.ofSeconds(5), BossBar.MAX_PROGRESS, true, BossBar.Color.RED, BossBar.Overlay.PROGRESS)
+    );
 
     @Comment("# Command notifications")
     public Notification autoMessagesEnabledNotification = new ChatNotification("<green>Enabled automatic messages<dark_gray>.");
