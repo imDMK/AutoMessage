@@ -74,7 +74,7 @@ public class NotificationConfiguration extends OkaeriConfig {
     public Notification invalidUsageNotification = new ChatNotification("<red>Invalid usage<dark_gray>: <red>{USAGE}");
     @Comment("# This notifications are used when there is more than one option to use a command")
     public Notification invalidUsageFirstNotification = new ChatNotification("<red>Invalid usage<dark_gray>:");
-    public ChatNotification invalidUsageListNotification = new ChatNotification("<dark_gray>- <red>{USAGE}");
+    public Notification invalidUsageListNotification = new ChatNotification("<dark_gray>- <red>{USAGE}");
 
     public Notification invalidNumberNotification = new ChatNotification("<red>Invalid number<dark_gray>.");
     public Notification invalidTypeNotification = new ChatNotification("<red>Invalid notification type<dark_gray>.");
