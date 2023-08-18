@@ -16,8 +16,8 @@ import com.github.imdmk.automessage.notification.Notification;
 import com.github.imdmk.automessage.notification.NotificationSender;
 import com.github.imdmk.automessage.notification.NotificationType;
 import com.github.imdmk.automessage.notification.configuration.NotificationSerializer;
-import com.github.imdmk.automessage.notification.implementation.bossbar.BossBarAudienceManager;
-import com.github.imdmk.automessage.notification.implementation.bossbar.BossBarTask;
+import com.github.imdmk.automessage.notification.implementation.bossbar.audience.BossBarAudienceManager;
+import com.github.imdmk.automessage.notification.implementation.bossbar.audience.BossBarAudienceTask;
 import com.github.imdmk.automessage.notification.task.AutoNotificationTask;
 import com.github.imdmk.automessage.scheduler.TaskScheduler;
 import com.github.imdmk.automessage.scheduler.TaskSchedulerImpl;
@@ -75,7 +75,7 @@ public class AutoMessage  {
         this.taskScheduler = new TaskSchedulerImpl(plugin, this.server);
 
         this.taskScheduler.runTimerAsync(new AutoNotificationTask(this.pluginConfiguration.notificationConfiguration, this.notificationSender), 10L, DurationUtil.toTicks(this.pluginConfiguration.notificationConfiguration.autoMessagesDelay));
-        this.taskScheduler.runTimerAsync(new BossBarTask(this.bossBarAudienceManager), 0L, DurationUtil.toTicks(Duration.ofSeconds(1)));
+        this.taskScheduler.runTimerAsync(new BossBarAudienceTask(this.bossBarAudienceManager), 0L, DurationUtil.toTicks(Duration.ofSeconds(1)));
 
         /* Commands */
         if (this.pluginConfiguration.autoMessageCommandEnabled) {
