@@ -81,7 +81,7 @@ public class NotificationFormatter {
 
                 String name = this.replacePlaceholders(bossBarNotification.name());
 
-                yield new BossBarNotification(name, bossBarNotification.time(), bossBarNotification.progress(), bossBarNotification.color(), bossBarNotification.overlay());
+                yield new BossBarNotification(name, bossBarNotification.time(), bossBarNotification.progress(), bossBarNotification.timeChangesProgress(), bossBarNotification.color(), bossBarNotification.overlay());
             }
 
             case DISABLED -> new DisabledNotification();
