@@ -1,5 +1,6 @@
 package com.github.imdmk.automessage.command;
 
+import com.github.imdmk.automessage.configuration.PluginConfiguration;
 import com.github.imdmk.automessage.notification.Notification;
 import com.github.imdmk.automessage.notification.NotificationFormatter;
 import com.github.imdmk.automessage.notification.NotificationSender;
@@ -22,10 +23,12 @@ import java.time.Duration;
 @Route(name = "automessage create")
 public class AutoMessageCreateCommand {
 
+    private final PluginConfiguration pluginConfiguration;
     private final NotificationConfiguration notificationConfiguration;
     private final NotificationSender notificationSender;
 
-    public AutoMessageCreateCommand(NotificationConfiguration notificationConfiguration, NotificationSender notificationSender) {
+    public AutoMessageCreateCommand(PluginConfiguration pluginConfiguration, NotificationConfiguration notificationConfiguration, NotificationSender notificationSender) {
+        this.pluginConfiguration = pluginConfiguration;
         this.notificationConfiguration = notificationConfiguration;
         this.notificationSender = notificationSender;
     }
@@ -71,6 +74,7 @@ public class AutoMessageCreateCommand {
 
     private void addAutoNotification(Notification notification) {
         this.notificationConfiguration.autoMessages.add(notification);
+        this.pluginConfiguration.save();
     }
 
     private void sendAddedNotification(CommandSender sender, Notification addedNotification) {

@@ -1,5 +1,6 @@
 package com.github.imdmk.automessage.command;
 
+import com.github.imdmk.automessage.configuration.PluginConfiguration;
 import com.github.imdmk.automessage.notification.Notification;
 import com.github.imdmk.automessage.notification.NotificationSender;
 import com.github.imdmk.automessage.notification.configuration.NotificationConfiguration;
@@ -11,10 +12,12 @@ import org.bukkit.command.CommandSender;
 @Route(name = "automessage")
 public class AutoMessageRemoveCommand {
 
+    private final PluginConfiguration pluginConfiguration;
     private final NotificationConfiguration notificationConfiguration;
     private final NotificationSender notificationSender;
 
-    public AutoMessageRemoveCommand(NotificationConfiguration notificationConfiguration, NotificationSender notificationSender) {
+    public AutoMessageRemoveCommand(PluginConfiguration pluginConfiguration, NotificationConfiguration notificationConfiguration, NotificationSender notificationSender) {
+        this.pluginConfiguration = pluginConfiguration;
         this.notificationConfiguration = notificationConfiguration;
         this.notificationSender = notificationSender;
     }
@@ -22,6 +25,7 @@ public class AutoMessageRemoveCommand {
     @Execute(route = "remove")
     void remove(CommandSender sender, @Arg Notification notification) {
         this.notificationConfiguration.autoMessages.remove(notification);
+        this.pluginConfiguration.save();
 
         this.notificationSender.sendNotification(sender, this.notificationConfiguration.autoMessageRemovedNotification);
     }
