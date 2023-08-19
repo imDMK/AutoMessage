@@ -138,9 +138,9 @@ public class AutoMessage  {
 
                 .commandInstance(
                         new AutoMessageCommand(this.pluginConfiguration.notificationConfiguration, this.notificationSender),
-                        new AutoMessageCreateCommand(this.pluginConfiguration.notificationConfiguration, this.notificationSender),
+                        new AutoMessageCreateCommand(this.pluginConfiguration, this.pluginConfiguration.notificationConfiguration, this.notificationSender),
                         new AutoMessageListCommand(this.pluginConfiguration.notificationConfiguration, this.notificationSender),
-                        new AutoMessageRemoveCommand(this.pluginConfiguration.notificationConfiguration, this.notificationSender)
+                        new AutoMessageRemoveCommand(this.pluginConfiguration, this.pluginConfiguration.notificationConfiguration, this.notificationSender)
                 )
 
                 .commandEditor("automessage", new AutoMessageCommandEditor(this.pluginConfiguration))
