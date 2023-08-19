@@ -34,18 +34,16 @@ public class AutoMessageCreateCommand {
     void createChat(CommandSender sender, @Joiner  @Name("message") String message) {
         ChatNotification chatNotification = new ChatNotification(message);
 
-        this.notificationConfiguration.autoMessages.add(chatNotification);
-
-        this.notificationSender.sendNotification(sender, this.createAddedNotification(chatNotification));
+        this.addAutoNotification(chatNotification);
+        this.sendAddedNotification(sender, chatNotification);
     }
 
     @Execute(route = "ACTIONBAR")
     void createActionbar(CommandSender sender, @Joiner @Name("message") String message) {
         ActionBarNotification actionBarNotification = new ActionBarNotification(message);
 
-        this.notificationConfiguration.autoMessages.add(actionBarNotification);
-
-        this.notificationSender.sendNotification(sender, this.createAddedNotification(actionBarNotification));
+        this.addAutoNotification(actionBarNotification);
+        this.sendAddedNotification(sender, actionBarNotification);
     }
 
     @Execute(route = "TITLE")
@@ -59,24 +57,28 @@ public class AutoMessageCreateCommand {
 
         TitleNotification titleNotification = new TitleNotification(splitMessage[0], splitMessage[1]);
 
-        this.notificationConfiguration.autoMessages.add(titleNotification);
-
-        this.notificationSender.sendNotification(sender, this.createAddedNotification(titleNotification));
+        this.addAutoNotification(titleNotification);
+        this.sendAddedNotification(sender, titleNotification);
     }
 
     @Execute(route = "BOSSBAR")
     void createBossBar(CommandSender sender, @Arg @Name("time") Duration time, @Arg @By("bossBarProgress") @Name("progress") float progress, @Arg @Name("timeChangesProgress") boolean timeChangesProgress, @Arg @Name("color") BossBar.Color color, @Arg @Name("overlay") BossBar.Overlay overlay, @Joiner @Name("name") String name) {
         BossBarNotification bossBarNotification = new BossBarNotification(name, time, progress, timeChangesProgress, color, overlay);
 
-        this.notificationConfiguration.autoMessages.add(bossBarNotification);
-
-        this.notificationSender.sendNotification(sender, this.createAddedNotification(bossBarNotification));
+        this.addAutoNotification(bossBarNotification);
+        this.sendAddedNotification(sender, bossBarNotification);
     }
 
-    private Notification createAddedNotification(Notification notification) {
-        return new NotificationFormatter(this.notificationConfiguration.autoMessageAddedNotification)
-                .placeholder("{TYPE}", notification.type().name().toUpperCase())
-                .placeholder("{POSITION}", this.notificationConfiguration.autoMessages.size() + 1)
+    private void addAutoNotification(Notification notification) {
+        this.notificationConfiguration.autoMessages.add(notification);
+    }
+
+    private void sendAddedNotification(CommandSender sender, Notification addedNotification) {
+        Notification notification = new NotificationFormatter(this.notificationConfiguration.autoMessageAddedNotification)
+                .placeholder("{TYPE}", addedNotification.type().name().toUpperCase())
+                .placeholder("{POSITION}", this.notificationConfiguration.autoMessages.size())
                 .build();
+
+        this.notificationSender.sendNotification(sender, notification);
     }
 }
