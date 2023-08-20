@@ -10,6 +10,7 @@ import eu.okaeri.configs.annotation.Comment;
 import net.kyori.adventure.bossbar.BossBar;
 
 import java.time.Duration;
+import java.util.Arrays;
 import java.util.List;
 
 public class NotificationConfiguration extends OkaeriConfig {
@@ -38,7 +39,7 @@ public class NotificationConfiguration extends OkaeriConfig {
             "# Automatic message list",
             "# If you have trouble configuring the messages, please refer to the project's github."
     })
-    public List<Notification> autoMessages = List.of(
+    public List<Notification> autoMessages = Arrays.asList(
             new ChatNotification("<red>This is first message"),
             new ActionBarNotification("<yellow>This is second message"),
             new TitleNotification("<yellow>Third message", "<red>This is third message"),
@@ -55,14 +56,18 @@ public class NotificationConfiguration extends OkaeriConfig {
     public Notification autoMessageAddedNotification = new ChatNotification("<green>Added new automatic message with type {TYPE} at position {POSITION}<dark_gray>.");
     public Notification autoMessageRemovedNotification = new ChatNotification("<red>Removed automatic message<dark_gray>.");
 
-    public Notification autoMessagesListFirstNotification = new ChatNotification("<gray>List of automatic messages<dark_gray>:");
+    @Comment({
+            "# Format notification information in hovers?",
+            "# More info at: https://docs.advntr.dev/minimessage/format.html#hover"
+    })
+    public boolean autoMessagesListUseHover = true;
 
+    public Notification autoMessagesListFirstNotification = new ChatNotification("<gray>List of automatic messages<dark_gray>:");
     @Comment({
             "# {POSITION} - Position of automatic message",
-            "# {TYPE} - The notification type of automatic message",
-            "# {MESSAGE} - The content of automatic message"
+            "# {NOTIFICATION} - Notification information"
     })
-    public Notification autoMessagesListNotification = new ChatNotification("<gray>{POSITION}<dark_gray>. <dark_gray>: <gray>{NOTIFICATION}");
+    public Notification autoMessagesListNotification = new ChatNotification("<gray>{POSITION}<dark_gray>. <red>{NOTIFICATION}");
 
     public Notification autoMessagesEmptyNotification = new ChatNotification("<red>Automatic messages is empty<dark_gray>.");
 
