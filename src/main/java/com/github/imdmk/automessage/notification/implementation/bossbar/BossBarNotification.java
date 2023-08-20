@@ -4,7 +4,9 @@ import com.github.imdmk.automessage.notification.Notification;
 import com.github.imdmk.automessage.notification.NotificationType;
 import com.github.imdmk.automessage.util.ComponentUtil;
 import com.github.imdmk.automessage.util.DurationUtil;
+import com.github.imdmk.automessage.util.StringUtil;
 import net.kyori.adventure.bossbar.BossBar;
+import net.kyori.adventure.text.Component;
 
 import java.time.Duration;
 
@@ -12,7 +14,8 @@ public record BossBarNotification(String name, Duration time, float progress, bo
                                   BossBar.Overlay overlay) implements Notification {
 
     public BossBar create() {
-        return BossBar.bossBar(ComponentUtil.deserialize(this.name), this.progress, this.color, this.overlay);
+        Component name = ComponentUtil.deserialize(this.name);
+        return BossBar.bossBar(name, this.progress, this.color, this.overlay);
     }
 
     @Override
@@ -22,12 +25,17 @@ public record BossBarNotification(String name, Duration time, float progress, bo
 
     @Override
     public String format() {
-        return this.type().name()
-                + ", name: " + this.name
-                + ", time: " + DurationUtil.toHumanReadable(this.time)
-                + ", progress: " + this.progress
-                + ", timeChangesProgress: " + this.timeChangesProgress
-                + ", color: " + this.color.name().toUpperCase()
-                + ", overlay: " + this.overlay.name().toUpperCase();
+        return StringUtil.GRAY_COLOR + this.type().name() + ":"
+                + StringUtil.NEW_LINE + StringUtil.GRAY_COLOR + "name: " + this.name
+                + StringUtil.NEW_LINE + StringUtil.GRAY_COLOR + "time: " + DurationUtil.toHumanReadable(this.time)
+                + StringUtil.NEW_LINE + StringUtil.GRAY_COLOR + "progress: " + this.progress
+                + StringUtil.NEW_LINE + StringUtil.GRAY_COLOR + "timeChangesProgress: " + this.timeChangesProgress
+                + StringUtil.NEW_LINE + StringUtil.GRAY_COLOR + "color: " + this.color.name()
+                + StringUtil.NEW_LINE + StringUtil.GRAY_COLOR + "overlay: " + this.overlay.name();
+    }
+
+    @Override
+    public String formatHover() {
+        return "<hover:show_text:'" +  this.format() + "'>" + this.type().name();
     }
 }

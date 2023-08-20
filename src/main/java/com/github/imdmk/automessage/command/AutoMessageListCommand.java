@@ -7,6 +7,7 @@ import com.github.imdmk.automessage.notification.configuration.NotificationConfi
 import dev.rollczi.litecommands.command.execute.Execute;
 import dev.rollczi.litecommands.command.route.Route;
 import org.bukkit.command.CommandSender;
+import org.bukkit.entity.Player;
 
 import java.util.List;
 import java.util.concurrent.atomic.AtomicInteger;
@@ -33,17 +34,17 @@ public class AutoMessageListCommand {
 
         this.notificationSender.sendNotification(sender, this.notificationConfiguration.autoMessagesListFirstNotification);
 
+        boolean formatHovers = sender instanceof Player && this.notificationConfiguration.autoMessagesListUseHover;
+
         AtomicInteger position = new AtomicInteger(0);
 
         for (Notification notification : autoMessages) {
-            position.incrementAndGet();
-
-            Notification autoMessagesList = new NotificationFormatter(this.notificationConfiguration.autoMessagesListNotification)
-                    .placeholder("{POSITION}", position.get())
-                    .placeholder("{NOTIFICATION}", notification.format())
+            Notification autoMessagesListNotification = new NotificationFormatter(this.notificationConfiguration.autoMessagesListNotification)
+                    .placeholder("{POSITION}", position.getAndIncrement())
+                    .placeholder("{NOTIFICATION}", formatHovers ? notification.formatHover() : notification.format())
                     .build();
 
-            this.notificationSender.sendNotification(sender, autoMessagesList);
+            this.notificationSender.sendNotification(sender, autoMessagesListNotification);
         }
     }
 }

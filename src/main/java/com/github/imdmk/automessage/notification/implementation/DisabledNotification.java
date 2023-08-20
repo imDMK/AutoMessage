@@ -2,6 +2,7 @@ package com.github.imdmk.automessage.notification.implementation;
 
 import com.github.imdmk.automessage.notification.Notification;
 import com.github.imdmk.automessage.notification.NotificationType;
+import com.github.imdmk.automessage.util.StringUtil;
 
 public class DisabledNotification implements Notification {
 
@@ -12,6 +13,11 @@ public class DisabledNotification implements Notification {
 
     @Override
     public String format() {
-        return this.type().name();
+        return StringUtil.GRAY_COLOR + this.type().name();
+    }
+
+    @Override
+    public String formatHover() {
+        return "<hover:show_text:'" +  this.format() + "'>" + this.type().name();
     }
 }
