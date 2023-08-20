@@ -34,7 +34,7 @@ public class AutoMessageCreateCommand {
     }
 
     @Execute(route = "CHAT")
-    void createChat(CommandSender sender, @Joiner  @Name("message") String message) {
+    void createChat(CommandSender sender, @Joiner @Name("message") String message) {
         ChatNotification chatNotification = new ChatNotification(message);
 
         this.addAutoNotification(chatNotification);
@@ -78,11 +78,11 @@ public class AutoMessageCreateCommand {
     }
 
     private void sendAddedNotification(CommandSender sender, Notification addedNotification) {
-        Notification notification = new NotificationFormatter(this.notificationConfiguration.autoMessageAddedNotification)
-                .placeholder("{TYPE}", addedNotification.type().name().toUpperCase())
+        Notification autoMessageAddedNotification = new NotificationFormatter(this.notificationConfiguration.autoMessageAddedNotification)
+                .placeholder("{TYPE}", addedNotification.type().name())
                 .placeholder("{POSITION}", this.notificationConfiguration.autoMessages.size())
                 .build();
 
-        this.notificationSender.sendNotification(sender, notification);
+        this.notificationSender.sendNotification(sender, autoMessageAddedNotification);
     }
 }
