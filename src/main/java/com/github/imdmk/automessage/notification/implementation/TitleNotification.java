@@ -31,9 +31,4 @@ public record TitleNotification(String title, String subtitle, Title.Times times
                 + StringUtil.NEW_LINE + StringUtil.GRAY_COLOR + "title: " + this.title
                 + StringUtil.NEW_LINE + StringUtil.GRAY_COLOR + "subtitle: " + this.subtitle;
     }
-
-    @Override
-    public String formatHover() {
-        return "<hover:show_text:'" +  this.format() + "'>" + this.type().name();
-    }
 }

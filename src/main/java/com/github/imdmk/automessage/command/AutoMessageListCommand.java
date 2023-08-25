@@ -34,17 +34,25 @@ public class AutoMessageListCommand {
 
         this.notificationSender.sendNotification(sender, this.notificationConfiguration.autoMessagesListFirstNotification);
 
-        boolean formatHovers = sender instanceof Player && this.notificationConfiguration.autoMessagesListUseHover;
+        boolean useHovers = sender instanceof Player && this.notificationConfiguration.autoMessagesListUseHover;
 
         AtomicInteger position = new AtomicInteger(0);
 
         for (Notification notification : autoMessages) {
             Notification autoMessagesListNotification = new NotificationFormatter(this.notificationConfiguration.autoMessagesListNotification)
                     .placeholder("{POSITION}", position.getAndIncrement())
-                    .placeholder("{NOTIFICATION}", formatHovers ? notification.formatHover() : notification.format())
+                    .placeholder("{NOTIFICATION}", this.formatNotification(notification, useHovers))
                     .build();
 
             this.notificationSender.sendNotification(sender, autoMessagesListNotification);
         }
+    }
+
+    private String formatNotification(Notification notification, boolean useHover) {
+        return useHover ? this.formatNotificationHover(notification) : notification.format();
+    }
+
+    private String formatNotificationHover(Notification notification) {
+        return "<hover:show_text:'" +  notification.format() + "'>" + notification.type();
     }
 }

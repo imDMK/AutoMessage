@@ -16,9 +16,4 @@ public record ChatNotification(String message) implements Notification {
         return StringUtil.GRAY_COLOR + this.type().name() + ":"
                 + StringUtil.NEW_LINE + StringUtil.GRAY_COLOR + "message: " + this.message;
     }
-
-    @Override
-    public String formatHover() {
-        return "<hover:show_text:'" +  this.format() + "'>" + this.type().name();
-    }
 }

@@ -33,9 +33,4 @@ public record BossBarNotification(String name, Duration time, float progress, bo
                 + StringUtil.NEW_LINE + StringUtil.GRAY_COLOR + "color: " + this.color.name()
                 + StringUtil.NEW_LINE + StringUtil.GRAY_COLOR + "overlay: " + this.overlay.name();
     }
-
-    @Override
-    public String formatHover() {
-        return "<hover:show_text:'" +  this.format() + "'>" + this.type().name();
-    }
 }
