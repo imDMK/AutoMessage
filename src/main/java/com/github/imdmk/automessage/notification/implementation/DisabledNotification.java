@@ -15,9 +15,4 @@ public class DisabledNotification implements Notification {
     public String format() {
         return StringUtil.GRAY_COLOR + this.type().name();
     }
-
-    @Override
-    public String formatHover() {
-        return "<hover:show_text:'" +  this.format() + "'>" + this.type().name();
-    }
 }
