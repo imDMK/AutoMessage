@@ -6,6 +6,7 @@ import com.github.imdmk.automessage.notification.implementation.TitleNotificatio
 import com.github.imdmk.automessage.notification.implementation.bossbar.BossBarNotification;
 import com.github.imdmk.automessage.notification.implementation.bossbar.audience.BossBarAudience;
 import com.github.imdmk.automessage.notification.implementation.bossbar.audience.BossBarAudienceManager;
+import com.github.imdmk.automessage.util.ComponentUtil;
 import net.kyori.adventure.audience.Audience;
 import net.kyori.adventure.bossbar.BossBar;
 import net.kyori.adventure.platform.AudienceProvider;
@@ -20,12 +21,10 @@ import java.time.Instant;
 public class NotificationSender {
 
     private final AudienceProvider audienceProvider;
-    private final MiniMessage miniMessage;
     private final BossBarAudienceManager bossBarAudienceManager;
 
     public NotificationSender(AudienceProvider audienceProvider, BossBarAudienceManager bossBarAudienceManager) {
         this.audienceProvider = audienceProvider;
-        this.miniMessage = MiniMessage.miniMessage();
         this.bossBarAudienceManager = bossBarAudienceManager;
     }
 
@@ -46,7 +45,7 @@ public class NotificationSender {
             case CHAT -> {
                 ChatNotification chatNotification = (ChatNotification) notification;
 
-                Component message = this.miniMessage.deserialize(chatNotification.message());
+                Component message = ComponentUtil.deserialize(chatNotification.message());
 
                 audience.sendMessage(message);
             }
@@ -54,7 +53,7 @@ public class NotificationSender {
             case ACTIONBAR -> {
                 ActionBarNotification actionBarNotification = (ActionBarNotification) notification;
 
-                Component message = this.miniMessage.deserialize(actionBarNotification.message());
+                Component message = ComponentUtil.deserialize(actionBarNotification.message());
 
                 audience.sendActionBar(message);
             }
