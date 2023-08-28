@@ -8,6 +8,7 @@ import java.util.List;
 
 public class ComponentUtil {
 
+    public static final MiniMessage MINI_MESSAGE = MiniMessage.miniMessage();
     public static final CharSequence LEGACY_CHAR = "§";
 
     private ComponentUtil() {
@@ -17,7 +18,7 @@ public class ComponentUtil {
     public static Component deserialize(String text) {
         return text.contains(LEGACY_CHAR)
                 ? LegacyComponentSerializer.legacySection().deserialize(text)
-                : MiniMessage.miniMessage().deserialize(text);
+                : MINI_MESSAGE.deserialize(text);
     }
 
     public static List<Component> deserialize(List<String> strings) {
