@@ -80,7 +80,7 @@ public class AutoMessageCreateCommand {
     private void sendAddedNotification(CommandSender sender, Notification addedNotification) {
         Notification autoMessageAddedNotification = new NotificationFormatter(this.notificationConfiguration.autoMessageAddedNotification)
                 .placeholder("{TYPE}", addedNotification.type().name())
-                .placeholder("{POSITION}", this.notificationConfiguration.autoMessages.size())
+                .placeholder("{POSITION}", this.notificationConfiguration.autoMessages.size() - 1)
                 .build();
 
         this.notificationSender.sendNotification(sender, autoMessageAddedNotification);
