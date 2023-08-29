@@ -6,7 +6,7 @@ plugins {
 }
 
 group = "com.github.imdmk.automessage"
-version = "1.0.0-SNAPSHOT"
+version = "1.0.0"
 
 compileJava.options.encoding = "UTF-8"
 compileTestJava.options.encoding = "UTF-8"
@@ -70,4 +70,6 @@ shadowJar {
 
     relocate("org.bstats", "com.github.imdmk.automessage.bstats")
     relocate("dev.rollczi.litecommands", "com.github.imdmk.automessage.litecommands")
+
+    archiveFileName.set("${project.name} v${project.version}.jar")
 }
