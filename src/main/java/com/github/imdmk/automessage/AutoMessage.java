@@ -128,7 +128,7 @@ public class AutoMessage  {
         return LiteBukkitAdventurePlatformFactory.builder(this.server, "AutoMessage", false, this.bukkitAudiences, true)
                 .contextualBind(Player.class, new BukkitOnlyPlayerContextual<>("Command only for player"))
 
-                .argument(Float.class, "bossBarProgress", new BossBarProgressArgument(this.pluginConfiguration.notificationConfiguration))
+                .argument(float.class, "bossBarProgress", new BossBarProgressArgument(this.pluginConfiguration.notificationConfiguration))
                 .argument(NotificationType.class, new NotificationTypeArgument(this.pluginConfiguration.notificationConfiguration))
                 .argument(Notification.class, new NotificationArgument(this.pluginConfiguration.notificationConfiguration))
 
