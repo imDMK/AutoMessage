@@ -50,8 +50,6 @@ public class NotificationConfiguration extends OkaeriConfig {
     public Notification autoMessagesEnabledNotification = new ChatNotification("<green>Enabled automatic messages<dark_gray>.");
     public Notification autoMessagesDisabledNotification = new ChatNotification("<red>Disabled automatic messages<dark_gray>.");
 
-    public Notification autoMessagesChangedDelayNotification = new ChatNotification("<green>Changed automatic messages delay<dark_gray>.");
-
     @Comment("# {POSITION} - Position of automatic message")
     public Notification autoMessageAddedNotification = new ChatNotification("<green>Added new automatic message with type {TYPE} at position {POSITION}<dark_gray>.");
     public Notification autoMessageRemovedNotification = new ChatNotification("<red>Removed automatic message<dark_gray>.");
@@ -68,7 +66,6 @@ public class NotificationConfiguration extends OkaeriConfig {
             "# {NOTIFICATION} - Notification information"
     })
     public Notification autoMessagesListNotification = new ChatNotification("<gray>{POSITION}<dark_gray>. <red>{NOTIFICATION}");
-
     public Notification autoMessagesEmptyNotification = new ChatNotification("<red>Automatic messages is empty<dark_gray>.");
 
     public Notification autoMessageNotFoundNotification = new ChatNotification("<red>Automatic message not found<dark_gray>.");
@@ -81,7 +78,8 @@ public class NotificationConfiguration extends OkaeriConfig {
     public Notification invalidUsageFirstNotification = new ChatNotification("<red>Invalid usage<dark_gray>:");
     public Notification invalidUsageListNotification = new ChatNotification("<dark_gray>- <red>{USAGE}");
 
-    public Notification invalidNumberNotification = new ChatNotification("<red>Invalid number<dark_gray>.");
+    public Notification invalidNumberNotification = new ChatNotification("<red>Invalid number value<dark_gray>.");
+    public Notification invalidFloatNotification = new ChatNotification("<red>Invalid float value<dark_gray>.");
     public Notification invalidTypeNotification = new ChatNotification("<red>Invalid notification type<dark_gray>.");
     public Notification missingPermissionNotification = new ChatNotification("<red>Missing permissions<dark_gray>: <red>{PERMISSIONS}");
 
