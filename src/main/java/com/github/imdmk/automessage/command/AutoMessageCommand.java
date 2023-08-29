@@ -3,13 +3,9 @@ package com.github.imdmk.automessage.command;
 import com.github.imdmk.automessage.configuration.PluginConfiguration;
 import com.github.imdmk.automessage.notification.NotificationSender;
 import com.github.imdmk.automessage.notification.configuration.NotificationConfiguration;
-import dev.rollczi.litecommands.argument.Arg;
-import dev.rollczi.litecommands.argument.Name;
 import dev.rollczi.litecommands.command.execute.Execute;
 import dev.rollczi.litecommands.command.route.Route;
 import org.bukkit.command.CommandSender;
-
-import java.time.Duration;
 
 @Route(name = "automessage")
 public class AutoMessageCommand {
@@ -38,13 +34,5 @@ public class AutoMessageCommand {
         this.pluginConfiguration.save();
 
         this.notificationSender.sendNotification(sender, this.notificationConfiguration.autoMessagesDisabledNotification);
-    }
-
-    @Execute(route = "delay")
-    public void delay(CommandSender sender, @Arg @Name("delay") Duration delay) {
-        this.notificationConfiguration.autoMessagesDelay = delay;
-        this.pluginConfiguration.save();
-
-        this.notificationSender.sendNotification(sender, this.notificationConfiguration.autoMessagesChangedDelayNotification);
     }
 }
