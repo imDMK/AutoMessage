@@ -27,6 +27,8 @@ public class UpdateService {
     }
 
     public void check() {
+        this.logger.info("Checking for update...");
+
         try {
             GitTag gitTag = GitTag.of("v" + this.pluginDescriptionFile.getVersion());
             GitCheckResult checkResult = this.gitCheck.checkRelease(GIT_REPOSITORY, gitTag);
