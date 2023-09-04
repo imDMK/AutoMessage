@@ -37,7 +37,7 @@ dependencies {
     implementation("dev.rollczi.litecommands:core:2.8.9")
     implementation("dev.rollczi.litecommands:bukkit-adventure:2.8.8")
 
-    implementation("dev.rollczi.litecommands:core:2.8.8")
+    implementation("dev.rollczi.litecommands:core:2.8.9")
     implementation("dev.rollczi.litecommands:bukkit-adventure:2.8.9")
 
     implementation("com.eternalcode:gitcheck:1.0.0")
