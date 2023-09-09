@@ -5,6 +5,7 @@
 ![Supported versions](https://img.shields.io/badge/Minecraft-1.17--1.20.1-green.svg)
 [![SpigotMC](https://img.shields.io/badge/SpigotMC-yellow.svg)](https://www.spigotmc.org/resources/automessage.112363/)
 [![Bukkit](https://img.shields.io/badge/Bukkit-blue.svg)](https://legacy.curseforge.com/minecraft/bukkit-plugins/auto-messages)
+[![PaperMC](https://img.shields.io/badge/Paper-004ee9.svg)](https://hangar.papermc.io/imDMK/AutoMessage)
 [![bStats](https://img.shields.io/badge/bStats-00695c)](https://bstats.org/plugin/bukkit/AutoMessages/19487)
 
 A powerful plugin that allows you to send custom messages to online players automatically.
