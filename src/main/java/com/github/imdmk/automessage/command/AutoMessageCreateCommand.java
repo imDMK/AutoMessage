@@ -15,6 +15,7 @@ import dev.rollczi.litecommands.argument.Name;
 import dev.rollczi.litecommands.argument.joiner.Joiner;
 import dev.rollczi.litecommands.command.execute.Execute;
 import dev.rollczi.litecommands.command.route.Route;
+import dev.rollczi.litecommands.suggestion.Suggest;
 import net.kyori.adventure.bossbar.BossBar;
 import org.bukkit.command.CommandSender;
 
@@ -34,7 +35,7 @@ public class AutoMessageCreateCommand {
     }
 
     @Execute(route = "CHAT")
-    void createChat(CommandSender sender, @Joiner @Name("message") String message) {
+    void createChat(CommandSender sender, @Joiner @Suggest("<red>Example chat message") @Name("message") String message) {
         ChatNotification chatNotification = new ChatNotification(message);
 
         this.addAutoNotification(chatNotification);
@@ -42,7 +43,7 @@ public class AutoMessageCreateCommand {
     }
 
     @Execute(route = "ACTIONBAR")
-    void createActionbar(CommandSender sender, @Joiner @Name("message") String message) {
+    void createActionbar(CommandSender sender, @Joiner @Suggest("<green>Example actionbar message") @Name("message") String message) {
         ActionBarNotification actionBarNotification = new ActionBarNotification(message);
 
         this.addAutoNotification(actionBarNotification);
@@ -50,7 +51,7 @@ public class AutoMessageCreateCommand {
     }
 
     @Execute(route = "TITLE")
-    void createTitle(CommandSender sender, @Joiner @Name("message") String message) {
+    void createTitle(CommandSender sender, @Joiner @Suggest("<yellow>Example title message") @Name("message") String message) {
         String[] splitMessage = message.split("\\|");
 
         if (splitMessage.length < 2) {
@@ -65,7 +66,13 @@ public class AutoMessageCreateCommand {
     }
 
     @Execute(route = "BOSSBAR")
-    void createBossBar(CommandSender sender, @Arg @Name("time") Duration time, @Arg @By("bossBarProgress") @Name("progress") float progress, @Arg @Name("timeChangesProgress") boolean timeChangesProgress, @Arg @Name("color") BossBar.Color color, @Arg @Name("overlay") BossBar.Overlay overlay, @Joiner @Name("name") String name) {
+    void createBossBar(CommandSender sender,
+                       @Arg @Name("time") Duration time,
+                       @Arg @By("bossBarProgress") float progress,
+                       @Arg @Name("timeChangesProgress") boolean timeChangesProgress,
+                       @Arg @Name("color") BossBar.Color color,
+                       @Arg @Name("overlay") BossBar.Overlay overlay,
+                       @Joiner @Suggest("<red>Example name") @Name("name") String name) {
         BossBarNotification bossBarNotification = new BossBarNotification(name, time, progress, timeChangesProgress, color, overlay);
 
         this.addAutoNotification(bossBarNotification);
