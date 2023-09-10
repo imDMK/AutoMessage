@@ -8,13 +8,13 @@ import dev.rollczi.litecommands.command.route.Route;
 import org.bukkit.command.CommandSender;
 
 @Route(name = "automessage")
-public class AutoMessageCommand {
+public class AutoMessageStateCommand {
 
     private final PluginConfiguration pluginConfiguration;
     private final NotificationConfiguration notificationConfiguration;
     private final NotificationSender notificationSender;
 
-    public AutoMessageCommand(PluginConfiguration pluginConfiguration, NotificationConfiguration notificationConfiguration, NotificationSender notificationSender) {
+    public AutoMessageStateCommand(PluginConfiguration pluginConfiguration, NotificationConfiguration notificationConfiguration, NotificationSender notificationSender) {
         this.pluginConfiguration = pluginConfiguration;
         this.notificationConfiguration = notificationConfiguration;
         this.notificationSender = notificationSender;

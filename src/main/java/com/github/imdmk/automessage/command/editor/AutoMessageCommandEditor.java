@@ -1,4 +1,4 @@
-package com.github.imdmk.automessage.command;
+package com.github.imdmk.automessage.command.editor;
 
 import com.github.imdmk.automessage.configuration.PluginConfiguration;
 import dev.rollczi.litecommands.factory.CommandEditor;
