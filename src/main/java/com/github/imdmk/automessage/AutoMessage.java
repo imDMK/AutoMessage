@@ -1,13 +1,13 @@
 package com.github.imdmk.automessage;
 
-import com.github.imdmk.automessage.command.AutoMessageCommand;
-import com.github.imdmk.automessage.command.AutoMessageCommandEditor;
 import com.github.imdmk.automessage.command.AutoMessageCreateCommand;
 import com.github.imdmk.automessage.command.AutoMessageListCommand;
 import com.github.imdmk.automessage.command.AutoMessageRemoveCommand;
+import com.github.imdmk.automessage.command.AutoMessageStateCommand;
 import com.github.imdmk.automessage.command.argument.BossBarProgressArgument;
 import com.github.imdmk.automessage.command.argument.NotificationArgument;
 import com.github.imdmk.automessage.command.argument.NotificationTypeArgument;
+import com.github.imdmk.automessage.command.editor.AutoMessageCommandEditor;
 import com.github.imdmk.automessage.command.handler.MissingPermissionHandler;
 import com.github.imdmk.automessage.command.handler.NotificationHandler;
 import com.github.imdmk.automessage.command.handler.UsageHandler;
@@ -137,7 +137,7 @@ public class AutoMessage  {
                 .resultHandler(Notification.class, new NotificationHandler(this.notificationSender))
 
                 .commandInstance(
-                        new AutoMessageCommand(this.pluginConfiguration, this.pluginConfiguration.notificationConfiguration, this.notificationSender),
+                        new AutoMessageStateCommand(this.pluginConfiguration, this.pluginConfiguration.notificationConfiguration, this.notificationSender),
                         new AutoMessageCreateCommand(this.pluginConfiguration, this.pluginConfiguration.notificationConfiguration, this.notificationSender),
                         new AutoMessageListCommand(this.pluginConfiguration.notificationConfiguration, this.notificationSender),
                         new AutoMessageRemoveCommand(this.pluginConfiguration, this.pluginConfiguration.notificationConfiguration, this.notificationSender)
