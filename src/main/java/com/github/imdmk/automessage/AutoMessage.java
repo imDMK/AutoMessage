@@ -84,7 +84,7 @@ public class AutoMessage  {
         this.taskScheduler.runTimerAsync(new BossBarAudienceTask(this.bossBarAudienceManager), 0L, DurationUtil.toTicks(Duration.ofSeconds(1)));
 
         /* Commands */
-        if (this.pluginConfiguration.autoMessageCommandEnabled) {
+        if (this.pluginConfiguration.commandConfiguration.autoMessageEnabled) {
             this.liteCommands = this.registerLiteCommands();
         }
 
@@ -143,7 +143,7 @@ public class AutoMessage  {
                         new AutoMessageRemoveCommand(this.pluginConfiguration, this.pluginConfiguration.notificationConfiguration, this.notificationSender)
                 )
 
-                .commandEditor("automessage", new AutoMessageCommandEditor(this.pluginConfiguration))
+                .commandEditor("automessage", new AutoMessageCommandEditor(this.pluginConfiguration.commandConfiguration))
 
                 .register();
     }

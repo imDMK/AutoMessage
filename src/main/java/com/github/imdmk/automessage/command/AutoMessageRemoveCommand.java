@@ -9,7 +9,7 @@ import dev.rollczi.litecommands.command.execute.Execute;
 import dev.rollczi.litecommands.command.route.Route;
 import org.bukkit.command.CommandSender;
 
-@Route(name = "automessage")
+@Route(name = "automessage remove")
 public class AutoMessageRemoveCommand {
 
     private final PluginConfiguration pluginConfiguration;
@@ -22,7 +22,7 @@ public class AutoMessageRemoveCommand {
         this.notificationSender = notificationSender;
     }
 
-    @Execute(route = "remove")
+    @Execute(required = 1)
     void remove(CommandSender sender, @Arg Notification notification) {
         this.notificationConfiguration.autoMessages.remove(notification);
         this.pluginConfiguration.save();

@@ -12,7 +12,7 @@ import org.bukkit.entity.Player;
 import java.util.List;
 import java.util.concurrent.atomic.AtomicInteger;
 
-@Route(name = "automessage")
+@Route(name = "automessage list")
 public class AutoMessageListCommand {
 
     private final NotificationConfiguration notificationConfiguration;
@@ -23,8 +23,8 @@ public class AutoMessageListCommand {
         this.notificationSender = notificationSender;
     }
 
-    @Execute(route = "list")
-    void listAutoMessages(CommandSender sender) {
+    @Execute
+    void showAutoMessages(CommandSender sender) {
         List<Notification> autoMessages = this.notificationConfiguration.autoMessages;
 
         if (autoMessages.isEmpty()) {
