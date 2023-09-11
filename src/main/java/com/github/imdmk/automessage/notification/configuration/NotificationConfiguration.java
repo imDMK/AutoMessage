@@ -54,6 +54,8 @@ public class NotificationConfiguration extends OkaeriConfig {
     public Notification autoMessageAddedNotification = new ChatNotification("<green>Added new automatic message with type {TYPE} at position {POSITION}<dark_gray>.");
     public Notification autoMessageRemovedNotification = new ChatNotification("<red>Removed automatic message<dark_gray>.");
 
+    public Notification autoMessageSendNotification = new ChatNotification("<red>An automatic message has been sent to the player {PLAYER}<dark_gray>.");
+
     @Comment({
             "# Format notification information in hovers?",
             "# More info at: https://docs.advntr.dev/minimessage/format.html#hover"
