@@ -8,6 +8,7 @@ import net.kyori.adventure.title.Title;
 import org.checkerframework.checker.nullness.qual.NonNull;
 
 import java.time.Duration;
+import java.util.Optional;
 
 public class TitleTimesSerializer implements ObjectSerializer<Title.Times> {
 
@@ -25,10 +26,19 @@ public class TitleTimesSerializer implements ObjectSerializer<Title.Times> {
 
     @Override
     public Title.Times deserialize(@NonNull DeserializationData data, @NonNull GenericsDeclaration generics) {
-        Duration fadeIn = data.get("fadeIn", Duration.class);
-        Duration stay = data.get("stay", Duration.class);
-        Duration fadeOut = data.get("fadeOut", Duration.class);
+        Duration fadeIn = this.getOptionalDuration(data, "fadeIn")
+                .orElseGet(Title.DEFAULT_TIMES::fadeIn);
+
+        Duration stay = this.getOptionalDuration(data, "stay")
+                .orElseGet(Title.DEFAULT_TIMES::stay);
+
+        Duration fadeOut = this.getOptionalDuration(data, "fadeOut")
+                .orElseGet(Title.DEFAULT_TIMES::fadeOut);
 
         return Title.Times.times(fadeIn, stay, fadeOut);
+    }
+
+    private Optional<Duration> getOptionalDuration(DeserializationData data, String key) {
+        return Optional.ofNullable(data.get(key, Duration.class));
     }
 }
