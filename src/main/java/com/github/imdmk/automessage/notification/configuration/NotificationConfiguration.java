@@ -74,8 +74,6 @@ public class NotificationConfiguration extends OkaeriConfig {
 
     public Notification autoMessageNotFoundNotification = new ChatNotification("<red>Automatic message not found<dark_gray>.");
 
-    public Notification invalidTitleTimesFormatNotification = new ChatNotification("<red>Invalid title times format. Correct usage: 1s, 2s, 3s");
-
     @Comment("# {USAGE} - The usage of command")
     public Notification invalidUsageNotification = new ChatNotification("<red>Invalid usage<dark_gray>: <red>{USAGE}");
     @Comment("# This notifications are used when there is more than one option to use a command")
