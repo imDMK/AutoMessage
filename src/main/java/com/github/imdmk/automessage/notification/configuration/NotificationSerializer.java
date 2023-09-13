@@ -5,6 +5,7 @@ import com.github.imdmk.automessage.notification.NotificationType;
 import com.github.imdmk.automessage.notification.implementation.ActionBarNotification;
 import com.github.imdmk.automessage.notification.implementation.ChatNotification;
 import com.github.imdmk.automessage.notification.implementation.DisabledNotification;
+import com.github.imdmk.automessage.notification.implementation.SubTitleNotification;
 import com.github.imdmk.automessage.notification.implementation.TitleNotification;
 import com.github.imdmk.automessage.notification.implementation.bossbar.BossBarNotification;
 import eu.okaeri.configs.schema.GenericsDeclaration;
@@ -19,7 +20,7 @@ import java.time.Duration;
 import java.util.Optional;
 
 public class NotificationSerializer implements ObjectSerializer<Notification> {
-    
+
     @Override
     public boolean supports(@NonNull Class<? super Notification> type) {
         return Notification.class.isAssignableFrom(type);
@@ -28,35 +29,31 @@ public class NotificationSerializer implements ObjectSerializer<Notification> {
     @Override
     public void serialize(@NonNull Notification notification, @NonNull SerializationData data, @NonNull GenericsDeclaration generics) {
         NotificationType type = notification.type();
+        String message = notification.message();
 
         data.add("type", type, NotificationType.class);
 
         switch (type) {
-            case CHAT -> {
-                ChatNotification chatNotification = (ChatNotification) notification;
-
-                data.add("message", chatNotification.message(), String.class);
-            }
-
-            case ACTIONBAR -> {
-                ActionBarNotification actionBarNotification = (ActionBarNotification) notification;
-
-                data.add("message", actionBarNotification.message(), String.class);
-            }
+            case CHAT, ACTIONBAR -> data.add("message", message, String.class);
 
             case TITLE -> {
                 TitleNotification titleNotification = (TitleNotification) notification;
 
-                data.add("title", titleNotification.title(), String.class);
-                data.add("subtitle", titleNotification.subtitle(), String.class);
-
+                data.add("title", message, String.class);
                 data.add("times", titleNotification.times(), Title.Times.class);
             }
 
-            case BOSSBAR -> {
+            case SUB_TITLE -> {
+                SubTitleNotification subTitleNotification = (SubTitleNotification) notification;
+
+                data.add("subtitle", subTitleNotification.message(), String.class);
+                data.add("times", subTitleNotification.times(), Title.Times.class);
+            }
+
+            case BOSS_BAR -> {
                 BossBarNotification bossBarNotification = (BossBarNotification) notification;
 
-                data.add("name", bossBarNotification.name(), String.class);
+                data.add("name", bossBarNotification.message(), String.class);
                 data.add("time", bossBarNotification.time(), Duration.class);
                 data.add("progress", bossBarNotification.progress(), float.class);
                 data.add("timeChangesProgress", bossBarNotification.timeChangesProgress(), boolean.class);
@@ -73,47 +70,40 @@ public class NotificationSerializer implements ObjectSerializer<Notification> {
 
     @Override
     public Notification deserialize(@NonNull DeserializationData data, @NonNull GenericsDeclaration generics) {
+        String message = data.get("message", String.class);
         NotificationType type = data.get("type", NotificationType.class);
 
-        switch (type) {
-            case CHAT -> {
-                String message = data.get("message", String.class);
-
-                return new ChatNotification(message);
-            }
-
-            case ACTIONBAR -> {
-                String message = data.get("message", String.class);
-
-                return new ActionBarNotification(message);
-            }
+        return switch (type) {
+            case CHAT -> new ChatNotification(message);
+            case ACTIONBAR -> new ActionBarNotification(message);
 
             case TITLE -> {
-                String title = data.get("title", String.class);
-                String subtitle = data.get("subtitle", String.class);
+                Title.Times times = this.getOptionalTitleTimes(data).orElse(Title.DEFAULT_TIMES);
 
-                Title.Times times = Optional.ofNullable(data.get("times", Title.Times.class))
-                        .orElse(Title.DEFAULT_TIMES);
-
-                return new TitleNotification(title, subtitle, times);
+                yield new TitleNotification(message, times);
             }
 
-            case BOSSBAR -> {
-                String name = data.get("name", String.class);
+            case SUB_TITLE -> {
+                Title.Times times = this.getOptionalTitleTimes(data).orElse(Title.DEFAULT_TIMES);
+
+                yield new SubTitleNotification(message, times);
+            }
+
+            case BOSS_BAR -> {
                 Duration time = data.get("time", Duration.class);
                 float progress = data.get("progress", float.class);
                 boolean timeChangesProgress = data.get("timeChangesProgress", boolean.class);
                 BossBar.Color color = data.get("color", BossBar.Color.class);
-                BossBar.Overlay overlay =  data.get("overlay", BossBar.Overlay.class);
+                BossBar.Overlay overlay = data.get("overlay", BossBar.Overlay.class);
 
-                return new BossBarNotification(name, time, progress, timeChangesProgress, color, overlay);
+                yield new BossBarNotification(message, time, progress, timeChangesProgress, color, overlay);
             }
 
-            case DISABLED -> {
-                return new DisabledNotification();
-            }
+            case DISABLED -> new DisabledNotification();
+        };
+    }
 
-            default -> throw new IllegalStateException("Unexpected notification type: " + type);
-        }
+    private Optional<Title.Times> getOptionalTitleTimes(DeserializationData data) {
+        return Optional.ofNullable(data.get("times", Title.Times.class));
     }
 }

@@ -1,7 +1,6 @@
 package com.github.imdmk.automessage.notification;
 
-import com.github.imdmk.automessage.notification.implementation.ActionBarNotification;
-import com.github.imdmk.automessage.notification.implementation.ChatNotification;
+import com.github.imdmk.automessage.notification.implementation.SubTitleNotification;
 import com.github.imdmk.automessage.notification.implementation.TitleNotification;
 import com.github.imdmk.automessage.notification.implementation.bossbar.BossBarNotification;
 import com.github.imdmk.automessage.notification.implementation.bossbar.audience.BossBarAudience;
@@ -14,8 +13,7 @@ import net.kyori.adventure.text.Component;
 import net.kyori.adventure.title.Title;
 import org.bukkit.command.CommandSender;
 import org.bukkit.entity.Player;
-
-import java.time.Instant;
+import panda.utilities.text.Formatter;
 
 public class NotificationSender {
 
@@ -30,59 +28,69 @@ public class NotificationSender {
     public void broadcast(Notification notification) {
         Audience audience = this.audienceProvider.players();
 
-        this.sendNotification(audience, notification);
+        this.sendNotification(audience, notification, null);
     }
 
     public void sendNotification(CommandSender sender, Notification notification) {
         Audience audience = this.createAudience(sender);
 
-        this.sendNotification(audience, notification);
+        this.sendNotification(audience, notification, null);
     }
 
-    public void sendNotification(Audience audience, Notification notification) {
-        switch (notification.type()) {
-            case CHAT -> {
-                ChatNotification chatNotification = (ChatNotification) notification;
+    public void sendNotification(CommandSender sender, Notification notification, Formatter formatter) {
+        Audience audience = this.createAudience(sender);
 
-                Component message = ComponentUtil.deserialize(chatNotification.message());
+        this.sendNotification(audience, notification, formatter);
+    }
 
-                audience.sendMessage(message);
-            }
+    public void sendNotification(Audience audience, Notification notification, Formatter formatter) {
+        Component message = ComponentUtil.deserialize(this.format(notification.message(), formatter));
+        NotificationType type = notification.type();
 
-            case ACTIONBAR -> {
-                ActionBarNotification actionBarNotification = (ActionBarNotification) notification;
-
-                Component message = ComponentUtil.deserialize(actionBarNotification.message());
-
-                audience.sendActionBar(message);
-            }
+        switch (type) {
+            case CHAT -> audience.sendMessage(message);
+            case ACTIONBAR -> audience.sendActionBar(message);
 
             case TITLE -> {
                 TitleNotification titleNotification = (TitleNotification) notification;
 
-                Title titleMessage = titleNotification.create();
+                Title title = Title.title(message, Component.empty(), titleNotification.times());
 
-                audience.showTitle(titleMessage);
+                audience.showTitle(title);
             }
 
-            case BOSSBAR -> {
+            case SUB_TITLE -> {
+                SubTitleNotification subTitleNotification = (SubTitleNotification) notification;
+
+                Title title = Title.title(Component.empty(), message, subTitleNotification.times());
+
+                audience.showTitle(title);
+            }
+
+            case BOSS_BAR -> {
                 BossBarNotification bossBarNotification = (BossBarNotification) notification;
-                BossBar bossBar = bossBarNotification.create();
+
+                BossBar bossBar = BossBar.bossBar(message, bossBarNotification.progress(), bossBarNotification.color(), bossBarNotification.overlay());
 
                 audience.showBossBar(bossBar);
 
-                BossBarAudience bossBarAudience = new BossBarAudience(
-                        bossBar,
-                        audience,
-                        Instant.now().plus(bossBarNotification.time()),
-                        bossBarNotification.timeChangesProgress()
-                );
-
+                BossBarAudience bossBarAudience = new BossBarAudience(bossBar, audience, bossBarNotification);
                 this.bossBarAudienceManager.add(bossBarAudience);
             }
 
-            default -> throw new IllegalStateException("Unexpected notification type: " + notification.type());
+            case DISABLED -> {
+            }
+
+            default -> throw new IllegalStateException("Unknown notification type: " + type);
         }
+    }
+
+    public String format(String message, Formatter formatter) {
+        if (formatter == null) {
+            return message;
+        }
+
+        return formatter.format(message);
     }
 
     public Audience createAudience(CommandSender sender) {

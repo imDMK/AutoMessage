@@ -1,5 +1,6 @@
-package com.github.imdmk.automessage.util;
+package com.github.imdmk.automessage;
 
+import com.github.imdmk.automessage.util.DurationUtil;
 import org.junit.jupiter.api.Test;
 
 import java.time.Duration;
