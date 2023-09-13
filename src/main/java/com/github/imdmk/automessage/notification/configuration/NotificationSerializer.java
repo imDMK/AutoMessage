@@ -33,38 +33,28 @@ public class NotificationSerializer implements ObjectSerializer<Notification> {
 
         data.add("type", type, NotificationType.class);
 
-        switch (type) {
-            case CHAT, ACTIONBAR -> data.add("message", message, String.class);
+        if (notification.type() == NotificationType.DISABLED) {
+            return;
+        }
 
-            case TITLE -> {
-                TitleNotification titleNotification = (TitleNotification) notification;
+        data.add("message", message, String.class);
 
-                data.add("title", message, String.class);
-                data.add("times", titleNotification.times(), Title.Times.class);
-            }
+        if (notification instanceof TitleNotification titleNotification) {
+            data.add("times", titleNotification.times(), Title.Times.class);
+            return;
+        }
 
-            case SUB_TITLE -> {
-                SubTitleNotification subTitleNotification = (SubTitleNotification) notification;
+        if (notification instanceof SubTitleNotification subTitleNotification) {
+            data.add("times", subTitleNotification.times(), Title.Times.class);
+            return;
+        }
 
-                data.add("subtitle", subTitleNotification.message(), String.class);
-                data.add("times", subTitleNotification.times(), Title.Times.class);
-            }
-
-            case BOSS_BAR -> {
-                BossBarNotification bossBarNotification = (BossBarNotification) notification;
-
-                data.add("name", bossBarNotification.message(), String.class);
-                data.add("time", bossBarNotification.time(), Duration.class);
-                data.add("progress", bossBarNotification.progress(), float.class);
-                data.add("timeChangesProgress", bossBarNotification.timeChangesProgress(), boolean.class);
-                data.add("color", bossBarNotification.color(), BossBar.Color.class);
-                data.add("overlay", bossBarNotification.overlay(), BossBar.Overlay.class);
-            }
-
-            case DISABLED -> {
-            }
-
-            default -> throw new IllegalStateException("Unexpected notification type: " + type);
+        if (notification instanceof BossBarNotification bossBarNotification) {
+            data.add("time", bossBarNotification.time(), Duration.class);
+            data.add("progress", bossBarNotification.progress(), float.class);
+            data.add("timeChangesProgress", bossBarNotification.timeChangesProgress(), boolean.class);
+            data.add("color", bossBarNotification.color(), BossBar.Color.class);
+            data.add("overlay", bossBarNotification.overlay(), BossBar.Overlay.class);
         }
     }
 
