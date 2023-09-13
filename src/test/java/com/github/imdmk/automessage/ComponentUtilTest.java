@@ -1,5 +1,6 @@
-package com.github.imdmk.automessage.util;
+package com.github.imdmk.automessage;
 
+import com.github.imdmk.automessage.util.ComponentUtil;
 import net.kyori.adventure.text.Component;
 import net.kyori.adventure.text.format.NamedTextColor;
 import org.junit.jupiter.api.Test;

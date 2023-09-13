@@ -20,8 +20,8 @@ public class BossBarAudienceTask implements Runnable {
             Audience audience = bossBarAudience.audience();
             BossBar bossBar = bossBarAudience.bossBar();
 
-            Instant endOfBossBar = bossBarAudience.endOfBossBar();
             Instant now = Instant.now();
+            Instant endOfBossBar = bossBarAudience.endOfBossBar();
 
             if (now.isAfter(endOfBossBar)) {
                 audience.hideBossBar(bossBar);
@@ -31,14 +31,10 @@ public class BossBarAudienceTask implements Runnable {
 
             if (bossBarAudience.timeChangesProgress()) {
                 Duration between = Duration.between(now, endOfBossBar);
-                Duration divisor = Duration.ofNanos(endOfBossBar.getNano());
+                Duration time = bossBarAudience.time();
 
-                float progress = between.dividedBy(divisor) / 10F;
-
-                if (progress > 1.0F || progress < 0.F) {
-                    bossBar.progress(progress > 1.0F ? BossBar.MAX_PROGRESS : BossBar.MIN_PROGRESS);
-                    return;
-                }
+                float difference = (float) between.toMillis() / time.toMillis();
+                float progress = Math.max(0.0F, Math.min(1.0F, difference));
 
                 bossBar.progress(progress);
             }

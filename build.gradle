@@ -23,6 +23,7 @@ repositories {
     maven { url "https://storehouse.okaeri.eu/repository/maven-public/" }
     maven { url "https://repo.panda-lang.org/releases" }
     maven { url "https://repo.eternalcode.pl/releases" }
+    maven { url "https://repo.panda-lang.org"}
 }
 
 dependencies {
@@ -42,6 +43,8 @@ dependencies {
 
     implementation("com.eternalcode:gitcheck:1.0.0")
     implementation("org.bstats:bstats-bukkit:3.0.2")
+
+    implementation("org.panda-lang:panda-utilities:0.5.2-alpha")
 
     testImplementation platform("org.junit:junit-bom:5.10.0")
     testImplementation("org.junit.jupiter:junit-jupiter")

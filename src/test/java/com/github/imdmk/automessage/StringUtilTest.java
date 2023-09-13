@@ -1,5 +1,6 @@
-package com.github.imdmk.automessage.util;
+package com.github.imdmk.automessage;
 
+import com.github.imdmk.automessage.util.StringUtil;
 import org.junit.jupiter.api.Test;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
