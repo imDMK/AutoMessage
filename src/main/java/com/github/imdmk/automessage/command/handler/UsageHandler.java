@@ -1,13 +1,12 @@
 package com.github.imdmk.automessage.command.handler;
 
-import com.github.imdmk.automessage.notification.Notification;
-import com.github.imdmk.automessage.notification.NotificationFormatter;
 import com.github.imdmk.automessage.notification.NotificationSender;
 import com.github.imdmk.automessage.notification.configuration.NotificationConfiguration;
 import dev.rollczi.litecommands.command.LiteInvocation;
 import dev.rollczi.litecommands.handle.InvalidUsageHandler;
 import dev.rollczi.litecommands.schematic.Schematic;
 import org.bukkit.command.CommandSender;
+import panda.utilities.text.Formatter;
 
 public class UsageHandler implements InvalidUsageHandler<CommandSender> {
 
@@ -22,22 +21,20 @@ public class UsageHandler implements InvalidUsageHandler<CommandSender> {
     @Override
     public void handle(CommandSender sender, LiteInvocation invocation, Schematic schematic) {
         if (schematic.isOnlyFirst()) {
-            Notification notification = new NotificationFormatter(this.notificationConfiguration.invalidUsageNotification)
-                    .placeholder("{USAGE}", schematic.first())
-                    .build();
+            Formatter formatter = new Formatter()
+                    .register("{USAGE}", schematic.first());
 
-            this.notificationSender.sendNotification(sender, notification);
+            this.notificationSender.sendNotification(sender, this.notificationConfiguration.invalidUsageNotification, formatter);
             return;
         }
 
         this.notificationSender.sendNotification(sender, this.notificationConfiguration.invalidUsageFirstNotification);
 
         for (String schema : schematic.getSchematics()) {
-            Notification notification = new NotificationFormatter(this.notificationConfiguration.invalidUsageListNotification)
-                    .placeholder("{USAGE}", schema)
-                    .build();
+            Formatter formatter = new Formatter()
+                    .register("{USAGE}", schema);
 
-            this.notificationSender.sendNotification(sender, notification);
+            this.notificationSender.sendNotification(sender, this.notificationConfiguration.invalidUsageListNotification, formatter);
         }
     }
 }

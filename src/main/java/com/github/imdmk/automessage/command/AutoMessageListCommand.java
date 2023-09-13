@@ -1,13 +1,13 @@
 package com.github.imdmk.automessage.command;
 
 import com.github.imdmk.automessage.notification.Notification;
-import com.github.imdmk.automessage.notification.NotificationFormatter;
 import com.github.imdmk.automessage.notification.NotificationSender;
 import com.github.imdmk.automessage.notification.configuration.NotificationConfiguration;
 import dev.rollczi.litecommands.command.execute.Execute;
 import dev.rollczi.litecommands.command.route.Route;
 import org.bukkit.command.CommandSender;
 import org.bukkit.entity.Player;
+import panda.utilities.text.Formatter;
 
 import java.util.List;
 import java.util.concurrent.atomic.AtomicInteger;
@@ -39,12 +39,11 @@ public class AutoMessageListCommand {
         AtomicInteger position = new AtomicInteger(0);
 
         for (Notification notification : autoMessages) {
-            Notification autoMessagesListNotification = new NotificationFormatter(this.notificationConfiguration.autoMessagesListNotification)
-                    .placeholder("{POSITION}", position.getAndIncrement())
-                    .placeholder("{NOTIFICATION}", this.formatNotification(notification, useHovers))
-                    .build();
+            Formatter formatter = new Formatter()
+                    .register("{POSITION}", position.getAndIncrement())
+                    .register("{NOTIFICATION}", this.formatNotification(notification, useHovers));
 
-            this.notificationSender.sendNotification(sender, autoMessagesListNotification);
+            this.notificationSender.sendNotification(sender, this.notificationConfiguration.autoMessagesListNotification, formatter);
         }
     }
 

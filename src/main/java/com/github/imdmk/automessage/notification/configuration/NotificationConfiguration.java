@@ -3,6 +3,7 @@ package com.github.imdmk.automessage.notification.configuration;
 import com.github.imdmk.automessage.notification.Notification;
 import com.github.imdmk.automessage.notification.implementation.ActionBarNotification;
 import com.github.imdmk.automessage.notification.implementation.ChatNotification;
+import com.github.imdmk.automessage.notification.implementation.SubTitleNotification;
 import com.github.imdmk.automessage.notification.implementation.TitleNotification;
 import com.github.imdmk.automessage.notification.implementation.bossbar.BossBarNotification;
 import eu.okaeri.configs.OkaeriConfig;
@@ -42,8 +43,9 @@ public class NotificationConfiguration extends OkaeriConfig {
     public List<Notification> autoMessages = Arrays.asList(
             new ChatNotification("<red>This is first message"),
             new ActionBarNotification("<yellow>This is second message"),
-            new TitleNotification("<yellow>Third message", "<red>This is third message"),
-            new BossBarNotification("<red>Fourth message announcement!", Duration.ofSeconds(5), BossBar.MAX_PROGRESS, true, BossBar.Color.RED, BossBar.Overlay.PROGRESS)
+            new TitleNotification("<yellow>Third message"),
+            new SubTitleNotification("<blue>Fourth message"),
+            new BossBarNotification("<red>Five message announcement!", Duration.ofSeconds(5), BossBar.MAX_PROGRESS, true, BossBar.Color.RED, BossBar.Overlay.PROGRESS)
     );
 
     @Comment("# Command notifications")
@@ -72,7 +74,7 @@ public class NotificationConfiguration extends OkaeriConfig {
 
     public Notification autoMessageNotFoundNotification = new ChatNotification("<red>Automatic message not found<dark_gray>.");
 
-    public Notification invalidTitleMessageNotification = new ChatNotification("<red>Use the | character to separate title and subtitle messages<dark_gray>.\n<red>Example<dark_gray>: <red>This is title message | This is subtitle message<dark_gray>.");
+    public Notification invalidTitleTimesFormatNotification = new ChatNotification("<red>Invalid title times format. Correct usage: 1s, 2s, 3s");
 
     @Comment("# {USAGE} - The usage of command")
     public Notification invalidUsageNotification = new ChatNotification("<red>Invalid usage<dark_gray>: <red>{USAGE}");
@@ -84,6 +86,7 @@ public class NotificationConfiguration extends OkaeriConfig {
     public Notification invalidFloatNotification = new ChatNotification("<red>Invalid float value<dark_gray>.");
     public Notification invalidTypeNotification = new ChatNotification("<red>Invalid notification type<dark_gray>.");
     public Notification missingPermissionNotification = new ChatNotification("<red>Missing permissions<dark_gray>: <red>{PERMISSIONS}");
+    public Notification playerNotFoundNotification = new ChatNotification("<red>Player not found<dark_gray>.");
 
     public enum AutoMessageMode {
         RANDOM, SEQUENTIAL

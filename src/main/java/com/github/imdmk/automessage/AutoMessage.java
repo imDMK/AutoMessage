@@ -3,6 +3,7 @@ package com.github.imdmk.automessage;
 import com.github.imdmk.automessage.command.AutoMessageCreateCommand;
 import com.github.imdmk.automessage.command.AutoMessageListCommand;
 import com.github.imdmk.automessage.command.AutoMessageRemoveCommand;
+import com.github.imdmk.automessage.command.AutoMessageSendCommand;
 import com.github.imdmk.automessage.command.AutoMessageStateCommand;
 import com.github.imdmk.automessage.command.argument.BossBarProgressArgument;
 import com.github.imdmk.automessage.command.argument.NotificationArgument;
@@ -28,6 +29,7 @@ import com.google.common.base.Stopwatch;
 import dev.rollczi.litecommands.LiteCommands;
 import dev.rollczi.litecommands.bukkit.adventure.platform.LiteBukkitAdventurePlatformFactory;
 import dev.rollczi.litecommands.bukkit.tools.BukkitOnlyPlayerContextual;
+import dev.rollczi.litecommands.bukkit.tools.BukkitPlayerArgument;
 import eu.okaeri.configs.ConfigManager;
 import eu.okaeri.configs.serdes.commons.SerdesCommons;
 import eu.okaeri.configs.yaml.bukkit.YamlBukkitConfigurer;
@@ -128,9 +130,11 @@ public class AutoMessage  {
         return LiteBukkitAdventurePlatformFactory.builder(this.server, "AutoMessage", false, this.bukkitAudiences, true)
                 .contextualBind(Player.class, new BukkitOnlyPlayerContextual<>("Command only for player"))
 
-                .argument(float.class, "bossBarProgress", new BossBarProgressArgument(this.pluginConfiguration.notificationConfiguration))
+                .argument(Player.class, new BukkitPlayerArgument<>(this.server, this.pluginConfiguration.notificationConfiguration.playerNotFoundNotification))
                 .argument(NotificationType.class, new NotificationTypeArgument(this.pluginConfiguration.notificationConfiguration))
                 .argument(Notification.class, new NotificationArgument(this.pluginConfiguration.notificationConfiguration))
+
+                .argument(float.class, "bossBarProgress", new BossBarProgressArgument(this.pluginConfiguration.notificationConfiguration))
 
                 .invalidUsageHandler(new UsageHandler(this.pluginConfiguration.notificationConfiguration, this.notificationSender))
                 .permissionHandler(new MissingPermissionHandler(this.pluginConfiguration.notificationConfiguration, this.notificationSender))
@@ -140,6 +144,7 @@ public class AutoMessage  {
                         new AutoMessageStateCommand(this.pluginConfiguration, this.pluginConfiguration.notificationConfiguration, this.notificationSender),
                         new AutoMessageCreateCommand(this.pluginConfiguration, this.pluginConfiguration.notificationConfiguration, this.notificationSender),
                         new AutoMessageListCommand(this.pluginConfiguration.notificationConfiguration, this.notificationSender),
+                        new AutoMessageSendCommand(this.pluginConfiguration.notificationConfiguration, this.notificationSender),
                         new AutoMessageRemoveCommand(this.pluginConfiguration, this.pluginConfiguration.notificationConfiguration, this.notificationSender)
                 )
 
