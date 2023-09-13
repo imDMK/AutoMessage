@@ -7,7 +7,7 @@ import eu.okaeri.configs.annotation.Comment;
 
 public class PluginConfiguration extends OkaeriConfig {
 
-    @Comment("# Check if you are using the latest version when enabling the plugin?")
+    @Comment("# Check if you are using the latest version when joining the server?")
     public boolean checkForUpdate = true;
 
     @Comment("# Command configuration")
