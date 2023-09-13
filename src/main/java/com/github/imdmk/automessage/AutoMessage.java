@@ -23,6 +23,7 @@ import com.github.imdmk.automessage.notification.implementation.bossbar.audience
 import com.github.imdmk.automessage.notification.task.AutoNotificationTask;
 import com.github.imdmk.automessage.scheduler.TaskScheduler;
 import com.github.imdmk.automessage.scheduler.TaskSchedulerImpl;
+import com.github.imdmk.automessage.update.UpdateListener;
 import com.github.imdmk.automessage.update.UpdateService;
 import com.github.imdmk.automessage.util.DurationUtil;
 import com.google.common.base.Stopwatch;
@@ -45,6 +46,7 @@ import java.io.File;
 import java.time.Duration;
 import java.util.concurrent.TimeUnit;
 import java.util.logging.Logger;
+import java.util.stream.Stream;
 
 public class AutoMessage  {
 
@@ -53,6 +55,8 @@ public class AutoMessage  {
     private final PluginConfiguration pluginConfiguration;
 
     private final BossBarAudienceManager bossBarAudienceManager;
+
+    private final UpdateService updateService;
 
     private final BukkitAudiences bukkitAudiences;
     private final NotificationSender notificationSender;
@@ -75,6 +79,9 @@ public class AutoMessage  {
         /* Managers */
         this.bossBarAudienceManager = new BossBarAudienceManager();
 
+        /* Services */
+        this.updateService = new UpdateService(plugin.getDescription());
+
         /* Adventure */
         this.bukkitAudiences = BukkitAudiences.create(plugin);
         this.notificationSender = new NotificationSender(this.bukkitAudiences, this.bossBarAudienceManager);
@@ -85,15 +92,14 @@ public class AutoMessage  {
         this.taskScheduler.runTimerAsync(new AutoNotificationTask(this.pluginConfiguration.notificationConfiguration, this.notificationSender), 10L, DurationUtil.toTicks(this.pluginConfiguration.notificationConfiguration.autoMessagesDelay));
         this.taskScheduler.runTimerAsync(new BossBarAudienceTask(this.bossBarAudienceManager), 0L, DurationUtil.toTicks(Duration.ofSeconds(1)));
 
+        /* Listeners */
+        Stream.of(
+                new UpdateListener(this.pluginConfiguration, this.notificationSender, this.updateService, this.taskScheduler)
+        ).forEach(listener -> this.server.getPluginManager().registerEvents(listener, plugin));
+
         /* Commands */
         if (this.pluginConfiguration.commandConfiguration.autoMessageEnabled) {
             this.liteCommands = this.registerLiteCommands();
-        }
-
-        /* Update service */
-        if (this.pluginConfiguration.checkForUpdate) {
-            UpdateService updateService = new UpdateService(plugin.getDescription(), logger);
-            this.taskScheduler.runLaterAsync(updateService::check, DurationUtil.toTicks(Duration.ofSeconds(3)));
         }
 
         /* Metrics */
