@@ -19,11 +19,10 @@ java {
 repositories {
     mavenCentral()
 
-    maven { url "https://hub.spigotmc.org/nexus/content/repositories/snapshots/" }
-    maven { url "https://storehouse.okaeri.eu/repository/maven-public/" }
-    maven { url "https://repo.panda-lang.org/releases" }
-    maven { url "https://repo.eternalcode.pl/releases" }
-    maven { url "https://repo.panda-lang.org"}
+    maven { url = "https://hub.spigotmc.org/nexus/content/repositories/snapshots/" }
+    maven { url = "https://storehouse.okaeri.eu/repository/maven-public/" }
+    maven { url = "https://repo.panda-lang.org/releases" }
+    maven { url = "https://repo.eternalcode.pl/releases" }
 }
 
 dependencies {
@@ -73,9 +72,32 @@ bukkit {
 shadowJar {
     dependsOn("checkstyleMain")
     dependsOn("checkstyleTest")
+    dependsOn("test")
 
-    relocate("org.bstats", "com.github.imdmk.automessage.bstats")
-    relocate("dev.rollczi.litecommands", "com.github.imdmk.automessage.litecommands")
+    exclude(
+            "org/intellij/lang/annotations/**",
+            "org/jetbrains/annotations/**",
+            "META-INF/**",
+            "kotlin/**",
+            "javax/**"
+    )
+
+    def prefix = "com.github.imdmk.automessage.libs"
+
+    def toRelocate = [
+            "eu.okaeri",
+            "net.kyori",
+            "dev.rollczi",
+            "com.eternalcode",
+            "org.bstats",
+            "panda",
+            "org.json.simple",
+            "javassist"
+    ]
+
+    toRelocate.each { pack ->
+        relocate(pack, "${prefix}.${pack}")
+    }
 
     archiveFileName.set("${project.name} v${project.version}.jar")
 }
