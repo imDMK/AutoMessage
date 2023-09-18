@@ -1,8 +1,9 @@
 plugins {
+    id("java-library")
+
     id("com.github.johnrengelman.shadow") version "8.1.1"
     id("net.minecrell.plugin-yml.bukkit") version "0.6.0"
     id("checkstyle")
-    id("java-library")
 }
 
 group = "com.github.imdmk.automessage"
@@ -37,16 +38,13 @@ dependencies {
     implementation("dev.rollczi.litecommands:core:2.8.9")
     implementation("dev.rollczi.litecommands:bukkit-adventure:2.8.9")
 
-    implementation("dev.rollczi.litecommands:core:2.8.9")
-    implementation("dev.rollczi.litecommands:bukkit-adventure:2.8.9")
-
     implementation("com.eternalcode:gitcheck:1.0.0")
     implementation("org.bstats:bstats-bukkit:3.0.2")
 
     implementation("org.panda-lang:panda-utilities:0.5.3-alpha")
 
     testImplementation platform("org.junit:junit-bom:5.10.0")
-    testImplementation("org.junit.jupiter:junit-jupiter")
+    testImplementation("org.junit.jupiter:junit-jupiter:5.9.2")
 }
 
 test {
@@ -70,6 +68,8 @@ bukkit {
 }
 
 shadowJar {
+    archiveFileName.set("${project.name} v${project.version}.jar")
+
     dependsOn("checkstyleMain")
     dependsOn("checkstyleTest")
     dependsOn("test")
@@ -78,13 +78,11 @@ shadowJar {
             "org/intellij/lang/annotations/**",
             "org/jetbrains/annotations/**",
             "META-INF/**",
-            "kotlin/**",
-            "javax/**"
+            "javassist"
     )
 
-    def prefix = "com.github.imdmk.automessage.libs"
-
-    def toRelocate = [
+    def prefix = "com.github.imdmk.automessage.lib"
+    [
             "eu.okaeri",
             "net.kyori",
             "dev.rollczi",
@@ -92,12 +90,7 @@ shadowJar {
             "org.bstats",
             "panda",
             "org.json.simple",
-            "javassist"
-    ]
-
-    toRelocate.each { pack ->
-        relocate(pack, "${prefix}.${pack}")
+    ].each { lib ->
+        relocate(lib, "${prefix}.${lib}")
     }
-
-    archiveFileName.set("${project.name} v${project.version}.jar")
 }
