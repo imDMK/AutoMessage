@@ -8,7 +8,7 @@
 [![PaperMC](https://img.shields.io/badge/Paper-004ee9.svg)](https://hangar.papermc.io/imDMK/AutoMessage)
 [![bStats](https://img.shields.io/badge/bStats-00695c)](https://bstats.org/plugin/bukkit/AutoMessages/19487)
 
-A powerful plugin that allows you to send custom messages to online players automatically.
+Efficient plugin for automatic global messaging with many features and configuration possibilities.
 
 # Features
 * Sending a CHAT message.
