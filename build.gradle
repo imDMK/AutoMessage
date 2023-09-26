@@ -44,7 +44,7 @@ dependencies {
     implementation("org.panda-lang:panda-utilities:0.5.3-alpha")
 
     testImplementation platform("org.junit:junit-bom:5.10.0")
-    testImplementation("org.junit.jupiter:junit-jupiter:5.9.2")
+    testImplementation("org.junit.jupiter:junit-jupiter:5.10.0")
 }
 
 test {
