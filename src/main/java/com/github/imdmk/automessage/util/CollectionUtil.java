@@ -4,12 +4,14 @@ import java.util.Collection;
 import java.util.Optional;
 import java.util.Random;
 
-public final class RandomUtil {
+public class CollectionUtil {
 
     private static final Random RANDOM = new Random();
 
-    private RandomUtil() {
-        throw new UnsupportedOperationException("This is utility class.");
+    public static <T> Optional<T> select(Collection<T> collection, int position) {
+        return collection.stream()
+                .skip(position)
+                .findFirst();
     }
 
     public static <T> Optional<T> getRandom(Collection<T> collection) {
