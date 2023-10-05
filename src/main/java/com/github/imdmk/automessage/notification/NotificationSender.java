@@ -5,6 +5,7 @@ import com.github.imdmk.automessage.notification.implementation.TitleNotificatio
 import com.github.imdmk.automessage.notification.implementation.bossbar.BossBarNotification;
 import com.github.imdmk.automessage.notification.implementation.bossbar.audience.BossBarAudience;
 import com.github.imdmk.automessage.notification.implementation.bossbar.audience.BossBarAudienceManager;
+import com.github.imdmk.automessage.text.Formatter;
 import com.github.imdmk.automessage.util.ComponentUtil;
 import net.kyori.adventure.audience.Audience;
 import net.kyori.adventure.bossbar.BossBar;
@@ -13,7 +14,6 @@ import net.kyori.adventure.text.Component;
 import net.kyori.adventure.title.Title;
 import org.bukkit.command.CommandSender;
 import org.bukkit.entity.Player;
-import panda.utilities.text.Formatter;
 
 public class NotificationSender {
 
@@ -85,7 +85,7 @@ public class NotificationSender {
         }
     }
 
-    public String format(String message, Formatter formatter) {
+    private String format(String message, Formatter formatter) {
         if (formatter == null) {
             return message;
         }

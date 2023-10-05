@@ -1,14 +1,15 @@
-package com.github.imdmk.automessage.command;
+package com.github.imdmk.automessage.command.implementation;
 
-import com.github.imdmk.automessage.configuration.PluginConfiguration;
+import com.github.imdmk.automessage.configuration.implementation.PluginConfiguration;
 import com.github.imdmk.automessage.notification.Notification;
 import com.github.imdmk.automessage.notification.NotificationSender;
-import com.github.imdmk.automessage.notification.configuration.NotificationConfiguration;
 import com.github.imdmk.automessage.notification.implementation.ActionBarNotification;
 import com.github.imdmk.automessage.notification.implementation.ChatNotification;
 import com.github.imdmk.automessage.notification.implementation.SubTitleNotification;
 import com.github.imdmk.automessage.notification.implementation.TitleNotification;
 import com.github.imdmk.automessage.notification.implementation.bossbar.BossBarNotification;
+import com.github.imdmk.automessage.notification.settings.NotificationSettings;
+import com.github.imdmk.automessage.text.Formatter;
 import dev.rollczi.litecommands.argument.Arg;
 import dev.rollczi.litecommands.argument.By;
 import dev.rollczi.litecommands.argument.Name;
@@ -18,7 +19,6 @@ import dev.rollczi.litecommands.command.route.Route;
 import dev.rollczi.litecommands.suggestion.Suggest;
 import net.kyori.adventure.bossbar.BossBar;
 import org.bukkit.command.CommandSender;
-import panda.utilities.text.Formatter;
 
 import java.time.Duration;
 
@@ -26,12 +26,12 @@ import java.time.Duration;
 public class AutoMessageCreateCommand {
 
     private final PluginConfiguration pluginConfiguration;
-    private final NotificationConfiguration notificationConfiguration;
+    private final NotificationSettings notificationSettings;
     private final NotificationSender notificationSender;
 
-    public AutoMessageCreateCommand(PluginConfiguration pluginConfiguration, NotificationConfiguration notificationConfiguration, NotificationSender notificationSender) {
+    public AutoMessageCreateCommand(PluginConfiguration pluginConfiguration, NotificationSettings notificationSettings, NotificationSender notificationSender) {
         this.pluginConfiguration = pluginConfiguration;
-        this.notificationConfiguration = notificationConfiguration;
+        this.notificationSettings = notificationSettings;
         this.notificationSender = notificationSender;
     }
 
@@ -82,15 +82,15 @@ public class AutoMessageCreateCommand {
     }
 
     private void addAutoNotification(Notification notification) {
-        this.notificationConfiguration.autoMessages.add(notification);
+        this.pluginConfiguration.autoMessages.add(notification);
         this.pluginConfiguration.save();
     }
 
     private void sendAddedNotification(CommandSender sender, Notification addedNotification) {
         Formatter formatter = new Formatter()
-                .register("{TYPE}", addedNotification.type().name())
-                .register("{POSITION}", this.notificationConfiguration.autoMessages.size() - 1);
+                .placeholder("{TYPE}", addedNotification.type().name())
+                .placeholder("{POSITION}", this.pluginConfiguration.autoMessages.size() - 1);
 
-        this.notificationSender.sendNotification(sender, this.notificationConfiguration.autoMessageAddedNotification, formatter);
+        this.notificationSender.sendNotification(sender, this.notificationSettings.autoMessageAddedNotification, formatter);
     }
 }

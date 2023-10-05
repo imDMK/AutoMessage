@@ -1,4 +1,4 @@
-package com.github.imdmk.automessage.notification.configuration;
+package com.github.imdmk.automessage.notification.serializer;
 
 import com.github.imdmk.automessage.notification.Notification;
 import com.github.imdmk.automessage.notification.NotificationType;
@@ -60,8 +60,8 @@ public class NotificationSerializer implements ObjectSerializer<Notification> {
 
     @Override
     public Notification deserialize(@NonNull DeserializationData data, @NonNull GenericsDeclaration generics) {
-        String message = data.get("message", String.class);
         NotificationType type = data.get("type", NotificationType.class);
+        String message = data.get("message", String.class);
 
         return switch (type) {
             case CHAT -> new ChatNotification(message);

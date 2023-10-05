@@ -1,9 +1,9 @@
-package com.github.imdmk.automessage.command;
+package com.github.imdmk.automessage.command.implementation;
 
-import com.github.imdmk.automessage.configuration.PluginConfiguration;
+import com.github.imdmk.automessage.configuration.implementation.PluginConfiguration;
 import com.github.imdmk.automessage.notification.Notification;
 import com.github.imdmk.automessage.notification.NotificationSender;
-import com.github.imdmk.automessage.notification.configuration.NotificationConfiguration;
+import com.github.imdmk.automessage.notification.settings.NotificationSettings;
 import dev.rollczi.litecommands.argument.Arg;
 import dev.rollczi.litecommands.command.execute.Execute;
 import dev.rollczi.litecommands.command.route.Route;
@@ -13,20 +13,20 @@ import org.bukkit.command.CommandSender;
 public class AutoMessageRemoveCommand {
 
     private final PluginConfiguration pluginConfiguration;
-    private final NotificationConfiguration notificationConfiguration;
+    private final NotificationSettings notificationSettings;
     private final NotificationSender notificationSender;
 
-    public AutoMessageRemoveCommand(PluginConfiguration pluginConfiguration, NotificationConfiguration notificationConfiguration, NotificationSender notificationSender) {
+    public AutoMessageRemoveCommand(PluginConfiguration pluginConfiguration, NotificationSettings notificationSettings, NotificationSender notificationSender) {
         this.pluginConfiguration = pluginConfiguration;
-        this.notificationConfiguration = notificationConfiguration;
+        this.notificationSettings = notificationSettings;
         this.notificationSender = notificationSender;
     }
 
     @Execute(required = 1)
     void remove(CommandSender sender, @Arg Notification notification) {
-        this.notificationConfiguration.autoMessages.remove(notification);
+        this.pluginConfiguration.autoMessages.remove(notification);
         this.pluginConfiguration.save();
 
-        this.notificationSender.sendNotification(sender, this.notificationConfiguration.autoMessageRemovedNotification);
+        this.notificationSender.sendNotification(sender, this.notificationSettings.autoMessageRemovedNotification);
     }
 }
