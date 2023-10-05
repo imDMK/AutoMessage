@@ -16,7 +16,7 @@ import org.bukkit.event.player.PlayerJoinEvent;
 
 public class UpdateListener implements Listener {
 
-    private static final String PREFIX = "<dark_gray>[<rainbow>DoubleJump<dark_gray>] ";
+    private static final String PREFIX = "<dark_gray>[<rainbow>AutoMessage<dark_gray>] ";
     private static final Notification UPDATE_AVAILABLE = new ChatNotification("\n" + PREFIX + "<yellow>A new version is available: {TAG}\n" + PREFIX + "<yellow><u><click:open_url:'{URL}'>Download it here</click></u>\n");
     private static final Notification UPDATE_EXCEPTION = new ChatNotification(PREFIX + "<red>An error occurred while checking for update: {MESSAGE}");
 
