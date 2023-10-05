@@ -1,7 +1,7 @@
 package com.github.imdmk.automessage.command.argument;
 
 import com.github.imdmk.automessage.notification.NotificationType;
-import com.github.imdmk.automessage.notification.configuration.NotificationConfiguration;
+import com.github.imdmk.automessage.notification.settings.NotificationSettings;
 import dev.rollczi.litecommands.argument.ArgumentName;
 import dev.rollczi.litecommands.argument.simple.OneArgument;
 import dev.rollczi.litecommands.command.LiteInvocation;
@@ -14,16 +14,16 @@ import java.util.stream.Stream;
 @ArgumentName("position")
 public class NotificationTypeArgument implements OneArgument<NotificationType> {
 
-    private final NotificationConfiguration notificationConfiguration;
+    private final NotificationSettings notificationSettings;
 
-    public NotificationTypeArgument(NotificationConfiguration notificationConfiguration) {
-        this.notificationConfiguration = notificationConfiguration;
+    public NotificationTypeArgument(NotificationSettings notificationSettings) {
+        this.notificationSettings = notificationSettings;
     }
 
     @Override
     public Result<NotificationType, ?> parse(LiteInvocation invocation, String argument) {
         return Result.supplyThrowing(IllegalArgumentException.class, () -> NotificationType.valueOf(argument.toUpperCase()))
-                .mapErr(e -> this.notificationConfiguration.invalidTypeNotification);
+                .mapErr(e -> this.notificationSettings.invalidTypeNotification);
     }
 
     @Override

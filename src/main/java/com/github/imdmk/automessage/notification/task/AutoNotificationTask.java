@@ -1,9 +1,10 @@
 package com.github.imdmk.automessage.notification.task;
 
+import com.github.imdmk.automessage.configuration.implementation.PluginConfiguration;
 import com.github.imdmk.automessage.notification.Notification;
 import com.github.imdmk.automessage.notification.NotificationSender;
-import com.github.imdmk.automessage.notification.configuration.NotificationConfiguration;
-import com.github.imdmk.automessage.util.RandomUtil;
+import com.github.imdmk.automessage.notification.settings.NotificationSettings;
+import com.github.imdmk.automessage.util.CollectionUtil;
 
 import java.util.List;
 import java.util.Optional;
@@ -11,23 +12,23 @@ import java.util.concurrent.atomic.AtomicInteger;
 
 public class AutoNotificationTask implements Runnable {
 
-    private final NotificationConfiguration notificationConfiguration;
+    private final PluginConfiguration pluginConfiguration;
     private final NotificationSender notificationSender;
 
     private final AtomicInteger position = new AtomicInteger(0);
 
-    public AutoNotificationTask(NotificationConfiguration notificationConfiguration, NotificationSender notificationSender) {
-        this.notificationConfiguration = notificationConfiguration;
+    public AutoNotificationTask(PluginConfiguration pluginConfiguration, NotificationSender notificationSender) {
+        this.pluginConfiguration = pluginConfiguration;
         this.notificationSender = notificationSender;
     }
 
     @Override
     public void run() {
-        if (!this.notificationConfiguration.autoMessagesEnabled) {
+        if (!this.pluginConfiguration.autoMessagesEnabled) {
             return;
         }
 
-        if (this.notificationConfiguration.autoMessages.isEmpty()) {
+        if (this.pluginConfiguration.autoMessages.isEmpty()) {
             return;
         }
 
@@ -35,23 +36,22 @@ public class AutoNotificationTask implements Runnable {
     }
 
     private Optional<Notification> selectNotification() {
-        return switch (this.notificationConfiguration.autoMessagesMode) {
-            case RANDOM -> this.selectRandomNotification();
-            case SEQUENTIAL -> this.selectNextNotification();
+        NotificationSettings.AutoMessageMode autoMessageMode = this.pluginConfiguration.autoMessagesMode;
+        List<Notification> autoMessages = this.pluginConfiguration.autoMessages;
+
+        return switch (autoMessageMode) {
+            case RANDOM -> this.selectRandomNotification(autoMessages);
+            case SEQUENTIAL -> this.selectNextNotification(autoMessages);
         };
     }
 
-    private Optional<Notification> selectRandomNotification() {
-        return RandomUtil.getRandom(this.notificationConfiguration.autoMessages);
+    private Optional<Notification> selectRandomNotification(List<Notification> notifications) {
+        return CollectionUtil.getRandom(notifications);
     }
 
-    private Optional<Notification> selectNextNotification() {
-        List<Notification> autoMessages = this.notificationConfiguration.autoMessages;
+    private Optional<Notification> selectNextNotification(List<Notification> notifications) {
+        int position = this.position.getAndIncrement() % notifications.size();
 
-        int position = this.position.getAndIncrement() % autoMessages.size();
-
-        return autoMessages.stream()
-                .skip(position)
-                .findFirst();
+        return CollectionUtil.select(notifications, position);
     }
 }

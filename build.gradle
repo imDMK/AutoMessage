@@ -41,8 +41,6 @@ dependencies {
     implementation("com.eternalcode:gitcheck:1.0.0")
     implementation("org.bstats:bstats-bukkit:3.0.2")
 
-    implementation("org.panda-lang:panda-utilities:0.5.3-alpha")
-
     testImplementation platform("org.junit:junit-bom:5.10.0")
     testImplementation("org.junit.jupiter:junit-jupiter:5.9.2")
 }
@@ -78,7 +76,6 @@ shadowJar {
             "org/intellij/lang/annotations/**",
             "org/jetbrains/annotations/**",
             "META-INF/**",
-            "javassist"
     )
 
     def prefix = "com.github.imdmk.automessage.lib"
@@ -88,7 +85,7 @@ shadowJar {
             "dev.rollczi",
             "com.eternalcode",
             "org.bstats",
-            "panda",
+            "panda.std",
             "org.json.simple",
     ].each { lib ->
         relocate(lib, "${prefix}.${lib}")

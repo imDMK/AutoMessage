@@ -1,52 +1,11 @@
-package com.github.imdmk.automessage.notification.configuration;
+package com.github.imdmk.automessage.notification.settings;
 
 import com.github.imdmk.automessage.notification.Notification;
-import com.github.imdmk.automessage.notification.implementation.ActionBarNotification;
 import com.github.imdmk.automessage.notification.implementation.ChatNotification;
-import com.github.imdmk.automessage.notification.implementation.SubTitleNotification;
-import com.github.imdmk.automessage.notification.implementation.TitleNotification;
-import com.github.imdmk.automessage.notification.implementation.bossbar.BossBarNotification;
 import eu.okaeri.configs.OkaeriConfig;
 import eu.okaeri.configs.annotation.Comment;
-import net.kyori.adventure.bossbar.BossBar;
 
-import java.time.Duration;
-import java.util.Arrays;
-import java.util.List;
-
-public class NotificationConfiguration extends OkaeriConfig {
-
-    @Comment({
-            "# The value of whether automatic messages should be enabled",
-            "# This value is changed when auto messages are disabled using the automessage enable/disable command"
-    })
-    public boolean autoMessagesEnabled = true;
-
-    @Comment({
-            "# How often should automatic messages be sent?",
-            "# Example: 10s"
-    })
-    public Duration autoMessagesDelay = Duration.ofSeconds(10);
-
-    @Comment({
-            "# Automatic message sending mode",
-            "# Modes: ",
-            "# RANDOM: Automatic messages will be selected randomly",
-            "# SEQUENTIAL: Automatic messages will be selected in turn"
-    })
-    public AutoMessageMode autoMessagesMode = AutoMessageMode.SEQUENTIAL;
-
-    @Comment({
-            "# Automatic message list",
-            "# If you have trouble configuring the messages, please refer to the project's github."
-    })
-    public List<Notification> autoMessages = Arrays.asList(
-            new ChatNotification("<red>This is first message"),
-            new ActionBarNotification("<yellow>This is second message"),
-            new TitleNotification("<yellow>Third message"),
-            new SubTitleNotification("<blue>Fourth message"),
-            new BossBarNotification("<red>Five message announcement!", Duration.ofSeconds(5), BossBar.MAX_PROGRESS, true, BossBar.Color.RED, BossBar.Overlay.PROGRESS)
-    );
+public class NotificationSettings extends OkaeriConfig {
 
     @Comment("# Command notifications")
     public Notification autoMessagesEnabledNotification = new ChatNotification("<green>Enabled automatic messages<dark_gray>.");

@@ -1,7 +1,9 @@
 package com.github.imdmk.automessage.command.argument;
 
+import com.github.imdmk.automessage.configuration.implementation.PluginConfiguration;
 import com.github.imdmk.automessage.notification.Notification;
-import com.github.imdmk.automessage.notification.configuration.NotificationConfiguration;
+import com.github.imdmk.automessage.notification.settings.NotificationSettings;
+import com.github.imdmk.automessage.util.CollectionUtil;
 import com.github.imdmk.automessage.util.StringUtil;
 import dev.rollczi.litecommands.argument.ArgumentName;
 import dev.rollczi.litecommands.argument.simple.OneArgument;
@@ -13,34 +15,37 @@ import java.util.List;
 import java.util.Optional;
 import java.util.stream.IntStream;
 
-@ArgumentName("notificationPosition")
+@ArgumentName("position")
 public class NotificationArgument implements OneArgument<Notification> {
 
-    private final NotificationConfiguration notificationConfiguration;
+    private final PluginConfiguration pluginConfiguration;
+    private final NotificationSettings notificationSettings;
 
-    public NotificationArgument(NotificationConfiguration notificationConfiguration) {
-        this.notificationConfiguration = notificationConfiguration;
+    public NotificationArgument(PluginConfiguration pluginConfiguration, NotificationSettings notificationSettings) {
+        this.pluginConfiguration = pluginConfiguration;
+        this.notificationSettings = notificationSettings;
     }
 
     @Override
     public Result<Notification, ?> parse(LiteInvocation invocation, String argument) {
         if (!StringUtil.isInteger(argument)) {
-            return Result.error(this.notificationConfiguration.invalidNumberNotification);
+            return Result.error(this.notificationSettings.invalidNumberNotification);
         }
 
         int position = Integer.parseInt(argument);
 
-        Optional<Notification> notificationOptional = this.notificationConfiguration.autoMessages.stream()
-                .skip(position)
-                .findFirst();
+        List<Notification> autoMessages = this.pluginConfiguration.autoMessages;
 
-        return notificationOptional.map(Result::ok)
-                .orElseGet(() -> Result.error(this.notificationConfiguration.autoMessageNotFoundNotification));
+        Optional<Notification> selectedNotification = CollectionUtil.select(autoMessages, position);
+
+        return selectedNotification
+                .map(Result::ok)
+                .orElseGet(() -> Result.error(this.notificationSettings.autoMessageNotFoundNotification));
     }
 
     @Override
     public List<Suggestion> suggest(LiteInvocation invocation) {
-        int autoMessagesSize = this.notificationConfiguration.autoMessages.size();
+        int autoMessagesSize = this.pluginConfiguration.autoMessages.size();
 
         return IntStream.range(0, autoMessagesSize)
                 .mapToObj(String::valueOf)
