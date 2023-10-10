@@ -6,7 +6,7 @@ import java.util.Set;
 
 public class BossBarAudienceManager {
 
-    private final HashSet<BossBarAudience> bossBarAudiences = new HashSet<>();
+    private final Set<BossBarAudience> bossBarAudiences = new HashSet<>();
 
     public void add(BossBarAudience bossBarAudience) {
         this.bossBarAudiences.add(bossBarAudience);
