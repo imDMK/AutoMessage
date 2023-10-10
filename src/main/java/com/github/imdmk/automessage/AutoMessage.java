@@ -18,6 +18,7 @@ import com.github.imdmk.automessage.notification.Notification;
 import com.github.imdmk.automessage.notification.NotificationSender;
 import com.github.imdmk.automessage.notification.NotificationType;
 import com.github.imdmk.automessage.notification.implementation.bossbar.audience.BossBarAudienceManager;
+import com.github.imdmk.automessage.notification.implementation.bossbar.audience.BossBarAudienceService;
 import com.github.imdmk.automessage.notification.implementation.bossbar.audience.BossBarAudienceTask;
 import com.github.imdmk.automessage.notification.task.AutoNotificationTask;
 import com.github.imdmk.automessage.scheduler.TaskScheduler;
@@ -71,17 +72,18 @@ public class AutoMessage  {
         BossBarAudienceManager bossBarAudienceManager = new BossBarAudienceManager();
 
         /* Services */
+        BossBarAudienceService bossBarAudienceService = new BossBarAudienceService(bossBarAudienceManager);
         UpdateService updateService = new UpdateService(plugin.getDescription());
 
         /* Adventure */
         this.bukkitAudiences = BukkitAudiences.create(plugin);
-        this.notificationSender = new NotificationSender(this.bukkitAudiences, bossBarAudienceManager);
+        this.notificationSender = new NotificationSender(this.bukkitAudiences);
 
         /* Tasks */
         TaskScheduler taskScheduler = new TaskSchedulerImpl(plugin, this.server);
 
-        taskScheduler.runTimerAsync(new AutoNotificationTask(this.pluginConfiguration, this.notificationSender), 0L, DurationUtil.toTicks(this.pluginConfiguration.autoMessagesDelay));
-        taskScheduler.runTimerAsync(new BossBarAudienceTask(bossBarAudienceManager), 0L, DurationUtil.toTicks(Duration.ofSeconds(1)));
+        taskScheduler.runTimerAsync(new AutoNotificationTask(this.pluginConfiguration, this.notificationSender, bossBarAudienceService), 0L, DurationUtil.toTicks(this.pluginConfiguration.autoMessagesDelay));
+        taskScheduler.runTimerAsync(new BossBarAudienceTask(bossBarAudienceManager, bossBarAudienceService), 0L, DurationUtil.toTicks(Duration.ofSeconds(1)));
 
         /* Listeners */
         Stream.of(
