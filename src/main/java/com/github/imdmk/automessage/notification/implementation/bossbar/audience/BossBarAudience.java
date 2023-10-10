@@ -7,9 +7,9 @@ import net.kyori.adventure.bossbar.BossBar;
 import java.time.Duration;
 import java.time.Instant;
 
-public record BossBarAudience(BossBar bossBar, Audience audience, Duration time, Instant endOfBossBar, boolean timeChangesProgress) {
+public record BossBarAudience(Audience audience, BossBar bossBar, Instant endOfBossBar, Duration time, float progress) {
 
-    public BossBarAudience(BossBar bossBar, Audience audience, BossBarNotification notification) {
-        this(bossBar, audience, notification.time(), Instant.now().plus(notification.time()), notification.timeChangesProgress());
+    public BossBarAudience(Audience audience, BossBar bossBar, BossBarNotification notification) {
+        this(audience, bossBar, Instant.now().plus(notification.time()), notification.time(), notification.progress());
     }
 }
