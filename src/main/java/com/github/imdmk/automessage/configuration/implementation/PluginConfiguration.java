@@ -47,7 +47,7 @@ public class PluginConfiguration extends OkaeriConfig {
             new ActionBarNotification("<yellow>This is second message"),
             new TitleNotification("<yellow>Third message"),
             new SubTitleNotification("<blue>Fourth message"),
-            new BossBarNotification("<red>Five message announcement!", Duration.ofSeconds(5), BossBar.MAX_PROGRESS, true, BossBar.Color.RED, BossBar.Overlay.PROGRESS)
+            new BossBarNotification("<red>Five message announcement!", Duration.ofSeconds(5), BossBar.MAX_PROGRESS, BossBar.Color.RED, BossBar.Overlay.PROGRESS)
     );
 
     @Comment({"#", "# Command configuration", "#"})

@@ -71,11 +71,10 @@ public class AutoMessageCreateCommand {
     void createBossBar(CommandSender sender,
                        @Arg @Name("time") Duration time,
                        @Arg @By("bossBarProgress") float progress,
-                       @Arg @Name("timeChangesProgress") boolean timeChangesProgress,
                        @Arg @Name("color") BossBar.Color color,
                        @Arg @Name("overlay") BossBar.Overlay overlay,
                        @Joiner @Suggest("<red>Example name") @Name("name") String name) {
-        BossBarNotification bossBarNotification = new BossBarNotification(name, time, progress, timeChangesProgress, color, overlay);
+        BossBarNotification bossBarNotification = new BossBarNotification(name, time, progress, color, overlay);
 
         this.addAutoNotification(bossBarNotification);
         this.sendAddedNotification(sender, bossBarNotification);
