@@ -40,13 +40,13 @@ public class NotificationSender {
     public void sendNotification(Audience audience, Notification notification, Formatter formatter) {
         Component message = ComponentUtil.deserialize(formatter.format(notification.message()));
 
-        processNotification(audience, notification, message);
+        this.processNotification(audience, notification, message);
     }
 
     public void sendNotification(Audience audience, Notification notification) {
         Component message = ComponentUtil.deserialize(notification.message());
 
-        processNotification(audience, notification, message);
+        this.processNotification(audience, notification, message);
     }
 
     private void processNotification(Audience audience, Notification notification, Component message) {
