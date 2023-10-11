@@ -40,7 +40,7 @@ public class NotificationSender {
 
     public void sendNotification(CommandSender sender, Notification notification, Formatter formatter) {
         Audience audience = this.createAudience(sender);
-        Component message = ComponentUtil.deserialize(formatter == null ? notification.message() : formatter.format(notification.message()));
+        Component message = ComponentUtil.deserialize(formatter.format(notification.message()));
 
         this.processNotification(audience, notification, message);
     }
