@@ -25,26 +25,22 @@ public class NotificationSender {
         return this.audienceProvider.players();
     }
 
-    public void sendNotification(CommandSender sender, Notification notification, Formatter formatter) {
-        Audience audience = this.createAudience(sender);
-
-        this.sendNotification(audience, notification, formatter);
-    }
-
     public void sendNotification(CommandSender sender, Notification notification) {
         Audience audience = this.createAudience(sender);
-
-        this.sendNotification(audience, notification);
-    }
-
-    public void sendNotification(Audience audience, Notification notification, Formatter formatter) {
-        Component message = ComponentUtil.deserialize(formatter.format(notification.message()));
+        Component message = ComponentUtil.deserialize(notification.message());
 
         this.processNotification(audience, notification, message);
     }
 
     public void sendNotification(Audience audience, Notification notification) {
         Component message = ComponentUtil.deserialize(notification.message());
+
+        this.processNotification(audience, notification, message);
+    }
+
+    public void sendNotification(CommandSender sender, Notification notification, Formatter formatter) {
+        Audience audience = this.createAudience(sender);
+        Component message = ComponentUtil.deserialize(formatter == null ? notification.message() : formatter.format(notification.message()));
 
         this.processNotification(audience, notification, message);
     }
