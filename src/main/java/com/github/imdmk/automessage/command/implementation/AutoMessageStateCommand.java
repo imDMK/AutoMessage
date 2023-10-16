@@ -2,7 +2,7 @@ package com.github.imdmk.automessage.command.implementation;
 
 import com.github.imdmk.automessage.configuration.implementation.PluginConfiguration;
 import com.github.imdmk.automessage.notification.NotificationSender;
-import com.github.imdmk.automessage.notification.settings.NotificationSettings;
+import com.github.imdmk.automessage.notification.configuration.NotificationSettings;
 import dev.rollczi.litecommands.command.execute.Execute;
 import dev.rollczi.litecommands.command.permission.Permission;
 import dev.rollczi.litecommands.command.route.Route;
