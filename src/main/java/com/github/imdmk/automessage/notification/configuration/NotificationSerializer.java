@@ -21,8 +21,6 @@ import java.util.Optional;
 
 public class NotificationSerializer implements ObjectSerializer<Notification> {
 
-    private static final String NOTIFICATION_FORMAT = "%s: %s";
-
     @Override
     public boolean supports(@NonNull Class<? super Notification> type) {
         return Notification.class.isAssignableFrom(type);
