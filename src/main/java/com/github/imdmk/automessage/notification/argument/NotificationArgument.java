@@ -1,4 +1,4 @@
-package com.github.imdmk.automessage.command.argument;
+package com.github.imdmk.automessage.notification.argument;
 
 import com.github.imdmk.automessage.configuration.implementation.PluginConfiguration;
 import com.github.imdmk.automessage.notification.Notification;
@@ -29,7 +29,7 @@ public class NotificationArgument implements OneArgument<Notification> {
     @Override
     public Result<Notification, ?> parse(LiteInvocation invocation, String argument) {
         if (!StringUtil.isInteger(argument)) {
-            return Result.error(this.notificationSettings.invalidNumberNotification);
+            return Result.error(this.notificationSettings.invalidNumber);
         }
 
         int position = Integer.parseInt(argument);
@@ -40,7 +40,7 @@ public class NotificationArgument implements OneArgument<Notification> {
 
         return selectedNotification
                 .map(Result::ok)
-                .orElseGet(() -> Result.error(this.notificationSettings.autoMessageNotFoundNotification));
+                .orElseGet(() -> Result.error(this.notificationSettings.autoMessageNotFound));
     }
 
     @Override

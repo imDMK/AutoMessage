@@ -22,7 +22,8 @@ public class BossBarAudienceService {
         Instant endOfBossBar = bossBarAudience.endOfBossBar();
 
         if (now.isAfter(endOfBossBar)) {
-            this.hide(bossBarAudience);
+            bossBarAudience.audience().hideBossBar(bossBar);
+            this.bossBarAudienceManager.remove(bossBarAudience);
             return;
         }
 
@@ -39,19 +40,13 @@ public class BossBarAudienceService {
         }
     }
 
-    public BossBarAudience create(Audience audience, BossBarNotification notification) {
-        BossBar bossBar = notification.create();
-        BossBarAudience bossBarAudience = new BossBarAudience(audience, bossBar, notification);
+    public BossBarAudience create(Audience audience, BossBarNotification bossBarNotification) {
+        BossBar bossBar = bossBarNotification.create();
+        BossBarAudience bossBarAudience = new BossBarAudience(audience, bossBar, bossBarNotification);
 
+        audience.showBossBar(bossBar);
         this.bossBarAudienceManager.add(bossBarAudience);
+
         return bossBarAudience;
-    }
-
-    public void hide(BossBarAudience bossBarAudience) {
-        Audience audience = bossBarAudience.audience();
-        BossBar bossBar = bossBarAudience.bossBar();
-
-        audience.hideBossBar(bossBar);
-        this.bossBarAudienceManager.remove(bossBarAudience);
     }
 }

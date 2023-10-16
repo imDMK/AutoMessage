@@ -1,4 +1,4 @@
-package com.github.imdmk.automessage.command.argument;
+package com.github.imdmk.automessage.notification.argument;
 
 import com.github.imdmk.automessage.notification.NotificationType;
 import com.github.imdmk.automessage.notification.settings.NotificationSettings;
@@ -23,7 +23,7 @@ public class NotificationTypeArgument implements OneArgument<NotificationType> {
     @Override
     public Result<NotificationType, ?> parse(LiteInvocation invocation, String argument) {
         return Result.supplyThrowing(IllegalArgumentException.class, () -> NotificationType.valueOf(argument.toUpperCase()))
-                .mapErr(e -> this.notificationSettings.invalidTypeNotification);
+                .mapErr(e -> this.notificationSettings.invalidNotificationType);
     }
 
     @Override

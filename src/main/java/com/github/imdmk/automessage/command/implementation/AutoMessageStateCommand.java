@@ -4,10 +4,12 @@ import com.github.imdmk.automessage.configuration.implementation.PluginConfigura
 import com.github.imdmk.automessage.notification.NotificationSender;
 import com.github.imdmk.automessage.notification.settings.NotificationSettings;
 import dev.rollczi.litecommands.command.execute.Execute;
+import dev.rollczi.litecommands.command.permission.Permission;
 import dev.rollczi.litecommands.command.route.Route;
 import org.bukkit.command.CommandSender;
 
 @Route(name = "automessage")
+@Permission("command.automessage.switch.status")
 public class AutoMessageStateCommand {
 
     private final PluginConfiguration pluginConfiguration;
@@ -25,7 +27,7 @@ public class AutoMessageStateCommand {
         this.pluginConfiguration.autoMessagesEnabled = true;
         this.pluginConfiguration.save();
 
-        this.notificationSender.sendNotification(sender, this.notificationSettings.autoMessagesEnabledNotification);
+        this.notificationSender.sendNotification(sender, this.notificationSettings.autoMessagesEnabled);
     }
 
     @Execute(route = "disable")
@@ -33,6 +35,6 @@ public class AutoMessageStateCommand {
         this.pluginConfiguration.autoMessagesEnabled = false;
         this.pluginConfiguration.save();
 
-        this.notificationSender.sendNotification(sender, this.notificationSettings.autoMessagesDisabledNotification);
+        this.notificationSender.sendNotification(sender, this.notificationSettings.autoMessagesDisabled);
     }
 }

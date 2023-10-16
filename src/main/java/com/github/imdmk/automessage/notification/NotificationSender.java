@@ -60,7 +60,7 @@ public class NotificationSender {
                 audience.showTitle(title);
             }
 
-            case SUB_TITLE -> {
+            case SUBTITLE -> {
                 SubTitleNotification subTitleNotification = (SubTitleNotification) notification;
 
                 Title title = Title.title(Component.empty(), message, subTitleNotification.times());
@@ -68,7 +68,7 @@ public class NotificationSender {
                 audience.showTitle(title);
             }
 
-            case BOSS_BAR -> {
+            case BOSSBAR -> {
                 BossBarNotification bossBarNotification = (BossBarNotification) notification;
 
                 BossBar bossBar = bossBarNotification.create(message);

@@ -24,17 +24,17 @@ public class UsageHandler implements InvalidUsageHandler<CommandSender> {
             Formatter formatter = new Formatter()
                     .placeholder("{USAGE}", schematic.first());
 
-            this.notificationSender.sendNotification(sender, this.notificationSettings.invalidUsageNotification, formatter);
+            this.notificationSender.sendNotification(sender, this.notificationSettings.invalidUsage, formatter);
             return;
         }
 
-        this.notificationSender.sendNotification(sender, this.notificationSettings.invalidUsageFirstNotification);
+        this.notificationSender.sendNotification(sender, this.notificationSettings.invalidUsageListFirst);
 
         for (String schema : schematic.getSchematics()) {
             Formatter formatter = new Formatter()
                     .placeholder("{USAGE}", schema);
 
-            this.notificationSender.sendNotification(sender, this.notificationSettings.invalidUsageListNotification, formatter);
+            this.notificationSender.sendNotification(sender, this.notificationSettings.invalidUsageList, formatter);
         }
     }
 }

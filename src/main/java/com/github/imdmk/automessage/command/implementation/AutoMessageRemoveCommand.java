@@ -6,10 +6,12 @@ import com.github.imdmk.automessage.notification.NotificationSender;
 import com.github.imdmk.automessage.notification.settings.NotificationSettings;
 import dev.rollczi.litecommands.argument.Arg;
 import dev.rollczi.litecommands.command.execute.Execute;
+import dev.rollczi.litecommands.command.permission.Permission;
 import dev.rollczi.litecommands.command.route.Route;
 import org.bukkit.command.CommandSender;
 
 @Route(name = "automessage remove")
+@Permission("command.automessage.remove")
 public class AutoMessageRemoveCommand {
 
     private final PluginConfiguration pluginConfiguration;
@@ -27,6 +29,6 @@ public class AutoMessageRemoveCommand {
         this.pluginConfiguration.autoMessages.remove(notification);
         this.pluginConfiguration.save();
 
-        this.notificationSender.sendNotification(sender, this.notificationSettings.autoMessageRemovedNotification);
+        this.notificationSender.sendNotification(sender, this.notificationSettings.autoMessageRemoved);
     }
 }
