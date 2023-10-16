@@ -2,7 +2,7 @@ package com.github.imdmk.automessage.notification.argument;
 
 import com.github.imdmk.automessage.configuration.implementation.PluginConfiguration;
 import com.github.imdmk.automessage.notification.Notification;
-import com.github.imdmk.automessage.notification.settings.NotificationSettings;
+import com.github.imdmk.automessage.notification.configuration.NotificationSettings;
 import com.github.imdmk.automessage.util.CollectionUtil;
 import com.github.imdmk.automessage.util.StringUtil;
 import dev.rollczi.litecommands.argument.ArgumentName;
