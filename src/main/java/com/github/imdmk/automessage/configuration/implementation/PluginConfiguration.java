@@ -11,12 +11,24 @@ import com.github.imdmk.automessage.notification.implementation.TitleNotificatio
 import com.github.imdmk.automessage.notification.implementation.bossbar.BossBarNotification;
 import eu.okaeri.configs.OkaeriConfig;
 import eu.okaeri.configs.annotation.Comment;
+import eu.okaeri.configs.annotation.Header;
 import net.kyori.adventure.bossbar.BossBar;
 
 import java.time.Duration;
 import java.util.Arrays;
 import java.util.List;
 
+@Header({
+        "#",
+        "# Configuration file for the AutoMessage plugin.",
+        "#",
+        "# If you have a problem with plugin configuration, please create an issue on the project's github.",
+        "# However, if you like the plugin, leave a star for the project on GitHub.",
+        "# ",
+        "# Support site: https://github.com/imDMK/AutoMessage/issues/new/choose",
+        "# GitHub: https://github.com/imDMK/AutoMessage",
+        "#",
+})
 public class PluginConfiguration extends OkaeriConfig {
 
     @Comment({
