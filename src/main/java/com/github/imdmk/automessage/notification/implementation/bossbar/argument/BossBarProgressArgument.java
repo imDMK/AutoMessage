@@ -1,6 +1,6 @@
 package com.github.imdmk.automessage.notification.implementation.bossbar.argument;
 
-import com.github.imdmk.automessage.notification.settings.NotificationSettings;
+import com.github.imdmk.automessage.notification.configuration.NotificationSettings;
 import dev.rollczi.litecommands.argument.ArgumentName;
 import dev.rollczi.litecommands.argument.simple.OneArgument;
 import dev.rollczi.litecommands.command.LiteInvocation;

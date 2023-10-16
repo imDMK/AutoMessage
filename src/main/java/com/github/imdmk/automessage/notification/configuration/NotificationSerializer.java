@@ -1,4 +1,4 @@
-package com.github.imdmk.automessage.notification.serializer;
+package com.github.imdmk.automessage.notification.configuration;
 
 import com.github.imdmk.automessage.notification.Notification;
 import com.github.imdmk.automessage.notification.NotificationType;
@@ -21,6 +21,8 @@ import java.util.Optional;
 
 public class NotificationSerializer implements ObjectSerializer<Notification> {
 
+    private static final String NOTIFICATION_FORMAT = "%s: %s";
+
     @Override
     public boolean supports(@NonNull Class<? super Notification> type) {
         return Notification.class.isAssignableFrom(type);
@@ -28,16 +30,8 @@ public class NotificationSerializer implements ObjectSerializer<Notification> {
 
     @Override
     public void serialize(@NonNull Notification notification, @NonNull SerializationData data, @NonNull GenericsDeclaration generics) {
-        NotificationType type = notification.type();
-        String message = notification.message();
-
-        data.add("type", type, NotificationType.class);
-
-        if (notification.type() == NotificationType.DISABLED) {
-            return;
-        }
-
-        data.add("message", message, String.class);
+        data.add("type", notification.type(), NotificationType.class);
+        data.add("message", notification.message(), String.class);
 
         if (notification instanceof TitleNotification titleNotification) {
             data.add("times", titleNotification.times(), Title.Times.class);

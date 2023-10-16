@@ -1,4 +1,4 @@
-package com.github.imdmk.automessage.notification.settings;
+package com.github.imdmk.automessage.notification.configuration;
 
 import com.github.imdmk.automessage.notification.Notification;
 import com.github.imdmk.automessage.notification.implementation.ChatNotification;

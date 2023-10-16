@@ -1,7 +1,7 @@
 package com.github.imdmk.automessage.command.handler;
 
 import com.github.imdmk.automessage.notification.NotificationSender;
-import com.github.imdmk.automessage.notification.settings.NotificationSettings;
+import com.github.imdmk.automessage.notification.configuration.NotificationSettings;
 import com.github.imdmk.automessage.text.Formatter;
 import dev.rollczi.litecommands.command.LiteInvocation;
 import dev.rollczi.litecommands.command.permission.RequiredPermissions;
