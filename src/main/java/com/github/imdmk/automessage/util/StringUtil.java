@@ -3,7 +3,6 @@ package com.github.imdmk.automessage.util;
 public final class StringUtil {
 
     public static String NEW_LINE = "<newline>";
-
     public static String GRAY_COLOR = "<gray>";
 
     private StringUtil() {

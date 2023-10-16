@@ -23,6 +23,6 @@ public class MissingPermissionHandler implements PermissionHandler<CommandSender
         Formatter formatter = new Formatter()
                 .placeholder("{PERMISSIONS}", requiredPermissions.getPermissions());
 
-        this.notificationSender.sendNotification(sender, this.notificationSettings.missingPermissionNotification, formatter);
+        this.notificationSender.sendNotification(sender, this.notificationSettings.missingPermission, formatter);
     }
 }

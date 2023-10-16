@@ -1,4 +1,4 @@
-package com.github.imdmk.automessage.command.argument;
+package com.github.imdmk.automessage.notification.implementation.bossbar.argument;
 
 import com.github.imdmk.automessage.notification.settings.NotificationSettings;
 import dev.rollczi.litecommands.argument.ArgumentName;
@@ -22,7 +22,7 @@ public class BossBarProgressArgument implements OneArgument<Float> {
     public Result<Float, ?> parse(LiteInvocation invocation, String argument) {
         return Result.supplyThrowing(NumberFormatException.class, () -> Float.parseFloat(argument))
                 .filter(this::isValid, e -> new NumberFormatException("The float value must be greater than 0 and less than 1.0"))
-                .mapErr(exception -> this.notificationSettings.invalidFloatNotification);
+                .mapErr(exception -> this.notificationSettings.invalidFloat);
     }
 
     @Override

@@ -1,6 +1,7 @@
 package com.github.imdmk.automessage.configuration.implementation;
 
 import com.github.imdmk.automessage.command.settings.CommandSettings;
+import com.github.imdmk.automessage.mode.AutoMessageMode;
 import com.github.imdmk.automessage.notification.Notification;
 import com.github.imdmk.automessage.notification.implementation.ActionBarNotification;
 import com.github.imdmk.automessage.notification.implementation.ChatNotification;
@@ -35,13 +36,13 @@ public class PluginConfiguration extends OkaeriConfig {
 
     @Comment({
             "# Automatic messaging mode",
-            "# Modes: ",
+            "# Modes:",
             "# RANDOM - Messages will be selected randomly",
             "# SEQUENTIAL - The messages will be selected one by one"
     })
-    public NotificationSettings.AutoMessageMode autoMessagesMode = NotificationSettings.AutoMessageMode.SEQUENTIAL;
+    public AutoMessageMode autoMessagesMode = AutoMessageMode.SEQUENTIAL;
 
-    @Comment("# List of automatic messages")
+    @Comment("# Automatic messages")
     public List<Notification> autoMessages = Arrays.asList(
             new ChatNotification("<red>This is first message"),
             new ActionBarNotification("<yellow>This is second message"),

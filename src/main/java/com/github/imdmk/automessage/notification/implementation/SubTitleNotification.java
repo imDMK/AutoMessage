@@ -13,7 +13,7 @@ public record SubTitleNotification(String message, Title.Times times) implements
 
     @Override
     public NotificationType type() {
-        return NotificationType.SUB_TITLE;
+        return NotificationType.SUBTITLE;
     }
 
     @Override
