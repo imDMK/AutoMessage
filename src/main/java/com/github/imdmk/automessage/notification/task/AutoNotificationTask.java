@@ -1,11 +1,11 @@
 package com.github.imdmk.automessage.notification.task;
 
 import com.github.imdmk.automessage.configuration.implementation.PluginConfiguration;
+import com.github.imdmk.automessage.mode.AutoMessageMode;
 import com.github.imdmk.automessage.notification.Notification;
 import com.github.imdmk.automessage.notification.NotificationSender;
 import com.github.imdmk.automessage.notification.implementation.bossbar.BossBarNotification;
 import com.github.imdmk.automessage.notification.implementation.bossbar.audience.BossBarAudienceService;
-import com.github.imdmk.automessage.notification.settings.NotificationSettings;
 import com.github.imdmk.automessage.util.CollectionUtil;
 import net.kyori.adventure.audience.Audience;
 
@@ -39,15 +39,16 @@ public class AutoNotificationTask implements Runnable {
         Audience audience = this.notificationSender.audiencePlayers();
         Notification notification = this.selectNotification();
 
-        this.notificationSender.sendNotification(audience, notification);
-
         if (notification instanceof BossBarNotification bossBarNotification) {
             this.bossBarAudienceService.create(audience, bossBarNotification);
+            return;
         }
+
+        this.notificationSender.sendNotification(audience, notification);
     }
 
     private Notification selectNotification() {
-        NotificationSettings.AutoMessageMode autoMessageMode = this.pluginConfiguration.autoMessagesMode;
+        AutoMessageMode autoMessageMode = this.pluginConfiguration.autoMessagesMode;
         List<Notification> autoMessages = this.pluginConfiguration.autoMessages;
 
         return switch (autoMessageMode) {

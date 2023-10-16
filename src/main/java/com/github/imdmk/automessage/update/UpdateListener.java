@@ -14,18 +14,23 @@ import org.bukkit.event.EventHandler;
 import org.bukkit.event.Listener;
 import org.bukkit.event.player.PlayerJoinEvent;
 
+import java.util.logging.Level;
+import java.util.logging.Logger;
+
 public class UpdateListener implements Listener {
 
     private static final String PREFIX = "<dark_gray>[<rainbow>AutoMessage<dark_gray>] ";
     private static final Notification UPDATE_AVAILABLE = new ChatNotification("\n" + PREFIX + "<yellow>A new version is available: {TAG}\n" + PREFIX + "<yellow><u><click:open_url:'{URL}'>Download it here</click></u>\n");
     private static final Notification UPDATE_EXCEPTION = new ChatNotification(PREFIX + "<red>An error occurred while checking for update: {MESSAGE}");
 
+    private final Logger logger;
     private final PluginConfiguration pluginConfiguration;
     private final NotificationSender notificationSender;
     private final UpdateService updateService;
     private final TaskScheduler taskScheduler;
 
-    public UpdateListener(PluginConfiguration pluginConfiguration, NotificationSender notificationSender, UpdateService updateService, TaskScheduler taskScheduler) {
+    public UpdateListener(Logger logger, PluginConfiguration pluginConfiguration, NotificationSender notificationSender, UpdateService updateService, TaskScheduler taskScheduler) {
+        this.logger = logger;
         this.pluginConfiguration = pluginConfiguration;
         this.notificationSender = notificationSender;
         this.updateService = updateService;
@@ -63,6 +68,8 @@ public class UpdateListener implements Listener {
             this.notificationSender.sendNotification(player, UPDATE_AVAILABLE, formatter);
         }
         catch (GitException gitException) {
+            this.logger.log(Level.SEVERE, "An error occurred while checking for update", gitException);
+
             Formatter formatter = new Formatter()
                     .placeholder("{MESSAGE}", gitException.getMessage());
 

@@ -6,14 +6,15 @@ import com.github.imdmk.automessage.notification.NotificationSender;
 import com.github.imdmk.automessage.notification.settings.NotificationSettings;
 import com.github.imdmk.automessage.text.Formatter;
 import dev.rollczi.litecommands.command.execute.Execute;
+import dev.rollczi.litecommands.command.permission.Permission;
 import dev.rollczi.litecommands.command.route.Route;
 import org.bukkit.command.CommandSender;
 import org.bukkit.entity.Player;
 
 import java.util.List;
-import java.util.concurrent.atomic.AtomicInteger;
 
 @Route(name = "automessage list")
+@Permission("command.automessage.list")
 public class AutoMessageListCommand {
 
     private final PluginConfiguration pluginConfiguration;
@@ -31,30 +32,28 @@ public class AutoMessageListCommand {
         List<Notification> autoMessages = this.pluginConfiguration.autoMessages;
 
         if (autoMessages.isEmpty()) {
-            this.notificationSender.sendNotification(sender, this.notificationSettings.autoMessagesEmptyNotification);
+            this.notificationSender.sendNotification(sender, this.notificationSettings.autoMessagesEmpty);
             return;
         }
 
-        this.notificationSender.sendNotification(sender, this.notificationSettings.autoMessagesListFirstNotification);
+        this.notificationSender.sendNotification(sender, this.notificationSettings.autoMessagesListFirst);
 
-        boolean useHovers = sender instanceof Player && this.notificationSettings.autoMessagesListUseHover;
+        for (int i = 0; i < autoMessages.size(); i++) {
+            Notification autoMessage = autoMessages.get(i);
 
-        AtomicInteger position = new AtomicInteger(0);
-
-        for (Notification notification : autoMessages) {
             Formatter formatter = new Formatter()
-                    .placeholder("{POSITION}", position.getAndIncrement())
-                    .placeholder("{NOTIFICATION}", this.formatNotification(notification, useHovers));
+                    .placeholder("{POSITION}", i + 1)
+                    .placeholder("{NOTIFICATION}", this.formatNotification(sender, autoMessage));
 
-            this.notificationSender.sendNotification(sender, this.notificationSettings.autoMessagesListNotification, formatter);
+            this.notificationSender.sendNotification(sender, this.notificationSettings.autoMessagesList, formatter);
         }
     }
 
-    private String formatNotification(Notification notification, boolean useHover) {
-        return useHover ? this.formatNotificationHover(notification) : notification.format();
+    private String formatNotification(CommandSender sender, Notification notification) {
+        return (sender instanceof Player) ? this.formatHover(notification) : notification.format();
     }
 
-    private String formatNotificationHover(Notification notification) {
+    private String formatHover(Notification notification) {
         return "<hover:show_text:'" +  notification.format() + "'>" + notification.type();
     }
 }

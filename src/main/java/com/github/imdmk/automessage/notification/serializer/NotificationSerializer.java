@@ -72,13 +72,13 @@ public class NotificationSerializer implements ObjectSerializer<Notification> {
                 yield new TitleNotification(message, times);
             }
 
-            case SUB_TITLE -> {
+            case SUBTITLE -> {
                 Title.Times times = this.getOptionalTitleTimes(data).orElse(Title.DEFAULT_TIMES);
 
                 yield new SubTitleNotification(message, times);
             }
 
-            case BOSS_BAR -> {
+            case BOSSBAR -> {
                 Duration time = data.get("time", Duration.class);
                 float progress = data.get("progress", float.class);
                 BossBar.Color color = data.get("color", BossBar.Color.class);

@@ -28,7 +28,7 @@ public record BossBarNotification(String message, Duration time, float progress,
 
     @Override
     public NotificationType type() {
-        return NotificationType.BOSS_BAR;
+        return NotificationType.BOSSBAR;
     }
 
     @Override
