@@ -45,11 +45,7 @@ Integrates with [Kyori Adventure](https://github.com/KyoriPowered/adventure) for
 ---
 
 ## ✨ Showcase
-
-<!-- Insert your GIFs or images here -->
-<!-- Example:
-![AutoMessage Chat Preview](https://yourdomain.com/chat-preview.gif)
--->
+![AutoMessage Chat Preview](assets/automessage-preview.gif)
 
 ---
 
