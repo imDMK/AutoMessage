@@ -1,72 +1,30 @@
 package com.github.imdmk.automessage.configuration.implementation;
 
-import com.github.imdmk.automessage.command.settings.CommandSettings;
-import com.github.imdmk.automessage.mode.AutoMessageMode;
-import com.github.imdmk.automessage.notification.Notification;
-import com.github.imdmk.automessage.notification.configuration.NotificationSettings;
-import com.github.imdmk.automessage.notification.implementation.ActionBarNotification;
-import com.github.imdmk.automessage.notification.implementation.ChatNotification;
-import com.github.imdmk.automessage.notification.implementation.SubTitleNotification;
-import com.github.imdmk.automessage.notification.implementation.TitleNotification;
-import com.github.imdmk.automessage.notification.implementation.bossbar.BossBarNotification;
-import eu.okaeri.configs.OkaeriConfig;
+import com.github.imdmk.automessage.configuration.ConfigSection;
 import eu.okaeri.configs.annotation.Comment;
-import eu.okaeri.configs.annotation.Header;
-import net.kyori.adventure.bossbar.BossBar;
+import eu.okaeri.configs.serdes.OkaeriSerdesPack;
+import eu.okaeri.configs.serdes.commons.SerdesCommons;
+import org.jetbrains.annotations.NotNull;
 
 import java.time.Duration;
-import java.util.Arrays;
-import java.util.List;
 
-@Header({
-        "#",
-        "# Configuration file for the AutoMessage plugin.",
-        "#",
-        "# If you have a problem with plugin configuration, please create an issue on the project's github.",
-        "# However, if you like the plugin, leave a star for the project on GitHub.",
-        "# ",
-        "# Support site: https://github.com/imDMK/AutoMessage/issues/new/choose",
-        "# GitHub: https://github.com/imDMK/AutoMessage",
-        "#",
-})
-public class PluginConfiguration extends OkaeriConfig {
+public class PluginConfiguration extends ConfigSection {
 
-    @Comment({
-            "# Specifies whether to check for a new plugin version when the administrator joins the server",
-            "# I highly recommend enabling this option"
-    })
-    public boolean checkForUpdate = true;
+    @Comment("# Check for plugin update and send notification after administrator join to server?")
+    public boolean checkUpdate = true;
 
-    @Comment({
-            "# Specifies whether automatic messages should be turned on",
-            "# Note: This value changes when you use the automessage enable/disable command"
-    })
-    public boolean autoMessagesEnabled = true;
+    @Comment("# How often should the plugin check for updates? Recommended value: 1 day")
+    public Duration updateInterval = Duration.ofDays(1);
 
-    @Comment("# How often should automatic messages be sent?")
-    public Duration autoMessagesDelay = Duration.ofSeconds(10);
+    @Override
+    public @NotNull OkaeriSerdesPack getSerdesPack() {
+        return registry -> {
+            registry.register(new SerdesCommons());
+        };
+    }
 
-    @Comment({
-            "# Automatic messaging mode",
-            "# Modes:",
-            "# RANDOM - Messages will be selected randomly",
-            "# SEQUENTIAL - The messages will be selected one by one"
-    })
-    public AutoMessageMode autoMessagesMode = AutoMessageMode.SEQUENTIAL;
-
-    @Comment("# Automatic messages")
-    public List<Notification> autoMessages = Arrays.asList(
-            new ChatNotification("<red>This is first message"),
-            new ActionBarNotification("<yellow>This is second message"),
-            new TitleNotification("<yellow>Third message"),
-            new SubTitleNotification("<blue>Fourth message"),
-            new BossBarNotification("<red>Five message announcement!", Duration.ofSeconds(5), BossBar.MAX_PROGRESS, BossBar.Color.RED, BossBar.Overlay.PROGRESS)
-    );
-
-    @Comment({"#", "# Command configuration", "#"})
-    public CommandSettings commandSettings = new CommandSettings();
-
-    @Comment({"#", "# Notification settings", "#"})
-    public NotificationSettings notificationSettings = new NotificationSettings();
-
+    @Override
+    public @NotNull String getFileName() {
+        return "pluginConfiguration.yml";
+    }
 }

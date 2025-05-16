@@ -4,6 +4,9 @@ import org.bukkit.plugin.java.JavaPlugin;
 
 public class AutoMessagePlugin extends JavaPlugin {
 
+    /** bStats Metrics service ID for reporting plugin statistics */
+    public static final int METRICS_SERVICE_ID = 19487;
+
     private AutoMessage autoMessage;
 
     @Override
@@ -13,6 +16,6 @@ public class AutoMessagePlugin extends JavaPlugin {
 
     @Override
     public void onDisable() {
-        this.autoMessage.onDisable();
+        this.autoMessage.disable();
     }
 }
