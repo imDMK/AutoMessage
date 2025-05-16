@@ -1,4 +1,4 @@
-package com.github.imdmk.automessage.configuration.representer;
+package com.github.imdmk.automessage.configuration;
 
 import org.yaml.snakeyaml.DumperOptions;
 import org.yaml.snakeyaml.nodes.Node;
