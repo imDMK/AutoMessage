@@ -1,136 +1,125 @@
 package com.github.imdmk.automessage;
 
-import com.github.imdmk.automessage.command.handler.MissingPermissionHandler;
-import com.github.imdmk.automessage.command.handler.NotificationHandler;
-import com.github.imdmk.automessage.command.handler.UsageHandler;
-import com.github.imdmk.automessage.command.implementation.AutoMessageCreateCommand;
-import com.github.imdmk.automessage.command.implementation.AutoMessageListCommand;
-import com.github.imdmk.automessage.command.implementation.AutoMessageRemoveCommand;
-import com.github.imdmk.automessage.command.implementation.AutoMessageStateCommand;
-import com.github.imdmk.automessage.configuration.ConfigurationFactory;
+import com.eternalcode.multification.notice.Notice;
+import com.github.imdmk.automessage.configuration.ConfigurationManager;
 import com.github.imdmk.automessage.configuration.implementation.PluginConfiguration;
-import com.github.imdmk.automessage.notification.Notification;
-import com.github.imdmk.automessage.notification.NotificationSender;
-import com.github.imdmk.automessage.notification.NotificationType;
-import com.github.imdmk.automessage.notification.argument.NotificationArgument;
-import com.github.imdmk.automessage.notification.argument.NotificationTypeArgument;
-import com.github.imdmk.automessage.notification.implementation.bossbar.argument.BossBarProgressArgument;
-import com.github.imdmk.automessage.notification.implementation.bossbar.audience.BossBarAudienceManager;
-import com.github.imdmk.automessage.notification.implementation.bossbar.audience.BossBarAudienceService;
-import com.github.imdmk.automessage.notification.implementation.bossbar.audience.BossBarAudienceTask;
-import com.github.imdmk.automessage.notification.task.AutoNotificationTask;
+import com.github.imdmk.automessage.feature.command.builder.configuration.CommandConfiguration;
+import com.github.imdmk.automessage.feature.command.builder.configuration.CommandConfigurator;
+import com.github.imdmk.automessage.feature.command.builder.handler.MissingPermissionHandler;
+import com.github.imdmk.automessage.feature.command.builder.handler.UsageHandler;
+import com.github.imdmk.automessage.feature.command.builder.player.PlayerArgument;
+import com.github.imdmk.automessage.feature.command.builder.player.PlayerContextual;
+import com.github.imdmk.automessage.feature.command.implementation.DelayCommand;
+import com.github.imdmk.automessage.feature.command.implementation.ReloadCommand;
+import com.github.imdmk.automessage.feature.message.MessageConfiguration;
+import com.github.imdmk.automessage.feature.message.MessageResultHandler;
+import com.github.imdmk.automessage.feature.message.MessageService;
+import com.github.imdmk.automessage.feature.message.auto.AutoMessageConfiguration;
+import com.github.imdmk.automessage.feature.message.auto.dispatcher.AutoMessageDispatcher;
+import com.github.imdmk.automessage.feature.update.UpdateController;
+import com.github.imdmk.automessage.feature.update.UpdateService;
+import com.github.imdmk.automessage.scheduler.BukkitTaskScheduler;
 import com.github.imdmk.automessage.scheduler.TaskScheduler;
-import com.github.imdmk.automessage.scheduler.TaskSchedulerImpl;
-import com.github.imdmk.automessage.update.UpdateListener;
-import com.github.imdmk.automessage.update.UpdateService;
-import com.github.imdmk.automessage.util.DurationUtil;
 import com.google.common.base.Stopwatch;
 import dev.rollczi.litecommands.LiteCommands;
-import dev.rollczi.litecommands.bukkit.adventure.platform.LiteBukkitAdventurePlatformFactory;
-import dev.rollczi.litecommands.bukkit.tools.BukkitOnlyPlayerContextual;
-import dev.rollczi.litecommands.bukkit.tools.BukkitPlayerArgument;
+import dev.rollczi.litecommands.bukkit.LiteBukkitFactory;
 import net.kyori.adventure.platform.bukkit.BukkitAudiences;
+import net.kyori.adventure.text.minimessage.MiniMessage;
 import org.bstats.bukkit.Metrics;
 import org.bukkit.Server;
 import org.bukkit.command.CommandSender;
 import org.bukkit.entity.Player;
 import org.bukkit.plugin.Plugin;
-import org.bukkit.plugin.java.JavaPlugin;
 
-import java.io.File;
-import java.time.Duration;
 import java.util.concurrent.TimeUnit;
 import java.util.logging.Logger;
 import java.util.stream.Stream;
 
-public class AutoMessage  {
+/**
+ * Core plugin initializer responsible for setting up configuration,
+ * services, commands, schedulers, and external integrations.
+ */
+class AutoMessage {
 
     private final Server server;
+    private final Logger logger;
 
-    private final PluginConfiguration pluginConfiguration;
+    private final ConfigurationManager configurationManager;
 
-    private final BukkitAudiences bukkitAudiences;
-    private final NotificationSender notificationSender;
+    private final MessageService messageService;
 
-    private LiteCommands<CommandSender> liteCommands;
+    private final TaskScheduler taskScheduler;
+
+    private final LiteCommands<CommandSender> liteCommands;
 
     private final Metrics metrics;
 
-    public AutoMessage(Plugin plugin) {
+    AutoMessage(Plugin plugin) {
         Stopwatch stopwatch = Stopwatch.createStarted();
 
-        Logger logger = plugin.getLogger();
-        File dataFolder = plugin.getDataFolder();
-
         this.server = plugin.getServer();
+        this.logger = plugin.getLogger();
 
         /* Configuration */
-        this.pluginConfiguration = ConfigurationFactory.create(PluginConfiguration.class, new File(dataFolder, "configuration.yml"));
+        this.configurationManager = new ConfigurationManager(this.logger, plugin.getDataFolder());
 
-        /* Managers */
-        BossBarAudienceManager bossBarAudienceManager = new BossBarAudienceManager();
+        PluginConfiguration pluginConfiguration = this.configurationManager.create(PluginConfiguration.class);
+        MessageConfiguration messageConfiguration = this.configurationManager.create(MessageConfiguration.class);
+        AutoMessageConfiguration autoMessageConfiguration = this.configurationManager.create(AutoMessageConfiguration.class);
+        CommandConfiguration commandConfiguration = this.configurationManager.create(CommandConfiguration.class);
 
         /* Services */
-        BossBarAudienceService bossBarAudienceService = new BossBarAudienceService(bossBarAudienceManager);
-        UpdateService updateService = new UpdateService(plugin.getDescription());
+        this.messageService = new MessageService(messageConfiguration, BukkitAudiences.create(plugin), MiniMessage.miniMessage());
+        UpdateService updateService = new UpdateService(pluginConfiguration, plugin.getDescription());
 
-        /* Adventure */
-        this.bukkitAudiences = BukkitAudiences.create(plugin);
-        this.notificationSender = new NotificationSender(this.bukkitAudiences);
+        /* Scheduler */
+        this.taskScheduler = new BukkitTaskScheduler(plugin, this.server);
 
-        /* Tasks */
-        TaskScheduler taskScheduler = new TaskSchedulerImpl(plugin, this.server);
+        /* Dispatcher */
+        AutoMessageDispatcher autoMessageDispatcher = new AutoMessageDispatcher(this.configurationManager, autoMessageConfiguration, this.messageService, this.taskScheduler);
+        autoMessageDispatcher.schedule();
 
-        taskScheduler.runTimerAsync(new AutoNotificationTask(this.pluginConfiguration, this.notificationSender, bossBarAudienceService), 0L, DurationUtil.toTicks(this.pluginConfiguration.autoMessagesDelay));
-        taskScheduler.runTimerAsync(new BossBarAudienceTask(bossBarAudienceManager, bossBarAudienceService), 0L, DurationUtil.toTicks(Duration.ofSeconds(1)));
-
-        /* Listeners */
+        /* Controllers */
         Stream.of(
-                new UpdateListener(logger, this.pluginConfiguration, this.notificationSender, updateService, taskScheduler)
+                new UpdateController(this.logger, pluginConfiguration, this.messageService, updateService, this.taskScheduler)
         ).forEach(listener -> this.server.getPluginManager().registerEvents(listener, plugin));
 
-        /* Commands */
-        if (this.pluginConfiguration.commandSettings.autoMessageEnabled) {
-            this.liteCommands = this.registerLiteCommands();
-        }
+        /* LiteCommands */
+        this.liteCommands = LiteBukkitFactory.builder("AutoMessage", plugin, this.server)
+                .argument(Player.class, new PlayerArgument(this.server, messageConfiguration))
 
-        /* Metrics */
-        this.metrics = new Metrics((JavaPlugin) plugin, 19487);
+                .context(Player.class, new PlayerContextual())
+                .result(Notice.class, new MessageResultHandler(this.messageService))
 
-        logger.info("Enabled plugin in " + stopwatch.stop().elapsed(TimeUnit.MILLISECONDS) + "ms.");
-    }
+                .missingPermission(new MissingPermissionHandler(this.messageService))
+                .invalidUsage(new UsageHandler(this.messageService))
 
-    public void onDisable() {
-        this.bukkitAudiences.close();
-
-        if (this.liteCommands != null) {
-            this.liteCommands.getPlatform().unregisterAll();
-        }
-
-        this.metrics.shutdown();
-    }
-
-    private LiteCommands<CommandSender> registerLiteCommands() {
-        return LiteBukkitAdventurePlatformFactory.builder(this.server, "AutoMessage", false, this.bukkitAudiences, true)
-                .contextualBind(Player.class, new BukkitOnlyPlayerContextual<>("Command only for player"))
-
-                .argument(Player.class, new BukkitPlayerArgument<>(this.server, this.pluginConfiguration.notificationSettings.playerNotFound))
-                .argument(NotificationType.class, new NotificationTypeArgument(this.pluginConfiguration.notificationSettings))
-                .argument(Notification.class, new NotificationArgument(this.pluginConfiguration, this.pluginConfiguration.notificationSettings))
-
-                .argument(float.class, "bossBarProgress", new BossBarProgressArgument(this.pluginConfiguration.notificationSettings))
-
-                .invalidUsageHandler(new UsageHandler(this.pluginConfiguration.notificationSettings, this.notificationSender))
-                .permissionHandler(new MissingPermissionHandler(this.pluginConfiguration.notificationSettings, this.notificationSender))
-                .resultHandler(Notification.class, new NotificationHandler(this.notificationSender))
-
-                .commandInstance(
-                        new AutoMessageStateCommand(this.pluginConfiguration, this.pluginConfiguration.notificationSettings, this.notificationSender),
-                        new AutoMessageCreateCommand(this.pluginConfiguration, this.pluginConfiguration.notificationSettings, this.notificationSender),
-                        new AutoMessageListCommand(this.pluginConfiguration, this.pluginConfiguration.notificationSettings, this.notificationSender),
-                        new AutoMessageRemoveCommand(this.pluginConfiguration, this.pluginConfiguration.notificationSettings, this.notificationSender)
+                .commands(
+                        new DelayCommand(this.messageService, autoMessageDispatcher),
+                        new ReloadCommand(this.logger, this.configurationManager, this.messageService)
                 )
 
-                .register();
+                .editorGlobal(new CommandConfigurator(this.logger, commandConfiguration))
+
+                .build();
+
+        /* Metrics */
+        this.metrics = new Metrics(plugin, AutoMessagePlugin.METRICS_SERVICE_ID);
+
+        this.logger.info("Enabled plugin in " + stopwatch.elapsed(TimeUnit.MILLISECONDS) + "ms.");
+    }
+
+    /**
+     * Gracefully shuts down all plugin components and resources.
+     * Called during plugin disable.
+     */
+    void disable() {
+        this.configurationManager.shutdown();
+        this.messageService.close();
+        this.liteCommands.unregister();
+        this.metrics.shutdown();
+        this.taskScheduler.shutdown();
+
+        this.logger.info("Successfully disabled plugin.");
     }
 }
