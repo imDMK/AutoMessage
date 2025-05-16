@@ -6,6 +6,7 @@
 [![SpigotMC](https://img.shields.io/badge/SpigotMC-yellow.svg)](https://www.spigotmc.org/resources/automessage.112363/)
 [![Bukkit](https://img.shields.io/badge/Bukkit-blue.svg)](https://legacy.curseforge.com/minecraft/bukkit-plugins/auto-messages)
 [![PaperMC](https://img.shields.io/badge/Paper-004ee9.svg)](https://hangar.papermc.io/imDMK/AutoMessage)
+[![Modrinth](https://img.shields.io/badge/Modrinth-1bd96a.svg)]([https://modrinth.com/plugin/spenttime](https://modrinth.com/plugin/automessage))
 [![bStats](https://img.shields.io/badge/bStats-00695c)](https://bstats.org/plugin/bukkit/AutoMessages/19487)
 
 ---
