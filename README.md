@@ -7,6 +7,7 @@
 [![Bukkit](https://img.shields.io/badge/Bukkit-blue.svg)](https://legacy.curseforge.com/minecraft/bukkit-plugins/auto-messages)
 [![PaperMC](https://img.shields.io/badge/Paper-004ee9.svg)](https://hangar.papermc.io/imDMK/AutoMessage)
 [![Modrinth](https://img.shields.io/badge/Modrinth-1bd96a.svg)](https://modrinth.com/plugin/automessage)
+[![Polymart](https://img.shields.io/badge/Polymart-green.svg)](https://polymart.org/product/7890/automessage-1-17-1-21-5)
 [![bStats](https://img.shields.io/badge/bStats-00695c)](https://bstats.org/plugin/bukkit/AutoMessages/19487)
 
 ---
