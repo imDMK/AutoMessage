@@ -14,7 +14,7 @@ import org.jetbrains.annotations.NotNull;
 
 import java.util.Objects;
 
-public class MessageService extends BukkitMultification<MessageConfiguration> {
+public final class MessageService extends BukkitMultification<MessageConfiguration> {
 
     private final MessageConfiguration messageConfiguration;
     private final AudienceProvider audienceProvider;
@@ -51,7 +51,7 @@ public class MessageService extends BukkitMultification<MessageConfiguration> {
         };
     }
 
-    public void send(CommandSender sender, NoticeProvider<MessageConfiguration> notice) {
+    public void send(@NotNull CommandSender sender, @NotNull NoticeProvider<MessageConfiguration> notice) {
         this.create().viewer(sender).notice(notice).send();
     }
 
