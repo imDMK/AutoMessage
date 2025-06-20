@@ -9,7 +9,7 @@ import org.jetbrains.annotations.NotNull;
 
 import java.util.Objects;
 
-public class MessageResultHandler implements ResultHandler<CommandSender, Notice> {
+public final class MessageResultHandler implements ResultHandler<CommandSender, Notice> {
 
     private final MessageService messageService;
 
