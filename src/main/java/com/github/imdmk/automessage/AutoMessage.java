@@ -16,6 +16,8 @@ import com.github.imdmk.automessage.feature.message.MessageResultHandler;
 import com.github.imdmk.automessage.feature.message.MessageService;
 import com.github.imdmk.automessage.feature.message.auto.AutoMessageConfiguration;
 import com.github.imdmk.automessage.feature.message.auto.dispatcher.AutoMessageDispatcher;
+import com.github.imdmk.automessage.feature.message.auto.eligibility.AutoMessageEligibilityEvaluator;
+import com.github.imdmk.automessage.feature.message.auto.eligibility.DefaultEligibilityEvaluator;
 import com.github.imdmk.automessage.feature.update.UpdateController;
 import com.github.imdmk.automessage.feature.update.UpdateService;
 import com.github.imdmk.automessage.scheduler.BukkitTaskScheduler;
@@ -76,7 +78,9 @@ class AutoMessage {
         this.taskScheduler = new BukkitTaskScheduler(plugin, this.server);
 
         /* Dispatcher */
-        AutoMessageDispatcher autoMessageDispatcher = new AutoMessageDispatcher(this.configurationManager, autoMessageConfiguration, this.messageService, this.taskScheduler);
+        AutoMessageEligibilityEvaluator eligibilityEvaluator = new DefaultEligibilityEvaluator();
+
+        AutoMessageDispatcher autoMessageDispatcher = new AutoMessageDispatcher(this.server, this.configurationManager, autoMessageConfiguration, this.messageService, this.taskScheduler, eligibilityEvaluator);
         autoMessageDispatcher.schedule();
 
         /* Controllers */
