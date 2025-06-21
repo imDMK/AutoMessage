@@ -70,6 +70,7 @@ public final class AutoMessageDispatcher {
         this.selector.selectFor(player, this.configuration.messages)
                 .map(AutoMessageNotice::getNotice)
                 .ifPresent(notice -> this.messageService.create()
+                        .viewer(player)
                         .notice(notice)
                         .sendAsync());
     }

@@ -17,6 +17,9 @@ import java.util.Optional;
 })
 public class CommandConfiguration extends ConfigSection {
 
+    @Comment("# Specifies to enable command editor feature.")
+    public boolean enabled = false;
+
     @Comment({
             "# This allows you to globally edit commands.",
             "# For example, if you want to change the command name from /my-furnaces to /furnaces,",

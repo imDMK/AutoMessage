@@ -53,7 +53,7 @@ public class AutoMessageConfiguration extends ConfigSection {
                     .build(),
 
             AutoMessageNotice.builder()
-                    .notice(Notice.chat("<dark_gray>[<red>!<dark_gray>] <gray>This is first announcement of <rainbow>automessage <gray>plugin!"))
+                    .notice(Notice.chat("<dark_gray>[<red>!<dark_gray>] <gray>This a announcement only for players with 'vip' group!"))
                     .requiredGroup("vip")
                     .build()
     );
@@ -62,6 +62,7 @@ public class AutoMessageConfiguration extends ConfigSection {
     public @NotNull OkaeriSerdesPack getSerdesPack() {
         return registry -> {
             registry.register(new SerdesCommons());
+            registry.register(new AutoMessageNoticeSerializer());
             registry.register(new MultificationSerdesPack(NoticeResolverDefaults.createRegistry()));
         };
     }
