@@ -1,71 +1,78 @@
 package com.github.imdmk.automessage.feature.message.auto.dispatcher;
 
-import com.eternalcode.multification.notice.Notice;
 import com.github.imdmk.automessage.configuration.ConfigurationManager;
 import com.github.imdmk.automessage.feature.message.MessageService;
 import com.github.imdmk.automessage.feature.message.auto.AutoMessageConfiguration;
+import com.github.imdmk.automessage.feature.message.auto.AutoMessageNotice;
+import com.github.imdmk.automessage.feature.message.auto.eligibility.AutoMessageEligibilityEvaluator;
+import com.github.imdmk.automessage.feature.message.auto.selector.AutoMessageSelector;
+import com.github.imdmk.automessage.feature.message.auto.selector.AutoMessageSelectorFactory;
 import com.github.imdmk.automessage.scheduler.TaskScheduler;
-import com.github.imdmk.automessage.util.CollectionUtil;
 import com.github.imdmk.automessage.util.DurationUtil;
+import org.bukkit.Server;
+import org.bukkit.entity.Player;
 import org.bukkit.scheduler.BukkitTask;
 import org.jetbrains.annotations.NotNull;
 
 import java.time.Duration;
-import java.util.List;
 import java.util.Objects;
-import java.util.concurrent.atomic.AtomicInteger;
 
 /**
  * Dispatches automatic messages to online players based on configured strategy.
  */
 public final class AutoMessageDispatcher {
 
+    /**
+     * The initial delay in ticks before the first auto message dispatch.
+     */
+    private static final long INITIAL_DELAY_TICKS = 0L;
+
+    /**
+     * Indicates that task is not currently scheduled.
+     */
+    private static final int TASK_NOT_RUN_ID = 0;
+
+    private final Server server;
     private final ConfigurationManager configurationManager;
     private final AutoMessageConfiguration configuration;
     private final MessageService messageService;
     private final TaskScheduler taskScheduler;
 
-    private final AtomicInteger position = new AtomicInteger(0);
+    private final AutoMessageSelector selector;
 
     private volatile long delayTicks;
     private volatile int currentTask;
 
     public AutoMessageDispatcher(
+            @NotNull Server server,
             @NotNull ConfigurationManager configurationManager,
             @NotNull AutoMessageConfiguration configuration,
             @NotNull MessageService messageService,
-            @NotNull TaskScheduler taskScheduler
+            @NotNull TaskScheduler taskScheduler,
+            @NotNull AutoMessageEligibilityEvaluator eligibilityEvaluator
     ) {
+        this.server = Objects.requireNonNull(server, "server cannot be null");
         this.configurationManager = Objects.requireNonNull(configurationManager, "configurationManager cannot be null");
         this.configuration = Objects.requireNonNull(configuration, "configuration cannot be null");
         this.messageService = Objects.requireNonNull(messageService, "messageService cannot be null");
         this.taskScheduler = Objects.requireNonNull(taskScheduler, "taskScheduler cannot be null");
 
-        this.delayTicks = DurationUtil.toTicks(this.configuration.delay);
+        this.selector = AutoMessageSelectorFactory.create(this.configuration.mode, eligibilityEvaluator);
+        this.delayTicks = DurationUtil.toTicks(Objects.requireNonNull(this.configuration.delay, "delay cannot be null"));
     }
 
     /**
-     * Selects and dispatches a message to all online players according to the auto message mode specified in the configuration.
-     */
-    public void dispatch() {
-        Notice message = this.selectMessage();
-
-        this.messageService.create()
-                .onlinePlayers()
-                .notice(message)
-                .sendAsync();
-    }
-
-    /**
-     * Dispatches a specific message to all online players.
+     * Dispatches an automatic message to the specified player if an eligible message is available.
      *
-     * @param message the message to dispatch
+     * @param player the player to receive the message, must not be {@code null}
      */
-    public void dispatch(@NotNull Notice message) {
-        this.messageService.create()
-                .onlinePlayers()
-                .notice(message)
-                .sendAsync();
+    public void dispatch(@NotNull Player player) {
+        this.selector.selectFor(player, this.configuration.messages)
+                .map(AutoMessageNotice::getNotice)
+                .ifPresent(notice -> this.messageService.create()
+                        .viewer(player)
+                        .notice(notice)
+                        .sendAsync());
     }
 
     /**
@@ -83,7 +90,7 @@ public final class AutoMessageDispatcher {
             return; // no change
         }
 
-        this.configuration.delay = DurationUtil.fromTicks(newDelayTicks);
+        this.configuration.setDelay(DurationUtil.fromTicks(newDelayTicks));
         this.configurationManager.save(this.configuration);
 
         this.delayTicks = newDelayTicks;
@@ -99,40 +106,15 @@ public final class AutoMessageDispatcher {
      * </p>
      */
     public synchronized void schedule() {
-        if (this.currentTask > 0) {
+        if (this.isTaskScheduled()) {
             this.taskScheduler.cancelTask(this.currentTask);
+            this.selector.reset();
         }
 
-        BukkitTask task = this.taskScheduler.runTimerAsync(this::dispatch, 0L, this.delayTicks);
+        BukkitTask task = this.taskScheduler.runTimerAsync(
+                new AutoMessageDispatchTask(this.server, this), INITIAL_DELAY_TICKS, this.delayTicks
+        );
         this.currentTask = task.getTaskId();
-    }
-
-
-    /**
-     * Selects the next message to dispatch from the configured messages list
-     * according to the current {@link AutoMessageConfiguration#mode}.
-     * <p>
-     * If the mode is RANDOM, a random message is selected.
-     * If the mode is SEQUENTIAL, messages are dispatched in order, cycling through the list.
-     * </p>
-     *
-     * @return the selected {@link Notice} message to dispatch
-     * @throws IllegalStateException if no messages are available for selection
-     */
-    private @NotNull Notice selectMessage() {
-        List<Notice> messages = this.configuration.messages;
-
-        return switch (this.configuration.mode) {
-            case RANDOM -> CollectionUtil.getRandom(messages).orElseThrow(
-                    () -> new IllegalStateException("No messages available for random selection")
-            );
-            case SEQUENTIAL -> {
-                int index = this.position.getAndIncrement() % messages.size();
-                yield CollectionUtil.select(messages, index).orElseThrow(
-                        () -> new IllegalStateException("No message at position: " + index)
-                );
-            }
-        };
     }
 
     /**
@@ -149,4 +131,18 @@ public final class AutoMessageDispatcher {
     public Duration getDelay() {
         return DurationUtil.fromTicks(this.delayTicks);
     }
+
+    /**
+     * Checks whether an auto message dispatch task is currently scheduled.
+     * <p>
+     * A task is considered scheduled if its task ID is greater than {@link #TASK_NOT_RUN_ID},
+     * which indicates that a valid Bukkit task has been assigned.
+     * </p>
+     *
+     * @return {@code true} if a task is currently scheduled; {@code false} otherwise
+     */
+    public boolean isTaskScheduled() {
+        return this.currentTask > TASK_NOT_RUN_ID;
+    }
+
 }

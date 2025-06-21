@@ -4,7 +4,7 @@ import com.eternalcode.multification.notice.Notice;
 import com.github.imdmk.automessage.configuration.ConfigurationManager;
 import com.github.imdmk.automessage.configuration.implementation.PluginConfiguration;
 import com.github.imdmk.automessage.feature.command.builder.configuration.CommandConfiguration;
-import com.github.imdmk.automessage.feature.command.builder.configuration.CommandConfigurator;
+import com.github.imdmk.automessage.feature.command.builder.configuration.CommandEditor;
 import com.github.imdmk.automessage.feature.command.builder.handler.MissingPermissionHandler;
 import com.github.imdmk.automessage.feature.command.builder.handler.UsageHandler;
 import com.github.imdmk.automessage.feature.command.builder.player.PlayerArgument;
@@ -16,6 +16,8 @@ import com.github.imdmk.automessage.feature.message.MessageResultHandler;
 import com.github.imdmk.automessage.feature.message.MessageService;
 import com.github.imdmk.automessage.feature.message.auto.AutoMessageConfiguration;
 import com.github.imdmk.automessage.feature.message.auto.dispatcher.AutoMessageDispatcher;
+import com.github.imdmk.automessage.feature.message.auto.eligibility.AutoMessageEligibilityEvaluator;
+import com.github.imdmk.automessage.feature.message.auto.eligibility.DefaultEligibilityEvaluator;
 import com.github.imdmk.automessage.feature.update.UpdateController;
 import com.github.imdmk.automessage.feature.update.UpdateService;
 import com.github.imdmk.automessage.scheduler.BukkitTaskScheduler;
@@ -76,7 +78,9 @@ class AutoMessage {
         this.taskScheduler = new BukkitTaskScheduler(plugin, this.server);
 
         /* Dispatcher */
-        AutoMessageDispatcher autoMessageDispatcher = new AutoMessageDispatcher(this.configurationManager, autoMessageConfiguration, this.messageService, this.taskScheduler);
+        AutoMessageEligibilityEvaluator eligibilityEvaluator = new DefaultEligibilityEvaluator();
+
+        AutoMessageDispatcher autoMessageDispatcher = new AutoMessageDispatcher(this.server, this.configurationManager, autoMessageConfiguration, this.messageService, this.taskScheduler, eligibilityEvaluator);
         autoMessageDispatcher.schedule();
 
         /* Controllers */
@@ -99,7 +103,7 @@ class AutoMessage {
                         new ReloadCommand(this.logger, this.configurationManager, this.messageService)
                 )
 
-                .editorGlobal(new CommandConfigurator(this.logger, commandConfiguration))
+                .editorGlobal(new CommandEditor(this.logger, commandConfiguration))
 
                 .build();
 

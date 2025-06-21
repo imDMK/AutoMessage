@@ -8,7 +8,7 @@ import org.jetbrains.annotations.NotNull;
 
 import java.util.Objects;
 
-public class BukkitTaskScheduler implements TaskScheduler {
+public final class BukkitTaskScheduler implements TaskScheduler {
 
     private final Plugin plugin;
     private final BukkitScheduler bukkitScheduler;
@@ -20,21 +20,25 @@ public class BukkitTaskScheduler implements TaskScheduler {
 
     @Override
     public BukkitTask runSync(@NotNull Runnable runnable) {
+        Objects.requireNonNull(runnable, "runnable cannot be null");
         return this.bukkitScheduler.runTask(this.plugin, runnable);
     }
 
     @Override
     public BukkitTask runAsync(@NotNull Runnable runnable) {
+        Objects.requireNonNull(runnable, "runnable cannot be null");
         return this.bukkitScheduler.runTaskAsynchronously(this.plugin, runnable);
     }
 
     @Override
     public BukkitTask runLaterAsync(@NotNull Runnable runnable, long delay) {
+        Objects.requireNonNull(runnable, "runnable cannot be null");
         return this.bukkitScheduler.runTaskLaterAsynchronously(this.plugin, runnable, delay);
     }
 
     @Override
     public BukkitTask runTimerAsync(@NotNull Runnable runnable, long delay, long period) {
+        Objects.requireNonNull(runnable, "runnable cannot be null");
         return this.bukkitScheduler.runTaskTimerAsynchronously(this.plugin, runnable, delay, period);
     }
 
