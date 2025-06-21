@@ -4,7 +4,7 @@ import com.eternalcode.multification.notice.Notice;
 import com.github.imdmk.automessage.configuration.ConfigurationManager;
 import com.github.imdmk.automessage.configuration.implementation.PluginConfiguration;
 import com.github.imdmk.automessage.feature.command.builder.configuration.CommandConfiguration;
-import com.github.imdmk.automessage.feature.command.builder.configuration.CommandConfigurator;
+import com.github.imdmk.automessage.feature.command.builder.configuration.CommandEditor;
 import com.github.imdmk.automessage.feature.command.builder.handler.MissingPermissionHandler;
 import com.github.imdmk.automessage.feature.command.builder.handler.UsageHandler;
 import com.github.imdmk.automessage.feature.command.builder.player.PlayerArgument;
@@ -103,7 +103,7 @@ class AutoMessage {
                         new ReloadCommand(this.logger, this.configurationManager, this.messageService)
                 )
 
-                .editorGlobal(new CommandConfigurator(this.logger, commandConfiguration))
+                .editorGlobal(new CommandEditor(this.logger, commandConfiguration))
 
                 .build();
 

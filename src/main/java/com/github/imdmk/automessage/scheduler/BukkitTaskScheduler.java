@@ -8,7 +8,7 @@ import org.jetbrains.annotations.NotNull;
 
 import java.util.Objects;
 
-public class BukkitTaskScheduler implements TaskScheduler {
+public final class BukkitTaskScheduler implements TaskScheduler {
 
     private final Plugin plugin;
     private final BukkitScheduler bukkitScheduler;

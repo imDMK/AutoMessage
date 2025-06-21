@@ -9,19 +9,23 @@ import org.jetbrains.annotations.NotNull;
 import java.util.Map;
 import java.util.logging.Logger;
 
-public class CommandConfigurator implements Editor<CommandSender> {
+public class CommandEditor implements Editor<CommandSender> {
 
     private final Logger logger;
-    private final CommandConfiguration commandConfiguration;
+    private final CommandConfiguration configuration;
 
-    public CommandConfigurator(@NotNull Logger logger, @NotNull CommandConfiguration commandConfiguration) {
+    public CommandEditor(@NotNull Logger logger, @NotNull CommandConfiguration configuration) {
         this.logger = logger;
-        this.commandConfiguration = commandConfiguration;
+        this.configuration = configuration;
     }
 
     @Override
     public CommandBuilder<CommandSender> edit(CommandBuilder<CommandSender> context) {
-        return this.commandConfiguration.getCommand(context.name())
+        if (!this.configuration.enabled) {
+            return context;
+        }
+
+        return this.configuration.getCommand(context.name())
                 .map(command -> {
                     CommandBuilder<CommandSender> updated = this.updateCommand(context, command);
                     return this.updateSubCommand(updated, command.subCommands());
