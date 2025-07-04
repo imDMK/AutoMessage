@@ -1,11 +1,11 @@
-package com.github.imdmk.automessage.feature.message.auto;
+package com.github.imdmk.automessage.feature.message.auto.selector;
 
 /**
  * Represents the strategy used for selecting and dispatching automatic messages.
  * <p>
  * This enum defines how messages should be selected from the configured list.
  */
-public enum AutoMessageMode {
+public enum AutoMessageSelectorMode {
 
     /**
      * Messages are selected randomly from the configured list.
