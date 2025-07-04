@@ -92,7 +92,7 @@ public class AutoMessageConfig extends ConfigSection {
     }
 
     public void setDelay(@NotNull Duration delay) {
-        Objects.requireNonNull( delay, "delay cannot be null");
+        Objects.requireNonNull(delay, "delay cannot be null");
         this.delay = delay;
     }
 }
