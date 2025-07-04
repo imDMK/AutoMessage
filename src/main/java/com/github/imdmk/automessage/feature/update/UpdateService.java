@@ -16,20 +16,20 @@ public class UpdateService {
     private static final GitRepository GIT_REPOSITORY = GitRepository.of("imDMK", "AutoMessage");
     private static final GitCheck GIT_CHECK = new GitCheck();
 
-    private final PluginConfig pluginConfig;
-    private final PluginDescriptionFile pluginDescriptionFile;
+    private final PluginConfig config;
+    private final PluginDescriptionFile descriptionFile;
 
     private Instant latestCheck;
 
-    public UpdateService(@NotNull PluginConfig pluginConfig, @NotNull PluginDescriptionFile descriptionFile) {
-        this.pluginConfig = Objects.requireNonNull(pluginConfig, "pluginConfiguration cannot be null");
-        this.pluginDescriptionFile = Objects.requireNonNull(descriptionFile, "pluginDescriptionFile cannot be null");
+    public UpdateService(@NotNull PluginConfig config, @NotNull PluginDescriptionFile descriptionFile) {
+        this.config = Objects.requireNonNull(config, "pluginConfiguration cannot be null");
+        this.descriptionFile = Objects.requireNonNull(descriptionFile, "pluginDescriptionFile cannot be null");
     }
 
     public @NotNull GitCheckResult check() {
         this.latestCheck = Instant.now();
 
-        GitTag tag = GitTag.of("v" + this.pluginDescriptionFile.getVersion());
+        GitTag tag = GitTag.of("v" + this.descriptionFile.getVersion());
         return GIT_CHECK.checkRelease(GIT_REPOSITORY, tag);
     }
 
@@ -38,7 +38,7 @@ public class UpdateService {
             return true;
         }
 
-        Instant nextCheckTime = this.latestCheck.plus(this.pluginConfig.updateInterval);
+        Instant nextCheckTime = this.latestCheck.plus(this.config.updateInterval);
         return Instant.now().isAfter(nextCheckTime);
     }
 }
