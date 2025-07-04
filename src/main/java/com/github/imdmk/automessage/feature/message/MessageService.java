@@ -2,6 +2,7 @@ package com.github.imdmk.automessage.feature.message;
 
 import com.eternalcode.multification.adventure.AudienceConverter;
 import com.eternalcode.multification.bukkit.BukkitMultification;
+import com.eternalcode.multification.notice.Notice;
 import com.eternalcode.multification.notice.provider.NoticeProvider;
 import com.eternalcode.multification.translation.TranslationProvider;
 import net.kyori.adventure.platform.AudienceProvider;
@@ -53,6 +54,14 @@ public final class MessageService extends BukkitMultification<MessageConfig> {
 
     public void send(@NotNull CommandSender sender, @NotNull NoticeProvider<MessageConfig> notice) {
         this.create().viewer(sender).notice(notice).send();
+    }
+
+    public void send(@NotNull CommandSender sender, @NotNull Notice notice) {
+        this.create().viewer(sender).notice(notice).send();
+    }
+
+    public void sendAsync(@NotNull CommandSender sender, @NotNull Notice notice) {
+        this.create().viewer(sender).notice(notice).sendAsync();
     }
 
     public void close() {

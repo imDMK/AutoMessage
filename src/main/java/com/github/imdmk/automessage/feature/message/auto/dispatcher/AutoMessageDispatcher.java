@@ -3,7 +3,6 @@ package com.github.imdmk.automessage.feature.message.auto.dispatcher;
 import com.github.imdmk.automessage.configuration.ConfigurationManager;
 import com.github.imdmk.automessage.feature.message.MessageService;
 import com.github.imdmk.automessage.feature.message.auto.AutoMessageConfig;
-import com.github.imdmk.automessage.feature.message.auto.AutoMessageNotice;
 import com.github.imdmk.automessage.feature.message.auto.eligibility.AutoMessageEligibilityEvaluator;
 import com.github.imdmk.automessage.feature.message.auto.selector.AutoMessageSelector;
 import com.github.imdmk.automessage.feature.message.auto.selector.AutoMessageSelectorFactory;
@@ -68,11 +67,10 @@ public final class AutoMessageDispatcher {
      */
     public void dispatch(@NotNull Player player) {
         this.selector.selectFor(player, this.configuration.messages)
-                .map(AutoMessageNotice::getNotice)
-                .ifPresent(notice -> this.messageService.create()
-                        .viewer(player)
-                        .notice(notice)
-                        .sendAsync());
+                .ifPresent(message -> {
+                    message.getSound().ifPresent(sound -> sound.play(player));
+                    message.getNotices().forEach(notice -> this.messageService.sendAsync(player, notice));
+                });
     }
 
     /**
