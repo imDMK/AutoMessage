@@ -3,7 +3,7 @@ package com.github.imdmk.automessage.feature.update;
 import com.eternalcode.gitcheck.GitCheckResult;
 import com.eternalcode.gitcheck.git.GitException;
 import com.eternalcode.multification.notice.Notice;
-import com.github.imdmk.automessage.configuration.implementation.PluginConfiguration;
+import com.github.imdmk.automessage.configuration.PluginConfig;
 import com.github.imdmk.automessage.feature.message.MessageService;
 import com.github.imdmk.automessage.scheduler.TaskScheduler;
 import com.github.imdmk.automessage.util.DurationUtil;
@@ -34,20 +34,20 @@ public class UpdateController implements Listener {
     );
 
     private final Logger logger;
-    private final PluginConfiguration pluginConfiguration;
+    private final PluginConfig pluginConfig;
     private final MessageService messageService;
     private final UpdateService updateService;
     private final TaskScheduler taskScheduler;
 
     public UpdateController(
             @NotNull Logger logger,
-            @NotNull PluginConfiguration pluginConfiguration,
+            @NotNull PluginConfig pluginConfig,
             @NotNull MessageService messageService,
             @NotNull UpdateService updateService,
             @NotNull TaskScheduler taskScheduler
     ) {
         this.logger = Objects.requireNonNull(logger, "logger cannot be null");
-        this.pluginConfiguration = Objects.requireNonNull(pluginConfiguration, "pluginConfiguration cannot be null");
+        this.pluginConfig = Objects.requireNonNull(pluginConfig, "pluginConfiguration cannot be null");
         this.messageService = Objects.requireNonNull(messageService, "messageService cannot be null");
         this.updateService = Objects.requireNonNull(updateService, "updateService cannot be null");
         this.taskScheduler = Objects.requireNonNull(taskScheduler, "taskScheduler cannot be null");
@@ -55,7 +55,7 @@ public class UpdateController implements Listener {
 
     @EventHandler(priority = EventPriority.HIGHEST)
     void onPlayerJoin(final PlayerJoinEvent event) {
-        if (!this.pluginConfiguration.checkUpdate) {
+        if (!this.pluginConfig.checkUpdate) {
             return;
         }
 
@@ -88,7 +88,7 @@ public class UpdateController implements Listener {
     private void sendNotice(@NotNull Player player, @NotNull Notice notice) {
         this.messageService.create()
                 .notice(notice)
-                .placeholder("{UPDATE_CHECK_INTERVAL}", DurationUtil.format(this.pluginConfiguration.updateInterval))
+                .placeholder("{UPDATE_CHECK_INTERVAL}", DurationUtil.format(this.pluginConfig.updateInterval))
                 .viewer(player)
                 .send();
     }

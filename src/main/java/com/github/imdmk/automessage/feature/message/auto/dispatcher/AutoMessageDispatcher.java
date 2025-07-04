@@ -2,7 +2,7 @@ package com.github.imdmk.automessage.feature.message.auto.dispatcher;
 
 import com.github.imdmk.automessage.configuration.ConfigurationManager;
 import com.github.imdmk.automessage.feature.message.MessageService;
-import com.github.imdmk.automessage.feature.message.auto.AutoMessageConfiguration;
+import com.github.imdmk.automessage.feature.message.auto.AutoMessageConfig;
 import com.github.imdmk.automessage.feature.message.auto.AutoMessageNotice;
 import com.github.imdmk.automessage.feature.message.auto.eligibility.AutoMessageEligibilityEvaluator;
 import com.github.imdmk.automessage.feature.message.auto.selector.AutoMessageSelector;
@@ -34,7 +34,7 @@ public final class AutoMessageDispatcher {
 
     private final Server server;
     private final ConfigurationManager configurationManager;
-    private final AutoMessageConfiguration configuration;
+    private final AutoMessageConfig configuration;
     private final MessageService messageService;
     private final TaskScheduler taskScheduler;
 
@@ -46,7 +46,7 @@ public final class AutoMessageDispatcher {
     public AutoMessageDispatcher(
             @NotNull Server server,
             @NotNull ConfigurationManager configurationManager,
-            @NotNull AutoMessageConfiguration configuration,
+            @NotNull AutoMessageConfig configuration,
             @NotNull MessageService messageService,
             @NotNull TaskScheduler taskScheduler,
             @NotNull AutoMessageEligibilityEvaluator eligibilityEvaluator

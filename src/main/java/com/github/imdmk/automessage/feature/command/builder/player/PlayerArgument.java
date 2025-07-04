@@ -1,6 +1,6 @@
 package com.github.imdmk.automessage.feature.command.builder.player;
 
-import com.github.imdmk.automessage.feature.message.MessageConfiguration;
+import com.github.imdmk.automessage.feature.message.MessageConfig;
 import dev.rollczi.litecommands.argument.Argument;
 import dev.rollczi.litecommands.argument.parser.ParseResult;
 import dev.rollczi.litecommands.argument.resolver.ArgumentResolver;
@@ -18,18 +18,18 @@ import java.util.Optional;
 public class PlayerArgument extends ArgumentResolver<CommandSender, Player> {
 
     private final Server server;
-    private final MessageConfiguration messageConfiguration;
+    private final MessageConfig messageConfig;
 
-    public PlayerArgument(@NotNull Server server, @NotNull MessageConfiguration messageConfiguration) {
+    public PlayerArgument(@NotNull Server server, @NotNull MessageConfig messageConfig) {
         this.server = Objects.requireNonNull(server, "server cannot be null");
-        this.messageConfiguration = Objects.requireNonNull(messageConfiguration, "messageConfiguration cannot be null");
+        this.messageConfig = Objects.requireNonNull(messageConfig, "messageConfiguration cannot be null");
     }
 
     @Override
     protected ParseResult<Player> parse(Invocation<CommandSender> invocation, Argument<Player> context, String argument) {
         return Optional.ofNullable(this.server.getPlayer(argument))
                 .map(ParseResult::success)
-                .orElseGet(() -> ParseResult.failure(this.messageConfiguration.playerNotFound));
+                .orElseGet(() -> ParseResult.failure(this.messageConfig.playerNotFound));
     }
 
     @Override
