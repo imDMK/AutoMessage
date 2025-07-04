@@ -8,7 +8,7 @@ import eu.okaeri.configs.annotation.Comment;
 import eu.okaeri.configs.serdes.OkaeriSerdesPack;
 import org.jetbrains.annotations.NotNull;
 
-public class MessageConfiguration extends ConfigSection {
+public class MessageConfig extends ConfigSection {
 
     @Comment({
             "# Sent when the automatic message delay is changed",
@@ -61,6 +61,6 @@ public class MessageConfiguration extends ConfigSection {
 
     @Override
     public @NotNull String getFileName() {
-        return "messageConfiguration.yml";
+        return "messageConfig.yml";
     }
 }

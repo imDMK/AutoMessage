@@ -2,8 +2,8 @@ package com.github.imdmk.automessage;
 
 import com.eternalcode.multification.notice.Notice;
 import com.github.imdmk.automessage.configuration.ConfigurationManager;
-import com.github.imdmk.automessage.configuration.implementation.PluginConfiguration;
-import com.github.imdmk.automessage.feature.command.builder.configuration.CommandConfiguration;
+import com.github.imdmk.automessage.configuration.PluginConfig;
+import com.github.imdmk.automessage.feature.command.builder.configuration.CommandConfig;
 import com.github.imdmk.automessage.feature.command.builder.configuration.CommandEditor;
 import com.github.imdmk.automessage.feature.command.builder.handler.MissingPermissionHandler;
 import com.github.imdmk.automessage.feature.command.builder.handler.UsageHandler;
@@ -11,10 +11,10 @@ import com.github.imdmk.automessage.feature.command.builder.player.PlayerArgumen
 import com.github.imdmk.automessage.feature.command.builder.player.PlayerContextual;
 import com.github.imdmk.automessage.feature.command.implementation.DelayCommand;
 import com.github.imdmk.automessage.feature.command.implementation.ReloadCommand;
-import com.github.imdmk.automessage.feature.message.MessageConfiguration;
+import com.github.imdmk.automessage.feature.message.MessageConfig;
 import com.github.imdmk.automessage.feature.message.MessageResultHandler;
 import com.github.imdmk.automessage.feature.message.MessageService;
-import com.github.imdmk.automessage.feature.message.auto.AutoMessageConfiguration;
+import com.github.imdmk.automessage.feature.message.auto.AutoMessageConfig;
 import com.github.imdmk.automessage.feature.message.auto.dispatcher.AutoMessageDispatcher;
 import com.github.imdmk.automessage.feature.message.auto.eligibility.AutoMessageEligibilityEvaluator;
 import com.github.imdmk.automessage.feature.message.auto.eligibility.DefaultEligibilityEvaluator;
@@ -32,7 +32,9 @@ import org.bukkit.Server;
 import org.bukkit.command.CommandSender;
 import org.bukkit.entity.Player;
 import org.bukkit.plugin.Plugin;
+import org.jetbrains.annotations.NotNull;
 
+import java.util.Objects;
 import java.util.concurrent.TimeUnit;
 import java.util.logging.Logger;
 import java.util.stream.Stream;
@@ -47,16 +49,14 @@ class AutoMessage {
     private final Logger logger;
 
     private final ConfigurationManager configurationManager;
-
     private final MessageService messageService;
-
     private final TaskScheduler taskScheduler;
 
     private final LiteCommands<CommandSender> liteCommands;
-
     private final Metrics metrics;
 
-    AutoMessage(Plugin plugin) {
+    AutoMessage(@NotNull Plugin plugin) {
+        Objects.requireNonNull(plugin, "plugin cannot be null.");
         Stopwatch stopwatch = Stopwatch.createStarted();
 
         this.server = plugin.getServer();
@@ -65,14 +65,14 @@ class AutoMessage {
         /* Configuration */
         this.configurationManager = new ConfigurationManager(this.logger, plugin.getDataFolder());
 
-        PluginConfiguration pluginConfiguration = this.configurationManager.create(PluginConfiguration.class);
-        MessageConfiguration messageConfiguration = this.configurationManager.create(MessageConfiguration.class);
-        AutoMessageConfiguration autoMessageConfiguration = this.configurationManager.create(AutoMessageConfiguration.class);
-        CommandConfiguration commandConfiguration = this.configurationManager.create(CommandConfiguration.class);
+        PluginConfig pluginConfig = this.configurationManager.create(PluginConfig.class);
+        MessageConfig messageConfig = this.configurationManager.create(MessageConfig.class);
+        AutoMessageConfig autoMessageConfig = this.configurationManager.create(AutoMessageConfig.class);
+        CommandConfig commandConfig = this.configurationManager.create(CommandConfig.class);
 
         /* Services */
-        this.messageService = new MessageService(messageConfiguration, BukkitAudiences.create(plugin), MiniMessage.miniMessage());
-        UpdateService updateService = new UpdateService(pluginConfiguration, plugin.getDescription());
+        this.messageService = new MessageService(messageConfig, BukkitAudiences.create(plugin), MiniMessage.miniMessage());
+        UpdateService updateService = new UpdateService(pluginConfig, plugin.getDescription());
 
         /* Scheduler */
         this.taskScheduler = new BukkitTaskScheduler(plugin, this.server);
@@ -80,17 +80,17 @@ class AutoMessage {
         /* Dispatcher */
         AutoMessageEligibilityEvaluator eligibilityEvaluator = new DefaultEligibilityEvaluator();
 
-        AutoMessageDispatcher autoMessageDispatcher = new AutoMessageDispatcher(this.server, this.configurationManager, autoMessageConfiguration, this.messageService, this.taskScheduler, eligibilityEvaluator);
+        AutoMessageDispatcher autoMessageDispatcher = new AutoMessageDispatcher(this.server, this.configurationManager, autoMessageConfig, this.messageService, this.taskScheduler, eligibilityEvaluator);
         autoMessageDispatcher.schedule();
 
         /* Controllers */
         Stream.of(
-                new UpdateController(this.logger, pluginConfiguration, this.messageService, updateService, this.taskScheduler)
+                new UpdateController(this.logger, pluginConfig, this.messageService, updateService, this.taskScheduler)
         ).forEach(listener -> this.server.getPluginManager().registerEvents(listener, plugin));
 
         /* LiteCommands */
         this.liteCommands = LiteBukkitFactory.builder("AutoMessage", plugin, this.server)
-                .argument(Player.class, new PlayerArgument(this.server, messageConfiguration))
+                .argument(Player.class, new PlayerArgument(this.server, messageConfig))
 
                 .context(Player.class, new PlayerContextual())
                 .result(Notice.class, new MessageResultHandler(this.messageService))
@@ -103,7 +103,7 @@ class AutoMessage {
                         new ReloadCommand(this.logger, this.configurationManager, this.messageService)
                 )
 
-                .editorGlobal(new CommandEditor(this.logger, commandConfiguration))
+                .editorGlobal(new CommandEditor(this.logger, commandConfig))
 
                 .build();
 

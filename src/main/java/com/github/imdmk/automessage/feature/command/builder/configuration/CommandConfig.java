@@ -15,7 +15,7 @@ import java.util.Optional;
         "# This file allows you to configure commands.",
         "#"
 })
-public class CommandConfiguration extends ConfigSection {
+public class CommandConfig extends ConfigSection {
 
     @Comment("# Specifies to enable command editor feature.")
     public boolean enabled = false;
@@ -63,6 +63,6 @@ public class CommandConfiguration extends ConfigSection {
 
     @Override
     public @NotNull String getFileName() {
-        return "commandConfiguration.yml";
+        return "commandConfig.yml";
     }
 }
