@@ -12,9 +12,9 @@ import java.util.logging.Logger;
 public class CommandEditor implements Editor<CommandSender> {
 
     private final Logger logger;
-    private final CommandConfiguration configuration;
+    private final CommandConfig configuration;
 
-    public CommandEditor(@NotNull Logger logger, @NotNull CommandConfiguration configuration) {
+    public CommandEditor(@NotNull Logger logger, @NotNull CommandConfig configuration) {
         this.logger = logger;
         this.configuration = configuration;
     }
