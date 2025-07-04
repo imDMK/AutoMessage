@@ -1,6 +1,5 @@
 package com.github.imdmk.automessage.feature.message.auto.selector;
 
-import com.github.imdmk.automessage.feature.message.auto.AutoMessageMode;
 import com.github.imdmk.automessage.feature.message.auto.eligibility.AutoMessageEligibilityEvaluator;
 import org.jetbrains.annotations.NotNull;
 
@@ -14,14 +13,14 @@ public final class AutoMessageSelectorFactory {
     }
 
     /**
-     * Creates an {@link AutoMessageSelector} according to the given {@link AutoMessageMode}.
+     * Creates an {@link AutoMessageSelector} according to the given {@link AutoMessageSelectorMode}.
      *
      * @param mode      the selection mode, must not be {@code null}
      * @param evaluator the eligibility evaluator used by the selector, must not be {@code null}
      * @return a new instance of {@link AutoMessageSelector} matching the specified mode
      */
     public static AutoMessageSelector create(
-            @NotNull AutoMessageMode mode,
+            @NotNull AutoMessageSelectorMode mode,
             @NotNull AutoMessageEligibilityEvaluator evaluator
     ) {
         return switch (mode) {
