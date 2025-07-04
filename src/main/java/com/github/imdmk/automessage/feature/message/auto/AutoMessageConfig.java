@@ -4,6 +4,7 @@ import com.eternalcode.multification.notice.Notice;
 import com.eternalcode.multification.notice.resolver.NoticeResolverDefaults;
 import com.eternalcode.multification.okaeri.MultificationSerdesPack;
 import com.github.imdmk.automessage.configuration.ConfigSection;
+import com.github.imdmk.automessage.feature.message.auto.selector.AutoMessageSelectorMode;
 import eu.okaeri.configs.annotation.Comment;
 import eu.okaeri.configs.serdes.OkaeriSerdesPack;
 import eu.okaeri.configs.serdes.commons.SerdesCommons;
@@ -14,7 +15,7 @@ import java.time.Duration;
 import java.util.Arrays;
 import java.util.List;
 
-public class AutoMessageConfiguration extends ConfigSection {
+public class AutoMessageConfig extends ConfigSection {
 
     @Comment("# How often should automatic messages be sent?")
     public Duration delay = Duration.ofSeconds(10);
@@ -24,7 +25,7 @@ public class AutoMessageConfiguration extends ConfigSection {
             "# RANDOM - messages are chosen randomly.",
             "# SEQUENTIAL - messages are sent in order."
     })
-    public AutoMessageMode mode = AutoMessageMode.SEQUENTIAL;
+    public AutoMessageSelectorMode mode = AutoMessageSelectorMode.SEQUENTIAL;
 
     @Comment({
             "# List of automatic messages to be dispatched.",
@@ -69,7 +70,7 @@ public class AutoMessageConfiguration extends ConfigSection {
 
     @Override
     public @NotNull String getFileName() {
-        return "autoMessageConfiguration.yml";
+        return "autoMessageConfig.yml";
     }
 
     public void setDelay(@NotNull Duration delay) {

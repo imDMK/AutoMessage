@@ -1,6 +1,5 @@
-package com.github.imdmk.automessage.configuration.implementation;
+package com.github.imdmk.automessage.configuration;
 
-import com.github.imdmk.automessage.configuration.ConfigSection;
 import eu.okaeri.configs.annotation.Comment;
 import eu.okaeri.configs.serdes.OkaeriSerdesPack;
 import eu.okaeri.configs.serdes.commons.SerdesCommons;
@@ -8,7 +7,7 @@ import org.jetbrains.annotations.NotNull;
 
 import java.time.Duration;
 
-public class PluginConfiguration extends ConfigSection {
+public class PluginConfig extends ConfigSection {
 
     @Comment("# Check for plugin update and send notification after administrator join to server?")
     public boolean checkUpdate = true;
@@ -25,6 +24,6 @@ public class PluginConfiguration extends ConfigSection {
 
     @Override
     public @NotNull String getFileName() {
-        return "pluginConfiguration.yml";
+        return "pluginConfig.yml";
     }
 }
