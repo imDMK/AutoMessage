@@ -14,25 +14,25 @@ import org.jetbrains.annotations.NotNull;
 
 import java.util.Objects;
 
-public final class MessageService extends BukkitMultification<MessageConfiguration> {
+public final class MessageService extends BukkitMultification<MessageConfig> {
 
-    private final MessageConfiguration messageConfiguration;
+    private final MessageConfig messageConfig;
     private final AudienceProvider audienceProvider;
     private final MiniMessage miniMessage;
 
     public MessageService(
-            @NotNull MessageConfiguration messageConfiguration,
+            @NotNull MessageConfig messageConfig,
             @NotNull AudienceProvider audienceProvider,
             @NotNull MiniMessage miniMessage
     ) {
-        this.messageConfiguration = Objects.requireNonNull(messageConfiguration, "messageConfiguration cannot be null");
+        this.messageConfig = Objects.requireNonNull(messageConfig, "messageConfiguration cannot be null");
         this.audienceProvider = Objects.requireNonNull(audienceProvider, "audienceProvider cannot be null");
         this.miniMessage = Objects.requireNonNull(miniMessage, "miniMessage cannot be null");
     }
 
     @Override
-    protected @NotNull TranslationProvider<MessageConfiguration> translationProvider() {
-        return locale -> this.messageConfiguration;
+    protected @NotNull TranslationProvider<MessageConfig> translationProvider() {
+        return locale -> this.messageConfig;
     }
 
     @Override
@@ -51,7 +51,7 @@ public final class MessageService extends BukkitMultification<MessageConfigurati
         };
     }
 
-    public void send(@NotNull CommandSender sender, @NotNull NoticeProvider<MessageConfiguration> notice) {
+    public void send(@NotNull CommandSender sender, @NotNull NoticeProvider<MessageConfig> notice) {
         this.create().viewer(sender).notice(notice).send();
     }
 
