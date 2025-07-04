@@ -69,7 +69,7 @@ public final class AutoMessageDispatcher {
         this.selector.selectFor(player, this.configuration.messages)
                 .ifPresent(message -> {
                     message.getSound().ifPresent(sound -> sound.play(player));
-                    message.getNotice().forEach(notice -> this.messageService.sendAsync(player, notice));
+                    message.getNotices().forEach(notice -> this.messageService.sendAsync(player, notice));
                 });
     }
 

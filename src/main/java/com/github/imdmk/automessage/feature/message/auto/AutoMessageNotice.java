@@ -40,7 +40,7 @@ public class AutoMessageNotice {
     /**
      * @return the associated {@link Notice}
      */
-    public @Unmodifiable List<Notice> getNotice() {
+    public @Unmodifiable List<Notice> getNotices() {
         return Collections.unmodifiableList(this.notices);
     }
 
