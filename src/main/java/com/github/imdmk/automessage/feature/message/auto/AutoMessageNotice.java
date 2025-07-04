@@ -1,11 +1,17 @@
 package com.github.imdmk.automessage.feature.message.auto;
 
 import com.eternalcode.multification.notice.Notice;
+import com.github.imdmk.automessage.feature.message.auto.sound.AutoMessageSound;
 import org.jetbrains.annotations.CheckReturnValue;
 import org.jetbrains.annotations.Contract;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
+import org.jetbrains.annotations.Unmodifiable;
 
+import java.util.ArrayList;
+import java.util.Collections;
+import java.util.List;
+import java.util.Objects;
 import java.util.Optional;
 
 /**
@@ -13,12 +19,20 @@ import java.util.Optional;
  */
 public class AutoMessageNotice {
 
-    private final @NotNull Notice notice;
+    private final @NotNull List<Notice> notices;
+
+    private final @Nullable AutoMessageSound sound;
     private final @Nullable String requiredPermission;
     private final @Nullable String requiredGroup;
 
-    private AutoMessageNotice(@NotNull Notice notice, @Nullable String requiredPermission, @Nullable String requiredGroup) {
-        this.notice = notice;
+    private AutoMessageNotice(
+            @NotNull List<Notice> notices,
+            @Nullable AutoMessageSound sound,
+            @Nullable String requiredPermission,
+            @Nullable String requiredGroup
+    ) {
+        this.notices = Objects.requireNonNull(notices, "notice cannot be null");
+        this.sound = sound;
         this.requiredPermission = requiredPermission;
         this.requiredGroup = requiredGroup;
     }
@@ -26,21 +40,28 @@ public class AutoMessageNotice {
     /**
      * @return the associated {@link Notice}
      */
-    public @NotNull Notice getNotice() {
-        return this.notice;
+    public @Unmodifiable List<Notice> getNotices() {
+        return Collections.unmodifiableList(this.notices);
+    }
+
+    /**
+     * @return the associated {@link AutoMessageSound}
+     */
+    public Optional<AutoMessageSound> getSound() {
+        return Optional.ofNullable(this.sound);
     }
 
     /**
      * @return optional required permission
      */
-    public @NotNull Optional<String> getRequiredPermission() {
+    public Optional<String> getRequiredPermission() {
         return Optional.ofNullable(this.requiredPermission);
     }
 
     /**
      * @return optional required group
      */
-    public @NotNull Optional<String> getRequiredGroup() {
+    public Optional<String> getRequiredGroup() {
         return Optional.ofNullable(this.requiredGroup);
     }
 
@@ -58,14 +79,33 @@ public class AutoMessageNotice {
      */
     public static class Builder {
 
-        private @Nullable Notice notice;
+        private @NotNull List<Notice> notices = new ArrayList<>();
+
+        private @Nullable AutoMessageSound sound;
         private @Nullable String requiredPermission;
         private @Nullable String requiredGroup;
 
         @Contract("_ -> this")
         @CheckReturnValue
         public @NotNull Builder notice(@NotNull Notice notice) {
-            this.notice = notice;
+            Objects.requireNonNull(notice, "notice cannot be null");
+            this.notices.add(notice);
+            return this;
+        }
+
+        @Contract("_ -> this")
+        @CheckReturnValue
+        public @NotNull Builder notices(@NotNull List<Notice> notices) {
+            Objects.requireNonNull(notices, "notices cannot be null");
+            this.notices = notices;
+            return this;
+        }
+
+        @Contract("_ -> this")
+        @CheckReturnValue
+        public @NotNull Builder sound(@NotNull AutoMessageSound sound) {
+            Objects.requireNonNull(sound, "notice cannot be null");
+            this.sound = sound;
             return this;
         }
 
@@ -91,11 +131,7 @@ public class AutoMessageNotice {
          */
         @CheckReturnValue
         public @NotNull AutoMessageNotice build() {
-            if (this.notice == null) {
-                throw new IllegalStateException("Notice must not be null");
-            }
-
-            return new AutoMessageNotice(this.notice, this.requiredPermission, this.requiredGroup);
+            return new AutoMessageNotice(this.notices, this.sound, this.requiredPermission, this.requiredGroup);
         }
     }
 }
