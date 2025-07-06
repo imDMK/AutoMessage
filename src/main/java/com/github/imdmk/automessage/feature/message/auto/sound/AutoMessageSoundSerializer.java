@@ -7,7 +7,7 @@ import eu.okaeri.configs.serdes.SerializationData;
 import org.bukkit.Sound;
 import org.jetbrains.annotations.NotNull;
 
-public class AutoMessageSerializer implements ObjectSerializer<AutoMessageSound> {
+public class AutoMessageSoundSerializer implements ObjectSerializer<AutoMessageSound> {
 
     @Override
     public boolean supports(@NotNull Class<? super AutoMessageSound> type) {

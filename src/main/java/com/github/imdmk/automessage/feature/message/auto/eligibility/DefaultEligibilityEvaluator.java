@@ -10,6 +10,10 @@ public final class DefaultEligibilityEvaluator implements AutoMessageEligibility
 
     @Override
     public boolean canReceive(@NotNull Player player, @NotNull AutoMessageNotice notice) {
+        if (notice.isIgnoreAdmins() && player.isOp()) {
+            return false;
+        }
+
         return notice.getRequiredPermission()
                 .map(player::hasPermission)
                 .orElse(true)

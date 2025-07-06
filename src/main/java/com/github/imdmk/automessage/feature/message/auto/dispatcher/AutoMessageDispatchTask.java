@@ -21,6 +21,8 @@ final class AutoMessageDispatchTask extends BukkitRunnable {
 
     @Override
     public void run() {
-        this.server.getOnlinePlayers().forEach(this.dispatcher::dispatch);
+        if (this.dispatcher.isEnabled()) {
+            this.server.getOnlinePlayers().forEach(this.dispatcher::dispatch);
+        }
     }
 }
