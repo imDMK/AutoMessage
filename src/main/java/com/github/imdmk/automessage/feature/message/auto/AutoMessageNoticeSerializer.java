@@ -9,6 +9,7 @@ import eu.okaeri.configs.serdes.SerializationData;
 import org.jetbrains.annotations.NotNull;
 
 import java.util.List;
+import java.util.Optional;
 
 public class AutoMessageNoticeSerializer implements ObjectSerializer<AutoMessageNotice> {
 
@@ -19,26 +20,37 @@ public class AutoMessageNoticeSerializer implements ObjectSerializer<AutoMessage
 
     @Override
     public void serialize(@NotNull AutoMessageNotice message, @NotNull SerializationData data, @NotNull GenericsDeclaration generics) {
+        data.add("name", message.getName(), String.class);
         data.addCollection("notices", message.getNotices(), Notice.class);
 
         message.getSound().ifPresent(sound -> data.add("sound", sound, AutoMessageSound.class));
         message.getRequiredPermission().ifPresent(permission -> data.add("requiredPermission", permission, String.class));
         message.getRequiredGroup().ifPresent(group -> data.add("requiredGroup", group, String.class));
+
+        if (message.isIgnoreAdmins()) {
+            data.add("ignoreAdmins", message.isIgnoreAdmins(), Boolean.class);
+        }
     }
 
     @Override
     public AutoMessageNotice deserialize(@NotNull DeserializationData data, @NotNull GenericsDeclaration generics) {
+        String name = data.get("name", String.class);
         List<Notice> notices = data.getAsList("notices", Notice.class);
 
         AutoMessageSound sound = data.get("sound", AutoMessageSound.class);
         String requiredPermission = data.get("requiredPermission", String.class);
         String requiredGroup = data.get("requiredGroup", String.class);
 
+        boolean ignoreAdmins = Optional.ofNullable(data.get("ignoreAdmins", Boolean.class))
+                .orElse(false);
+
         return AutoMessageNotice.builder()
+                .name(name)
                 .notices(notices)
                 .sound(sound)
                 .requiredPermission(requiredPermission)
                 .requiredGroup(requiredGroup)
+                .ignoreAdmins(ignoreAdmins)
                 .build();
     }
 }

@@ -22,6 +22,33 @@ public class MessageConfig extends ConfigSection {
     })
     public Notice autoMessageDelay = Notice.chat("<green>Current auto message delay is {DELAY}.");
 
+    @Comment("# Shown when auto messages are successfully enabled.")
+    public Notice autoMessageEnable = Notice.chat("<green>Enabled auto messages!");
+
+    @Comment("# Shown when auto messages are already enabled.")
+    public Notice autoMessageAlreadyEnabled = Notice.chat("<red>Auto messages are currently enabled!");
+
+    @Comment("# Shown when auto messages are successfully disabled.")
+    public Notice autoMessageDisable = Notice.chat("<green>Disabled auto messages!");
+
+    @Comment("# Sent when automatic messages are already disabled")
+    public Notice autoMessageAlreadyDisabled = Notice.chat("<red>Auto messages are already disabled!");
+
+    @Comment("# Sent when a random automatic message is dispatched")
+    public Notice autoMessageRandomDispatched = Notice.chat("<green>Dispatched a random auto message.");
+
+    @Comment("# Sent when a selected automatic message is dispatched")
+    public Notice autoMessageSelectedDispatched = Notice.chat("<green>Dispatched a selected auto message.");
+
+    @Comment({
+            "# Sent when the selected target player cannot receive the selected message",
+            "# Typically due to insufficient group or permission as defined in the configuration"
+    })
+    public Notice autoMessageSelectedCannotReceive = Notice.chat("<red>Selected player cannot receive the selected auto message (e.g. missing required group or permission).");
+
+    @Comment("# Sent when the provided auto message name does not exist")
+    public Notice autoMessageNotFound = Notice.chat("<red>Auto message with the given name not found.");
+
     @Comment({
             "# Sent when a command is used incorrectly",
             "# {USAGE} - Correct command usage"

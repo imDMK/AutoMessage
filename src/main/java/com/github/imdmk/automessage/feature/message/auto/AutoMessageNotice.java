@@ -19,22 +19,36 @@ import java.util.Optional;
  */
 public class AutoMessageNotice {
 
+    private final @NotNull String name;
     private final @NotNull List<Notice> notices;
 
     private final @Nullable AutoMessageSound sound;
     private final @Nullable String requiredPermission;
     private final @Nullable String requiredGroup;
 
+    private final boolean ignoreAdmins;
+
     private AutoMessageNotice(
+            @NotNull String name,
             @NotNull List<Notice> notices,
             @Nullable AutoMessageSound sound,
             @Nullable String requiredPermission,
-            @Nullable String requiredGroup
+            @Nullable String requiredGroup,
+            boolean ignoreAdmins
     ) {
+        this.name = Objects.requireNonNull(name, "name cannot be null");
         this.notices = Objects.requireNonNull(notices, "notice cannot be null");
         this.sound = sound;
         this.requiredPermission = requiredPermission;
         this.requiredGroup = requiredGroup;
+        this.ignoreAdmins = ignoreAdmins;
+    }
+
+    /**
+     * @return the associated AutoMessageNotice name
+     */
+    public @NotNull String getName() {
+        return this.name;
     }
 
     /**
@@ -66,6 +80,13 @@ public class AutoMessageNotice {
     }
 
     /**
+     * @return ignoreAdmins boolean
+     */
+    public boolean isIgnoreAdmins() {
+        return this.ignoreAdmins;
+    }
+
+    /**
      * Creates a new builder instance.
      *
      * @return the builder
@@ -79,11 +100,21 @@ public class AutoMessageNotice {
      */
     public static class Builder {
 
-        private @NotNull List<Notice> notices = new ArrayList<>();
+        private String name;
+        private List<Notice> notices = new ArrayList<>();
 
-        private @Nullable AutoMessageSound sound;
-        private @Nullable String requiredPermission;
-        private @Nullable String requiredGroup;
+        private AutoMessageSound sound;
+        private String requiredPermission;
+        private String requiredGroup;
+        private boolean ignoreAdmins;
+
+        @Contract("_ -> this")
+        @CheckReturnValue
+        public @NotNull Builder name(@NotNull String name) {
+            Objects.requireNonNull(name, "name cannot be null");
+            this.name = name;
+            return this;
+        }
 
         @Contract("_ -> this")
         @CheckReturnValue
@@ -103,8 +134,7 @@ public class AutoMessageNotice {
 
         @Contract("_ -> this")
         @CheckReturnValue
-        public @NotNull Builder sound(@NotNull AutoMessageSound sound) {
-            Objects.requireNonNull(sound, "notice cannot be null");
+        public @NotNull Builder sound(@Nullable AutoMessageSound sound) {
             this.sound = sound;
             return this;
         }
@@ -123,6 +153,13 @@ public class AutoMessageNotice {
             return this;
         }
 
+        @Contract("_ -> this")
+        @CheckReturnValue
+        public @NotNull Builder ignoreAdmins(boolean ignore) {
+            this.ignoreAdmins = ignore;
+            return this;
+        }
+
         /**
          * Builds the {@link AutoMessageNotice} instance.
          *
@@ -131,7 +168,7 @@ public class AutoMessageNotice {
          */
         @CheckReturnValue
         public @NotNull AutoMessageNotice build() {
-            return new AutoMessageNotice(this.notices, this.sound, this.requiredPermission, this.requiredGroup);
+            return new AutoMessageNotice(this.name, this.notices, this.sound, this.requiredPermission, this.requiredGroup, this.ignoreAdmins);
         }
     }
 }

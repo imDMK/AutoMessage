@@ -62,7 +62,7 @@ public final class DurationUtil {
      * @return a {@link Duration} representing the given number of ticks
      */
     @NotNull
-    public static Duration fromTicks(final long ticks) {
+    public static Duration fromTicks(long ticks) {
         if (ticks <= 0) {
             return Duration.ZERO;
         }
