@@ -10,11 +10,16 @@ import com.github.imdmk.automessage.feature.command.builder.handler.UsageHandler
 import com.github.imdmk.automessage.feature.command.builder.player.PlayerArgument;
 import com.github.imdmk.automessage.feature.command.builder.player.PlayerContextual;
 import com.github.imdmk.automessage.feature.command.implementation.DelayCommand;
+import com.github.imdmk.automessage.feature.command.implementation.DisableCommand;
+import com.github.imdmk.automessage.feature.command.implementation.DispatchCommand;
+import com.github.imdmk.automessage.feature.command.implementation.EnableCommand;
 import com.github.imdmk.automessage.feature.command.implementation.ReloadCommand;
 import com.github.imdmk.automessage.feature.message.MessageConfig;
 import com.github.imdmk.automessage.feature.message.MessageResultHandler;
 import com.github.imdmk.automessage.feature.message.MessageService;
-import com.github.imdmk.automessage.feature.message.auto.AutoMessageConfig;
+import com.github.imdmk.automessage.feature.message.auto.AutoMessageNotice;
+import com.github.imdmk.automessage.feature.message.auto.AutoMessageNoticeArgument;
+import com.github.imdmk.automessage.feature.message.auto.AutoMessageNoticeConfig;
 import com.github.imdmk.automessage.feature.message.auto.dispatcher.AutoMessageDispatcher;
 import com.github.imdmk.automessage.feature.message.auto.eligibility.AutoMessageEligibilityEvaluator;
 import com.github.imdmk.automessage.feature.message.auto.eligibility.DefaultEligibilityEvaluator;
@@ -67,7 +72,7 @@ class AutoMessage {
 
         PluginConfig pluginConfig = this.configurationManager.create(PluginConfig.class);
         MessageConfig messageConfig = this.configurationManager.create(MessageConfig.class);
-        AutoMessageConfig autoMessageConfig = this.configurationManager.create(AutoMessageConfig.class);
+        AutoMessageNoticeConfig autoMessageNoticeConfig = this.configurationManager.create(AutoMessageNoticeConfig.class);
         CommandConfig commandConfig = this.configurationManager.create(CommandConfig.class);
 
         /* Services */
@@ -80,7 +85,7 @@ class AutoMessage {
         /* Dispatcher */
         AutoMessageEligibilityEvaluator eligibilityEvaluator = new DefaultEligibilityEvaluator();
 
-        AutoMessageDispatcher autoMessageDispatcher = new AutoMessageDispatcher(this.server, this.configurationManager, autoMessageConfig, this.messageService, this.taskScheduler, eligibilityEvaluator);
+        AutoMessageDispatcher autoMessageDispatcher = new AutoMessageDispatcher(this.server, this.configurationManager, autoMessageNoticeConfig, this.messageService, this.taskScheduler, eligibilityEvaluator);
         autoMessageDispatcher.schedule();
 
         /* Controllers */
@@ -91,6 +96,7 @@ class AutoMessage {
         /* LiteCommands */
         this.liteCommands = LiteBukkitFactory.builder("AutoMessage", plugin, this.server)
                 .argument(Player.class, new PlayerArgument(this.server, messageConfig))
+                .argument(AutoMessageNotice.class, new AutoMessageNoticeArgument(messageConfig, autoMessageNoticeConfig))
 
                 .context(Player.class, new PlayerContextual())
                 .result(Notice.class, new MessageResultHandler(this.messageService))
@@ -100,6 +106,9 @@ class AutoMessage {
 
                 .commands(
                         new DelayCommand(this.messageService, autoMessageDispatcher),
+                        new DisableCommand(this.messageService, autoMessageDispatcher),
+                        new DispatchCommand(this.server, this.messageService, autoMessageDispatcher, eligibilityEvaluator),
+                        new EnableCommand(this.messageService, autoMessageDispatcher),
                         new ReloadCommand(this.logger, this.configurationManager, this.messageService)
                 )
 
