@@ -54,7 +54,7 @@ public class UpdateController implements Listener {
     }
 
     @EventHandler(priority = EventPriority.HIGHEST)
-    void onPlayerJoin(final PlayerJoinEvent event) {
+    void onPlayerJoin(PlayerJoinEvent event) {
         if (!this.pluginConfig.checkUpdate) {
             return;
         }
