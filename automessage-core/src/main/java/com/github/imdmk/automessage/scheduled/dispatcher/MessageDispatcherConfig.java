@@ -30,7 +30,7 @@ public final class MessageDispatcherConfig extends ConfigSection {
     @Override
     public @NotNull OkaeriSerdesPack getSerdesPack() {
         return registry -> {
-            registry.register(new SerdesCommons());
+            // SerdesCommons is registered globally in ConfigManager
         };
     }
 
