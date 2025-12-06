@@ -28,6 +28,7 @@ public final class EnableCommand {
     @Execute
     void enable(@Context CommandSender sender) {
         dispatcherConfig.setEnabled(true);
+        dispatcherConfig.save();
         messageService.send(sender, n -> n.dispatcherMessages.dispatcherEnabled());
     }
 }
