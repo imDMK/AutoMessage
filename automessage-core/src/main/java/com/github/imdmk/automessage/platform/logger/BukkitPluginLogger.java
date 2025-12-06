@@ -70,7 +70,7 @@ public final class BukkitPluginLogger implements PluginLogger {
 
     @Override
     public void warn(@NotNull Throwable throwable) {
-        logger.warning(throwable.getMessage());
+        logger.log(Level.WARNING, "A warning occurred, see stack trace for details.", throwable);
     }
 
     @Override
