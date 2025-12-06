@@ -85,7 +85,7 @@ public final class BukkitPluginLogger implements PluginLogger {
 
     @Override
     public void error(@NotNull Throwable throwable) {
-        logger.severe(throwable.getMessage());
+        logger.log(Level.SEVERE, "An error occurred, see stack trace for details.", throwable);
     }
 
     @Override
