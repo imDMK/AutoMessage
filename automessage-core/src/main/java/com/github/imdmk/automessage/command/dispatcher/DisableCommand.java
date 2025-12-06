@@ -28,6 +28,7 @@ public final class DisableCommand {
     @Execute
     void disable(@Context CommandSender sender) {
         dispatcherConfig.setEnabled(false);
+        dispatcherConfig.save();
         messageService.send(sender, n -> n.dispatcherMessages.dispatcherDisabled());
     }
 }
