@@ -31,7 +31,7 @@ public final class ScheduledMessageConfig extends ConfigSection {
             "# Message order is preserved and processed sequentially by the dispatcher.",
             "#"
     })
-    public List<ScheduledMessage> messages = Arrays.asList(
+    public List<ScheduledMessage> messages = List.of(
             ScheduledMessageBuilder.create()
                     .name("first-message")
                     .addNotices(
