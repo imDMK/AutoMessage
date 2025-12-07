@@ -3,19 +3,21 @@ package com.github.imdmk.automessage.scheduled.dispatcher;
 import com.github.imdmk.automessage.platform.scheduler.PluginTask;
 import com.github.imdmk.automessage.shared.validate.Validator;
 import org.bukkit.Server;
+import org.bukkit.entity.Player;
 import org.jetbrains.annotations.NotNull;
 
 import java.time.Duration;
+import java.util.Collection;
 
 public final class MessageDispatcherTask implements PluginTask {
 
     private final Server server;
-    private final MessageDispatcherConfig dispatcherConfig;
+    private final MessagesDispatcherConfig dispatcherConfig;
     private final MessageDispatcher messageDispatcher;
 
     public MessageDispatcherTask(
             @NotNull Server server,
-            @NotNull MessageDispatcherConfig dispatcherConfig,
+            @NotNull MessagesDispatcherConfig dispatcherConfig,
             @NotNull MessageDispatcher messageDispatcher
     ) {
         this.server = Validator.notNull(server, "server");
@@ -29,12 +31,12 @@ public final class MessageDispatcherTask implements PluginTask {
             return;
         }
 
-        var onlinePlayers = server.getOnlinePlayers();
+        Collection<? extends Player> onlinePlayers = server.getOnlinePlayers();
         if (onlinePlayers.isEmpty()) {
             return;
         }
 
-        var target = DispatchTarget.players(onlinePlayers);
+        DispatchTarget target = DispatchTarget.players(onlinePlayers);
         messageDispatcher.dispatchNext(target);
     }
 

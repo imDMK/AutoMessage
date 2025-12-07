@@ -12,11 +12,11 @@ import com.github.imdmk.automessage.platform.logger.BukkitPluginLogger;
 import com.github.imdmk.automessage.platform.logger.PluginLogger;
 import com.github.imdmk.automessage.platform.scheduler.BukkitTaskScheduler;
 import com.github.imdmk.automessage.platform.scheduler.TaskScheduler;
-import com.github.imdmk.automessage.scheduled.ScheduledMessageConfig;
+import com.github.imdmk.automessage.scheduled.ScheduledMessagesConfig;
 import com.github.imdmk.automessage.scheduled.audience.filter.AudienceFilter;
 import com.github.imdmk.automessage.scheduled.dispatcher.MessageDispatcher;
-import com.github.imdmk.automessage.scheduled.dispatcher.MessageDispatcherConfig;
 import com.github.imdmk.automessage.scheduled.dispatcher.MessageDispatcherTask;
+import com.github.imdmk.automessage.scheduled.dispatcher.MessagesDispatcherConfig;
 import com.github.imdmk.automessage.scheduled.selector.MessageSelector;
 import com.github.imdmk.automessage.scheduled.selector.MessageSelectorFactory;
 import com.github.imdmk.automessage.shared.message.MessageConfig;
@@ -72,20 +72,20 @@ final class AutoMessagePlugin {
         messageService = new MessageService(configManager.require(MessageConfig.class), bukkitAudiences);
         taskScheduler = new BukkitTaskScheduler(plugin, server.getScheduler());
 
-        final MessageDispatcherConfig messageDispatcherConfig = configManager.require(MessageDispatcherConfig.class);
-        final ScheduledMessageConfig scheduledMessageConfig = configManager.require(ScheduledMessageConfig.class);
+        final MessagesDispatcherConfig messagesDispatcherConfig = configManager.require(MessagesDispatcherConfig.class);
+        final ScheduledMessagesConfig scheduledMessagesConfig = configManager.require(ScheduledMessagesConfig.class);
 
         final AudienceFilter audienceFilter = AudienceFilter.createDefault();
-        final MessageSelector messageSelector = MessageSelectorFactory.create(messageDispatcherConfig.selector);
+        final MessageSelector messageSelector = MessageSelectorFactory.create(messagesDispatcherConfig.selector);
 
         final MessageDispatcher messageDispatcher = new MessageDispatcher(
                 messageService,
                 messageSelector,
                 audienceFilter,
-                () -> scheduledMessageConfig.messages
+                () -> scheduledMessagesConfig.messages
         );
 
-        MessageDispatcherTask messageDispatcherTask = new MessageDispatcherTask(server, messageDispatcherConfig, messageDispatcher);
+        MessageDispatcherTask messageDispatcherTask = new MessageDispatcherTask(server, messagesDispatcherConfig, messageDispatcher);
         taskScheduler.runTimerAsync(messageDispatcherTask);
 
         liteCommands = LiteBukkitFactory.builder(PLUGIN_PREFIX, plugin, server)
@@ -94,8 +94,8 @@ final class AutoMessagePlugin {
                 .result(Notice.class, new NoticeResultHandlerImpl(messageService))
 
                 .commands(
-                        new DisableCommand(messageDispatcherConfig, messageService),
-                        new EnableCommand(messageDispatcherConfig, messageService),
+                        new DisableCommand(messagesDispatcherConfig, messageService),
+                        new EnableCommand(messagesDispatcherConfig, messageService),
                         new ReloadCommand(logger, configManager, taskScheduler, messageService)
                 )
 
@@ -107,7 +107,10 @@ final class AutoMessagePlugin {
     }
 
     void disable() {
-        Validator.ifNotNull(configManager, ConfigManager::saveAll);
+//        Validator.ifNotNull(configManager, manager -> {
+//            manager.saveAll();
+//            manager.clearAll();
+//        });
         Validator.ifNotNull(bukkitAudiences, BukkitAudiences::close);
         Validator.ifNotNull(taskScheduler, TaskScheduler::shutdown);
         Validator.ifNotNull(liteCommands, LiteCommands::unregister);
