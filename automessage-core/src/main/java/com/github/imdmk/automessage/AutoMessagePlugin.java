@@ -96,7 +96,7 @@ final class AutoMessagePlugin {
                 .commands(
                         new DisableCommand(messageDispatcherConfig, messageService),
                         new EnableCommand(messageDispatcherConfig, messageService),
-                        new ReloadCommand(logger, configManager, messageService)
+                        new ReloadCommand(logger, configManager, taskScheduler, messageService)
                 )
 
                 .build();

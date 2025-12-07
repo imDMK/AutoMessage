@@ -4,7 +4,6 @@ import com.github.imdmk.automessage.config.ConfigSection;
 import com.github.imdmk.automessage.scheduled.selector.MessageSelectorType;
 import eu.okaeri.configs.annotation.Comment;
 import eu.okaeri.configs.serdes.OkaeriSerdesPack;
-import eu.okaeri.configs.serdes.commons.SerdesCommons;
 import org.jetbrains.annotations.NotNull;
 
 import java.time.Duration;
@@ -25,6 +24,10 @@ public final class MessageDispatcherConfig extends ConfigSection {
 
     public void setEnabled(boolean enabled) {
         this.enabled = enabled;
+    }
+
+    public boolean isEnabled() {
+        return enabled;
     }
 
     @Override

@@ -6,14 +6,24 @@ import eu.okaeri.configs.annotation.Comment;
 
 public final class DispatcherMessagesImpl extends OkaeriConfig implements DispatcherMessages {
 
-    @Comment({"#", "# Message shown when automatic message dispatching gets enabled.", "#"})
+    @Comment({"#", "# Sent when automatic message dispatching is successfully enabled.", "#"})
     Notice dispatcherEnabled = Notice.chat(
-            "<dark_gray>• <green>Automatic messages have been enabled.<dark_gray>"
+            "<dark_gray>• <green>Automatic messages have been <bold>enabled</bold>.<dark_gray>"
     );
 
-    @Comment({"#", "# Message shown when automatic message dispatching gets disabled.", "#"})
+    @Comment({"#", "# Sent when a user attempts to enable dispatching, but it is already active.", "#"})
+    Notice dispatcherAlreadyEnabled = Notice.chat(
+            "<dark_gray>• <yellow>Automatic messages are already enabled.<dark_gray>"
+    );
+
+    @Comment({"#", "# Sent when automatic message dispatching is successfully disabled.", "#"})
     Notice dispatcherDisabled = Notice.chat(
-            "<dark_gray>• <red>Automatic messages have been disabled.<dark_gray>"
+            "<dark_gray>• <red>Automatic messages have been <bold>disabled</bold>.<dark_gray>"
+    );
+
+    @Comment({"#", "# Sent when a user attempts to disable dispatching, but it is already inactive.", "#"})
+    Notice dispatcherAlreadyDisabled = Notice.chat(
+            "<dark_gray>• <yellow>Automatic messages are already disabled.<dark_gray>"
     );
 
     @Override
@@ -22,7 +32,17 @@ public final class DispatcherMessagesImpl extends OkaeriConfig implements Dispat
     }
 
     @Override
+    public Notice dispatcherAlreadyEnabled() {
+        return dispatcherAlreadyEnabled;
+    }
+
+    @Override
     public Notice dispatcherDisabled() {
         return dispatcherDisabled;
+    }
+
+    @Override
+    public Notice dispatcherAlreadyDisabled() {
+        return dispatcherAlreadyDisabled;
     }
 }
