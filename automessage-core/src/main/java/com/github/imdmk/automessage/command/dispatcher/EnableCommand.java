@@ -1,6 +1,6 @@
 package com.github.imdmk.automessage.command.dispatcher;
 
-import com.github.imdmk.automessage.scheduled.dispatcher.MessageDispatcherConfig;
+import com.github.imdmk.automessage.scheduled.dispatcher.MessagesDispatcherConfig;
 import com.github.imdmk.automessage.shared.message.MessageService;
 import com.github.imdmk.automessage.shared.validate.Validator;
 import dev.rollczi.litecommands.annotations.command.Command;
@@ -14,11 +14,11 @@ import org.jetbrains.annotations.NotNull;
 @Permission("command.automessage.enable")
 public final class EnableCommand {
 
-    private final MessageDispatcherConfig dispatcherConfig;
+    private final MessagesDispatcherConfig dispatcherConfig;
     private final MessageService messageService;
 
     public EnableCommand(
-            @NotNull MessageDispatcherConfig dispatcherConfig,
+            @NotNull MessagesDispatcherConfig dispatcherConfig,
             @NotNull MessageService messageService
     ) {
         this.dispatcherConfig = Validator.notNull(dispatcherConfig, "dispatcherConfig");
