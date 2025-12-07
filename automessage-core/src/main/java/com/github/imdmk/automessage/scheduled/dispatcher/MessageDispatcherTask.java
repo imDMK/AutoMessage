@@ -12,12 +12,12 @@ import java.util.Collection;
 public final class MessageDispatcherTask implements PluginTask {
 
     private final Server server;
-    private final MessagesDispatcherConfig dispatcherConfig;
+    private final MessageDispatcherConfig dispatcherConfig;
     private final MessageDispatcher messageDispatcher;
 
     public MessageDispatcherTask(
             @NotNull Server server,
-            @NotNull MessagesDispatcherConfig dispatcherConfig,
+            @NotNull MessageDispatcherConfig dispatcherConfig,
             @NotNull MessageDispatcher messageDispatcher
     ) {
         this.server = Validator.notNull(server, "server");

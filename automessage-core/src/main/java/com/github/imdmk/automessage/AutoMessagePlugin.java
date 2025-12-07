@@ -15,8 +15,8 @@ import com.github.imdmk.automessage.platform.scheduler.TaskScheduler;
 import com.github.imdmk.automessage.scheduled.ScheduledMessagesConfig;
 import com.github.imdmk.automessage.scheduled.audience.filter.AudienceFilter;
 import com.github.imdmk.automessage.scheduled.dispatcher.MessageDispatcher;
+import com.github.imdmk.automessage.scheduled.dispatcher.MessageDispatcherConfig;
 import com.github.imdmk.automessage.scheduled.dispatcher.MessageDispatcherTask;
-import com.github.imdmk.automessage.scheduled.dispatcher.MessagesDispatcherConfig;
 import com.github.imdmk.automessage.scheduled.selector.MessageSelector;
 import com.github.imdmk.automessage.scheduled.selector.MessageSelectorFactory;
 import com.github.imdmk.automessage.shared.message.MessageConfig;
@@ -72,11 +72,11 @@ final class AutoMessagePlugin {
         messageService = new MessageService(configManager.require(MessageConfig.class), bukkitAudiences);
         taskScheduler = new BukkitTaskScheduler(plugin, server.getScheduler());
 
-        final MessagesDispatcherConfig messagesDispatcherConfig = configManager.require(MessagesDispatcherConfig.class);
+        final MessageDispatcherConfig messageDispatcherConfig = configManager.require(MessageDispatcherConfig.class);
         final ScheduledMessagesConfig scheduledMessagesConfig = configManager.require(ScheduledMessagesConfig.class);
 
         final AudienceFilter audienceFilter = AudienceFilter.createDefault();
-        final MessageSelector messageSelector = MessageSelectorFactory.create(messagesDispatcherConfig.selector);
+        final MessageSelector messageSelector = MessageSelectorFactory.create(messageDispatcherConfig.selector);
 
         final MessageDispatcher messageDispatcher = new MessageDispatcher(
                 messageService,
@@ -85,7 +85,7 @@ final class AutoMessagePlugin {
                 () -> scheduledMessagesConfig.messages
         );
 
-        MessageDispatcherTask messageDispatcherTask = new MessageDispatcherTask(server, messagesDispatcherConfig, messageDispatcher);
+        MessageDispatcherTask messageDispatcherTask = new MessageDispatcherTask(server, messageDispatcherConfig, messageDispatcher);
         taskScheduler.runTimerAsync(messageDispatcherTask);
 
         liteCommands = LiteBukkitFactory.builder(PLUGIN_PREFIX, plugin, server)
@@ -94,8 +94,8 @@ final class AutoMessagePlugin {
                 .result(Notice.class, new NoticeResultHandlerImpl(messageService))
 
                 .commands(
-                        new DisableCommand(messagesDispatcherConfig, messageService),
-                        new EnableCommand(messagesDispatcherConfig, messageService),
+                        new DisableCommand(messageDispatcherConfig, messageService),
+                        new EnableCommand(messageDispatcherConfig, messageService),
                         new ReloadCommand(logger, configManager, taskScheduler, messageService)
                 )
 
