@@ -1,8 +1,8 @@
 # 💬 AutoMessage — Ultra-Efficient Broadcasting System
 
 [![Build Status](https://github.com/imDMK/AutoMessage/actions/workflows/gradle.yml/badge.svg)](https://github.com/imDMK/AutoMessage/actions/workflows/gradle.yml)
-![JDK](https://img.shields.io/badge/JDK-1.17-blue.svg)
-![Supported versions](https://img.shields.io/badge/Minecraft-1.17--1.21.5-green.svg)
+![JDK](https://img.shields.io/badge/JDK-1.21-blue.svg)
+![Supported versions](https://img.shields.io/badge/Minecraft-1.21--1.21.10-green.svg)
 [![SpigotMC](https://img.shields.io/badge/SpigotMC-yellow.svg)](https://www.spigotmc.org/resources/automessage.112363/)
 [![Bukkit](https://img.shields.io/badge/Bukkit-blue.svg)](https://legacy.curseforge.com/minecraft/bukkit-plugins/auto-messages)
 [![PaperMC](https://img.shields.io/badge/Paper-004ee9.svg)](https://hangar.papermc.io/imDMK/AutoMessage)
