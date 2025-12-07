@@ -7,6 +7,7 @@ import com.github.imdmk.automessage.config.ConfigSection;
 import com.github.imdmk.automessage.scheduled.audience.rule.AudienceRule;
 import com.github.imdmk.automessage.scheduled.audience.rule.AudienceRuleSerializer;
 import eu.okaeri.configs.annotation.Comment;
+import eu.okaeri.configs.annotation.Header;
 import eu.okaeri.configs.serdes.OkaeriSerdesPack;
 import net.kyori.adventure.bossbar.BossBar;
 import net.kyori.adventure.key.Key;
@@ -16,6 +17,54 @@ import org.jetbrains.annotations.NotNull;
 import java.time.Duration;
 import java.util.List;
 
+@Header({
+        "# ============================================================================",
+        "#                        AutoMessage — scheduledMessages.yml",
+        "# ============================================================================",
+        "# This file defines all automatically dispatched messages used by AutoMessage.",
+        "# Each entry represents one scheduled announcement, which may contain multiple",
+        "# message formats such as chat, actionbar, title, bossbar, and sound notices.",
+        "#",
+        "# How it works:",
+        "#  • Messages are dispatched in a sequence, based on the selector strategy",
+        "#    configured in messagesDispatcher.yml.",
+        "#  • Each message may contain access rules (audience filters) to restrict",
+        "#    delivery to specific players (groups, permissions, etc.).",
+        "#",
+        "# Structure of a scheduled message entry:",
+        "#  name:      Unique identifier of the message.",
+        "#  notices:   One or more notices to send using Multification.",
+        "#             Supported notice types:",
+        "#               - Chat",
+        "#               - Actionbar",
+        "#               - Title / Subtitle",
+        "#               - BossBar",
+        "#               - Sound",
+        "#",
+        "#  rules:     Optional audience restrictions.",
+        "#             Supported rule types:",
+        "#               • PERMISSION  -> Only players with this permission receive the message",
+        "#               • GROUP        -> Only players in the given group receive the message",
+        "#",
+        "# Editing recommendations:",
+        "#  • You may freely add or remove message entries.",
+        "#  • MiniMessage formatting (<red>, <yellow>, <rainbow>, etc.) is fully supported.",
+        "#  • Sound format: \"namespace:key SOURCE volume pitch\".",
+        "#  • Duration fields support values like: 5s, 2m, 500ms.",
+        "#",
+        "# After making changes, reload the plugin via:",
+        "#   /automessage reload",
+        "#",
+        "# Source Code:",
+        "#   https://github.com/imDMK/AutoMessage",
+        "#",
+        "# Support development:",
+        "#   GitHub Sponsors: https://github.com/sponsors/imDMK",
+        "#   PayPal:          https://paypal.me/dominiksuliga",
+        "#",
+        "# Thank you for using AutoMessage!",
+        "# ============================================================================"
+})
 public final class ScheduledMessagesConfig extends ConfigSection {
 
     @Comment({
