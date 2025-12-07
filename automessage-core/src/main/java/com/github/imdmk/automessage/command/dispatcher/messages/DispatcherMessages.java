@@ -6,6 +6,9 @@ public interface DispatcherMessages {
 
     Notice dispatcherEnabled();
 
+    Notice dispatcherAlreadyEnabled();
+
     Notice dispatcherDisabled();
 
+    Notice dispatcherAlreadyDisabled();
 }
