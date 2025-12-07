@@ -1,8 +1,8 @@
 package com.github.imdmk.automessage;
 
 import com.github.imdmk.automessage.config.ConfigSection;
-import com.github.imdmk.automessage.scheduled.ScheduledMessageConfig;
-import com.github.imdmk.automessage.scheduled.dispatcher.MessageDispatcherConfig;
+import com.github.imdmk.automessage.scheduled.ScheduledMessagesConfig;
+import com.github.imdmk.automessage.scheduled.dispatcher.MessagesDispatcherConfig;
 import com.github.imdmk.automessage.shared.message.MessageConfig;
 
 import java.util.List;
@@ -13,8 +13,8 @@ public final class DefaultPluginSettings implements PluginSettings {
     public List<Class<? extends ConfigSection>> configs() {
         return List.of(
                 MessageConfig.class,
-                ScheduledMessageConfig.class,
-                MessageDispatcherConfig.class
+                ScheduledMessagesConfig.class,
+                MessagesDispatcherConfig.class
         );
     }
 }

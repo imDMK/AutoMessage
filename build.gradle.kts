@@ -1,5 +1,3 @@
-apply(plugin = "java-library")
-
 group = "com.github.imdmk.automessage"
 version = "2.0.0"
 

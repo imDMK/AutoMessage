@@ -4,7 +4,9 @@ import com.eternalcode.multification.notice.Notice;
 import eu.okaeri.configs.OkaeriConfig;
 import eu.okaeri.configs.annotation.Comment;
 
-public final class ReloadMessagesImpl extends OkaeriConfig implements ReloadMessages {
+public final class ReloadMessagesImpl
+        extends OkaeriConfig
+        implements ReloadMessages {
 
     @Comment({"#", "# Message shown when all configuration files are successfully reloaded.", "#"})
     Notice configReloadedSuccess = Notice.chat(

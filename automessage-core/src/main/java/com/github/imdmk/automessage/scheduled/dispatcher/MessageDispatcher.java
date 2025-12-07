@@ -13,6 +13,16 @@ import java.util.List;
 import java.util.Optional;
 import java.util.function.Supplier;
 
+/**
+ * Coordinates selecting and dispatching scheduled messages to an audience.
+ *
+ * <p>This class is stateless and thread-safe under the assumption that:
+ * <ul>
+ *   <li>{@link MessageSelector} is thread-safe or externally synchronized.</li>
+ *   <li>{@link Supplier} provides a thread-safe messages source.</li>
+ * </ul>
+ * </p>
+ */
 public final class MessageDispatcher {
 
     private final MessageService messageService;
@@ -29,13 +39,23 @@ public final class MessageDispatcher {
         this.messageService = Validator.notNull(messageService, "messageService");
         this.selector = Validator.notNull(selector, "selector");
         this.filter = Validator.notNull(filter, "filter");
-        this.messagesSupplier = Validator.notNull(messagesSupplier, "messages");
+        this.messagesSupplier = Validator.notNull(messagesSupplier, "messagesSupplier");
     }
 
+    /**
+     * Selects the next scheduled message and dispatches it to the target audience.
+     * The selector index is automatically advanced.
+     */
     public void dispatchNext(@NotNull DispatchTarget target) {
         dispatchNext(target, true);
     }
 
+    /**
+     * Selects the next scheduled message and dispatches it to the provided audience.
+     *
+     * @param target the recipients wrapper
+     * @param advanceSelectorIndex whether the selector should advance its internal index
+     */
     public void dispatchNext(
             @NotNull DispatchTarget target,
             boolean advanceSelectorIndex
@@ -46,33 +66,36 @@ public final class MessageDispatcher {
         }
 
         final Optional<ScheduledMessage> next = selector.selectNext(messages, advanceSelectorIndex);
-        if (next.isEmpty()) {
-            return;
-        }
-
-        dispatch(next.get(), target);
+        next.ifPresent(message -> dispatch(message, target));
     }
 
+    /**
+     * Dispatches a specific message to all players permitted by the audience filter.
+     *
+     * @param message the message to send
+     * @param target the target audience
+     */
     public void dispatch(
             @NotNull ScheduledMessage message,
             @NotNull DispatchTarget target
     ) {
-        for (final Player recipient : target.recipients()) {
-            if (!filter.allows(recipient, message)) {
-                continue;
+        for (final Player player : target.recipients()) {
+            if (filter.allows(player, message)) {
+                sendToPlayer(player, message);
             }
-
-            sendToPlayer(recipient, message);
         }
     }
 
+    /**
+     * Sends all message notices to a single player asynchronously.
+     */
     private void sendToPlayer(
-            @NotNull Player recipient,
+            @NotNull Player player,
             @NotNull ScheduledMessage message
     ) {
         for (final Notice notice : message.notices()) {
             messageService.create()
-                    .viewer(recipient)
+                    .viewer(player)
                     .notice(notice)
                     .sendAsync();
         }

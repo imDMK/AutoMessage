@@ -8,7 +8,7 @@ import org.jetbrains.annotations.NotNull;
 
 import java.time.Duration;
 
-public final class MessageDispatcherConfig extends ConfigSection {
+public final class MessagesDispatcherConfig extends ConfigSection {
 
     @Comment("# Should the automatic dispatcher enabled?")
     public boolean enabled = true;
@@ -17,7 +17,7 @@ public final class MessageDispatcherConfig extends ConfigSection {
     public Duration period = Duration.ofSeconds(10);
 
     @Comment("# How long to wait before the first automatic dispatch.")
-    public Duration initialDelay = Duration.ZERO;
+    public Duration initialDelay = Duration.ofSeconds(10);
 
     @Comment("# Strategy used to select the next message.")
     public MessageSelectorType selector = MessageSelectorType.SEQUENTIAL;
@@ -32,13 +32,11 @@ public final class MessageDispatcherConfig extends ConfigSection {
 
     @Override
     public @NotNull OkaeriSerdesPack getSerdesPack() {
-        return registry -> {
-            // SerdesCommons is registered globally in ConfigManager
-        };
+        return registry -> {};
     }
 
     @Override
     public @NotNull String getFileName() {
-        return "messageDispatcher.yml";
+        return "messagesDispatcher.yml";
     }
 }

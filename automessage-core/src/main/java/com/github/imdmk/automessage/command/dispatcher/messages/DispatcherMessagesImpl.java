@@ -4,7 +4,9 @@ import com.eternalcode.multification.notice.Notice;
 import eu.okaeri.configs.OkaeriConfig;
 import eu.okaeri.configs.annotation.Comment;
 
-public final class DispatcherMessagesImpl extends OkaeriConfig implements DispatcherMessages {
+public final class DispatcherMessagesImpl
+        extends OkaeriConfig
+        implements DispatcherMessages {
 
     @Comment({"#", "# Sent when automatic message dispatching is successfully enabled.", "#"})
     Notice dispatcherEnabled = Notice.chat(

@@ -4,7 +4,9 @@ import com.eternalcode.multification.notice.Notice;
 import eu.okaeri.configs.OkaeriConfig;
 import eu.okaeri.configs.annotation.Comment;
 
-public final class LiteCommandsMessagesImpl extends OkaeriConfig implements LiteCommandsMessages {
+public final class LiteCommandsMessagesImpl
+        extends OkaeriConfig
+        implements LiteCommandsMessages {
 
     @Comment({
             "#",
@@ -50,7 +52,7 @@ public final class LiteCommandsMessagesImpl extends OkaeriConfig implements Lite
             "#"
     })
     Notice commandUsageEntry = Notice.chat(
-            "<dark_gray>  ▸ <gray>{USAGE}"
+            "<dark_gray>• <red>{USAGE}"
     );
 
     @Override
