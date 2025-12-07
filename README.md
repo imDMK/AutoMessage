@@ -34,9 +34,8 @@
 • Full MiniMessage & Adventure API formatting
 
 ✅ **Command support**  
-• `/automessage delay`  
+• `/automessage enable/disable`  
 • `/automessage reload`  
-• You can even configure a command like you want!
 
 ✅ **Zero-lag optimized**  
 Built with efficiency in mind — AutoMessage has no noticeable impact on server performance, even with hundreds of players online.
