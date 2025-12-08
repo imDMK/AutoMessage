@@ -4,8 +4,8 @@ dependencies {
     implementation("net.kyori:adventure-platform-bukkit:4.4.1")
     implementation("net.kyori:adventure-text-minimessage:4.21.0")
 
-    implementation("com.eternalcode:multification-bukkit:1.2.2")
-    implementation("com.eternalcode:multification-okaeri:1.2.2")
+    implementation("com.eternalcode:multification-bukkit:1.2.3")
+    implementation("com.eternalcode:multification-okaeri:1.2.3")
 
     api("eu.okaeri:okaeri-configs-yaml-snakeyaml:5.0.9")
     implementation("eu.okaeri:okaeri-configs-serdes-commons:5.0.5")
