@@ -48,7 +48,7 @@ class ConfigManagerTest {
     void create_shouldInstantiateBindInitializeAndRegister() {
         // given
         SampleConfig config = new SampleConfig();
-        when(factory.instantiate(SampleConfig.class)).thenReturn(config);
+        when(factory.create(SampleConfig.class)).thenReturn(config);
 
         // when
         SampleConfig result = manager.create(SampleConfig.class);
@@ -56,7 +56,7 @@ class ConfigManagerTest {
         // then
         assertSame(config, result);
 
-        verify(factory).instantiate(SampleConfig.class);
+        verify(factory).create(SampleConfig.class);
         verify(binder).bind(eq(config), any(File.class));
         verify(lifecycle).initialize(config);
 
@@ -67,11 +67,11 @@ class ConfigManagerTest {
     @Test
     @DisplayName("createAll(): should call create() for each provided config class")
     void createAll_shouldCreateEachConfig() {
-        when(factory.instantiate(SampleConfig.class)).thenReturn(new SampleConfig());
+        when(factory.create(SampleConfig.class)).thenReturn(new SampleConfig());
 
         manager.createAll(List.of(SampleConfig.class));
 
-        verify(factory).instantiate(SampleConfig.class);
+        verify(factory).create(SampleConfig.class);
     }
 
     @Test
@@ -84,7 +84,7 @@ class ConfigManagerTest {
     @DisplayName("loadAll(): should delegate loading to lifecycle")
     void loadAll_shouldDelegateToLifecycle() {
         SampleConfig config = new SampleConfig();
-        when(factory.instantiate(SampleConfig.class)).thenReturn(config);
+        when(factory.create(SampleConfig.class)).thenReturn(config);
 
         manager.create(SampleConfig.class);
         manager.loadAll();
@@ -96,7 +96,7 @@ class ConfigManagerTest {
     @DisplayName("saveAll(): should delegate saving to lifecycle")
     void saveAll_shouldDelegateToLifecycle() {
         SampleConfig config = new SampleConfig();
-        when(factory.instantiate(SampleConfig.class)).thenReturn(config);
+        when(factory.create(SampleConfig.class)).thenReturn(config);
 
         manager.create(SampleConfig.class);
         manager.saveAll();
@@ -107,7 +107,7 @@ class ConfigManagerTest {
     @Test
     @DisplayName("clearAll(): should remove all configs from registry")
     void clearAll_shouldRemoveAllConfigs() {
-        when(factory.instantiate(SampleConfig.class)).thenReturn(new SampleConfig());
+        when(factory.create(SampleConfig.class)).thenReturn(new SampleConfig());
 
         manager.create(SampleConfig.class);
         manager.clearAll();

@@ -1,24 +1,22 @@
 package com.github.imdmk.automessage.config;
 
 import com.github.imdmk.automessage.platform.logger.PluginLogger;
-import com.github.imdmk.automessage.shared.validate.Validator;
 import eu.okaeri.configs.exception.OkaeriException;
-import org.jetbrains.annotations.NotNull;
 
 final class ConfigLifecycle {
 
     private final PluginLogger logger;
 
-    ConfigLifecycle(@NotNull PluginLogger logger) {
-        this.logger = Validator.notNull(logger, "logger");
+    ConfigLifecycle(PluginLogger logger) {
+        this.logger = logger;
     }
 
-    void initialize(@NotNull ConfigSection config) {
+    void initialize(ConfigSection config) {
         config.saveDefaults();
         load(config);
     }
 
-    void load(@NotNull ConfigSection config) {
+    void load(ConfigSection config) {
         try {
             config.load(true);
         } catch (OkaeriException e) {
@@ -27,7 +25,7 @@ final class ConfigLifecycle {
         }
     }
 
-    void save(@NotNull ConfigSection config) {
+    void save(ConfigSection config) {
         try {
             config.save();
         } catch (Exception e) {

@@ -2,8 +2,6 @@ package com.github.imdmk.automessage.scheduled;
 
 import com.eternalcode.multification.notice.Notice;
 import com.github.imdmk.automessage.scheduled.audience.rule.AudienceRule;
-import com.github.imdmk.automessage.shared.validate.Validator;
-import org.jetbrains.annotations.NotNull;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -11,6 +9,7 @@ import java.util.List;
 public final class ScheduledMessageBuilder {
 
     private String name;
+
     private final List<Notice> notices = new ArrayList<>();
     private final List<AudienceRule> rules = new ArrayList<>();
 
@@ -18,44 +17,40 @@ public final class ScheduledMessageBuilder {
         return new ScheduledMessageBuilder();
     }
 
-    public @NotNull ScheduledMessageBuilder name(@NotNull String name) {
-        this.name = Validator.notNull(name, "name");
+    public ScheduledMessageBuilder name(String name) {
+        this.name = name;
         return this;
     }
 
-    public @NotNull ScheduledMessageBuilder addNotice(@NotNull Notice notice) {
-        this.notices.add(Validator.notNull(notice, "notice"));
+    public ScheduledMessageBuilder addNotice(Notice notice) {
+        this.notices.add(notice);
         return this;
     }
 
-    public @NotNull ScheduledMessageBuilder addNotices(@NotNull List<Notice> notices) {
-        Validator.notNull(notices, "notices");
-        notices.forEach(n -> this.notices.add(Validator.notNull(n, "notice element")));
+    public ScheduledMessageBuilder addNotices(List<Notice> notices) {
+        this.notices.addAll(notices);
         return this;
     }
 
-    public @NotNull ScheduledMessageBuilder addNotices(@NotNull Notice... notices) {
+    public ScheduledMessageBuilder addNotices(Notice... notices) {
         return addNotices(List.of(notices));
     }
 
-    public @NotNull ScheduledMessageBuilder addRule(@NotNull AudienceRule rule) {
-        this.rules.add(Validator.notNull(rule, "rule"));
+    public ScheduledMessageBuilder addRule(AudienceRule rule) {
+        this.rules.add(rule);
         return this;
     }
 
-    public @NotNull ScheduledMessageBuilder addRules(@NotNull List<AudienceRule> rules) {
-        Validator.notNull(rules, "rules");
-        rules.forEach(r -> this.rules.add(Validator.notNull(r, "rule element")));
+    public ScheduledMessageBuilder addRules(List<AudienceRule> rules) {
+        this.rules.addAll(rules);
         return this;
     }
 
-    public @NotNull ScheduledMessageBuilder addRules(@NotNull AudienceRule... rules) {
+    public ScheduledMessageBuilder addRules(AudienceRule... rules) {
         return addRules(List.of(rules));
     }
 
-    public @NotNull ScheduledMessage build() {
-        Validator.notNull(this.name, "name is required");
-
+    public ScheduledMessage build() {
         return new ScheduledMessage(
                 this.name,
                 List.copyOf(this.notices),

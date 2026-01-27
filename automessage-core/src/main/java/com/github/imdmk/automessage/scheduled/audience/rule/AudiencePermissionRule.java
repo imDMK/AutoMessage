@@ -1,22 +1,16 @@
 package com.github.imdmk.automessage.scheduled.audience.rule;
 
-import com.github.imdmk.automessage.shared.validate.Validator;
 import org.bukkit.entity.Player;
-import org.jetbrains.annotations.NotNull;
 
-public record AudiencePermissionRule(@NotNull String permission) implements AudienceRule {
-
-    public AudiencePermissionRule {
-        Validator.notNull(permission, "permission");
-    }
+public record AudiencePermissionRule(String permission) implements AudienceRule {
 
     @Override
-    public boolean test(@NotNull Player player) {
+    public boolean test(Player player) {
         return player.hasPermission(permission);
     }
 
     @Override
-    public @NotNull Type type() {
+    public Type type() {
         return Type.PERMISSION;
     }
 }
