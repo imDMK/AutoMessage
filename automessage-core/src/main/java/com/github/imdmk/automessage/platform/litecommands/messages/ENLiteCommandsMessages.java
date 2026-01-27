@@ -4,7 +4,7 @@ import com.eternalcode.multification.notice.Notice;
 import eu.okaeri.configs.OkaeriConfig;
 import eu.okaeri.configs.annotation.Comment;
 
-public final class LiteCommandsMessagesImpl
+public final class ENLiteCommandsMessages
         extends OkaeriConfig
         implements LiteCommandsMessages {
 
