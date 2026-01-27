@@ -1,19 +1,18 @@
 package com.github.imdmk.automessage.config;
 
 import eu.okaeri.configs.serdes.OkaeriSerdesPack;
-import org.jetbrains.annotations.NotNull;
 
 public class SampleConfig extends ConfigSection {
 
     public int value = 5;
 
     @Override
-    public @NotNull OkaeriSerdesPack getSerdesPack() {
+    public OkaeriSerdesPack getSerdesPack() {
         return registry -> {};
     }
 
     @Override
-    public @NotNull String getFileName() {
+    public String getFileName() {
         return "sample.yml";
     }
 }

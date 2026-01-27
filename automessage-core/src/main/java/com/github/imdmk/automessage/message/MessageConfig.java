@@ -1,15 +1,14 @@
-package com.github.imdmk.automessage.shared.message;
+package com.github.imdmk.automessage.message;
 
 import com.eternalcode.multification.notice.resolver.NoticeResolverDefaults;
 import com.eternalcode.multification.okaeri.MultificationSerdesPack;
-import com.github.imdmk.automessage.command.dispatcher.messages.DispatcherMessagesImpl;
-import com.github.imdmk.automessage.command.reload.messages.ReloadMessagesImpl;
+import com.github.imdmk.automessage.command.dispatcher.messages.ENDispatcherMessages;
+import com.github.imdmk.automessage.command.reload.messages.ENReloadMessages;
 import com.github.imdmk.automessage.config.ConfigSection;
-import com.github.imdmk.automessage.platform.litecommands.messages.LiteCommandsMessagesImpl;
+import com.github.imdmk.automessage.platform.litecommands.messages.ENLiteCommandsMessages;
 import eu.okaeri.configs.annotation.Comment;
 import eu.okaeri.configs.annotation.Header;
 import eu.okaeri.configs.serdes.OkaeriSerdesPack;
-import org.jetbrains.annotations.NotNull;
 
 @Header({
         "# ============================================================================",
@@ -46,14 +45,14 @@ public final class MessageConfig extends ConfigSection {
             "# Contains permission errors, usage hints, and syntax messages.",
             "#"
     })
-    public LiteCommandsMessagesImpl liteCommandsMessages = new LiteCommandsMessagesImpl();
+    public ENLiteCommandsMessages liteCommandsMessages = new ENLiteCommandsMessages();
 
     @Comment({
             "#",
             "# Messages used by dispatcher-related commands.",
             "#"
     })
-    public DispatcherMessagesImpl dispatcherMessages = new DispatcherMessagesImpl();
+    public ENDispatcherMessages dispatcherMessages = new ENDispatcherMessages();
 
     @Comment({
             "#",
@@ -61,17 +60,17 @@ public final class MessageConfig extends ConfigSection {
             "# Includes success and failure notifications.",
             "#"
     })
-    public ReloadMessagesImpl reloadMessages = new ReloadMessagesImpl();
+    public ENReloadMessages reloadMessages = new ENReloadMessages();
 
     @Override
-    public @NotNull OkaeriSerdesPack getSerdesPack() {
+    public OkaeriSerdesPack getSerdesPack() {
         return registry -> {
             registry.register(new MultificationSerdesPack(NoticeResolverDefaults.createRegistry()));
         };
     }
 
     @Override
-    public @NotNull String getFileName() {
+    public String getFileName() {
         return "messages.yml";
     }
 }

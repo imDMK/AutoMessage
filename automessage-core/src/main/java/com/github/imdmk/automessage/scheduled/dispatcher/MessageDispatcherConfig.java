@@ -5,7 +5,6 @@ import com.github.imdmk.automessage.scheduled.selector.MessageSelectorType;
 import eu.okaeri.configs.annotation.Comment;
 import eu.okaeri.configs.annotation.Header;
 import eu.okaeri.configs.serdes.OkaeriSerdesPack;
-import org.jetbrains.annotations.NotNull;
 
 import java.time.Duration;
 
@@ -79,12 +78,12 @@ public final class MessageDispatcherConfig extends ConfigSection {
     }
 
     @Override
-    public @NotNull OkaeriSerdesPack getSerdesPack() {
+    public OkaeriSerdesPack getSerdesPack() {
         return registry -> {};
     }
 
     @Override
-    public @NotNull String getFileName() {
+    public String getFileName() {
         return "messagesDispatcher.yml";
     }
 }

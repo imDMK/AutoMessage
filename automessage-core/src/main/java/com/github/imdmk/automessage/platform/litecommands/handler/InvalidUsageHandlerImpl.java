@@ -1,25 +1,27 @@
 package com.github.imdmk.automessage.platform.litecommands.handler;
 
-import com.github.imdmk.automessage.shared.message.MessageService;
-import com.github.imdmk.automessage.shared.validate.Validator;
+import com.github.imdmk.automessage.message.MessageService;
 import dev.rollczi.litecommands.handler.result.ResultHandlerChain;
 import dev.rollczi.litecommands.invalidusage.InvalidUsage;
 import dev.rollczi.litecommands.invalidusage.InvalidUsageHandler;
 import dev.rollczi.litecommands.invocation.Invocation;
 import dev.rollczi.litecommands.schematic.Schematic;
 import org.bukkit.command.CommandSender;
-import org.jetbrains.annotations.NotNull;
 
 public final class InvalidUsageHandlerImpl implements InvalidUsageHandler<CommandSender> {
 
     private final MessageService messageService;
 
-    public InvalidUsageHandlerImpl(@NotNull MessageService messageService) {
-        this.messageService = Validator.notNull(messageService, "messageService cannot be null");
+    public InvalidUsageHandlerImpl(MessageService messageService) {
+        this.messageService = messageService;
     }
 
     @Override
-    public void handle(Invocation<CommandSender> invocation, InvalidUsage<CommandSender> result, ResultHandlerChain<CommandSender> chain) {
+    public void handle(
+            Invocation<CommandSender> invocation,
+            InvalidUsage<CommandSender> result,
+            ResultHandlerChain<CommandSender> chain
+    ) {
         final CommandSender sender = invocation.sender();
         final Schematic schematic = result.getSchematic();
 
