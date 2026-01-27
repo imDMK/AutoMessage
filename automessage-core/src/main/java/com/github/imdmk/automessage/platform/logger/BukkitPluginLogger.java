@@ -1,114 +1,73 @@
 package com.github.imdmk.automessage.platform.logger;
 
-import com.github.imdmk.automessage.shared.validate.Validator;
-import org.bukkit.plugin.Plugin;
-import org.jetbrains.annotations.NotNull;
-
 import java.util.Locale;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 
-/**
- * Bukkit-specific implementation of {@link PluginLogger} delegating to a standard
- * {@link java.util.logging.Logger} obtained from a Bukkit {@link Plugin}.
- *
- * <p>This class provides formatted and structured logging methods for common log levels
- * (INFO, WARNING, DEBUG, SEVERE) with support for formatted messages and throwable logging.</p>
- *
- * <p><strong>Design notes:</strong></p>
- * <ul>
- *   <li>Acts as a lightweight adapter to bridge the internal plugin logging interface with Bukkit’s logger.</li>
- *   <li>Formatting uses {@link String#format(Locale, String, Object...)} with {@link Locale#ROOT} to ensure locale safety.</li>
- *   <li>Supports overloaded methods for flexible log message creation, including formatted and exception-based variants.</li>
- * </ul>
- *
- * <p><strong>Thread-safety:</strong> Delegates to the underlying {@link Logger}, which is thread-safe for concurrent use.</p>
- *
- * @see PluginLogger
- * @see Plugin#getLogger()
- * @see Logger
- */
 public final class BukkitPluginLogger implements PluginLogger {
 
-    /** Backing {@link java.util.logging.Logger} provided by Bukkit. */
     private final Logger logger;
 
-    /**
-     * Creates a new {@code BukkitPluginLogger} wrapping an existing {@link Logger}.
-     *
-     * @param logger non-null backing logger instance
-     * @throws NullPointerException if {@code logger} is null
-     */
-    public BukkitPluginLogger(@NotNull Logger logger) {
-        this.logger = Validator.notNull(logger, "logger");
-    }
-
-    /**
-     * Creates a new {@code BukkitPluginLogger} bound to the given Bukkit {@link Plugin}.
-     *
-     * @param plugin non-null Bukkit plugin instance
-     * @throws NullPointerException if {@code plugin} is null
-     */
-    public BukkitPluginLogger(@NotNull Plugin plugin) {
-        this(plugin.getLogger());
+    public BukkitPluginLogger(Logger logger) {
+        this.logger = logger;
     }
 
     @Override
-    public void info(@NotNull String message) {
+    public void info(String message) {
         logger.info(message);
     }
 
     @Override
-    public void info(@NotNull String message, @NotNull Object... args) {
+    public void info(String message, Object... args) {
         logger.log(Level.INFO, format(message, args));
     }
 
     @Override
-    public void warn(@NotNull String message) {
+    public void warn(String message) {
         logger.warning(message);
     }
 
     @Override
-    public void warn(@NotNull Throwable throwable) {
+    public void warn(Throwable throwable) {
         logger.log(Level.WARNING, "A warning occurred, see stack trace for details.", throwable);
     }
 
     @Override
-    public void warn(@NotNull Throwable throwable, @NotNull String message, @NotNull Object... args) {
+    public void warn(Throwable throwable, String message, Object... args) {
         logger.log(Level.WARNING, format(message, args), throwable);
     }
 
     @Override
-    public void warn(@NotNull String message, @NotNull Object... args) {
+    public void warn(String message, Object... args) {
         logger.log(Level.WARNING, format(message, args));
     }
 
     @Override
-    public void error(@NotNull Throwable throwable) {
+    public void error(Throwable throwable) {
         logger.log(Level.SEVERE, "An error occurred, see stack trace for details.", throwable);
     }
 
     @Override
-    public void error(@NotNull String message) {
+    public void error(String message) {
         logger.log(Level.SEVERE, message);
     }
 
     @Override
-    public void error(@NotNull String message, @NotNull Object... args) {
+    public void error(String message, Object... args) {
         logger.log(Level.SEVERE, format(message, args));
     }
 
     @Override
-    public void error(@NotNull Throwable throwable, @NotNull String message) {
+    public void error(Throwable throwable, String message) {
         logger.log(Level.SEVERE, message, throwable);
     }
 
     @Override
-    public void error(@NotNull Throwable throwable, @NotNull String message, @NotNull Object... args) {
+    public void error(Throwable throwable, String message, Object... args) {
         logger.log(Level.SEVERE, format(message, args), throwable);
     }
 
-    private String format(String message, Object... args) {
+    private static String format(String message, Object... args) {
         return String.format(Locale.ROOT, message, args);
     }
 }

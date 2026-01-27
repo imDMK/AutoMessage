@@ -12,7 +12,6 @@ import eu.okaeri.configs.serdes.OkaeriSerdesPack;
 import net.kyori.adventure.bossbar.BossBar;
 import net.kyori.adventure.key.Key;
 import net.kyori.adventure.sound.Sound;
-import org.jetbrains.annotations.NotNull;
 
 import java.time.Duration;
 import java.util.List;
@@ -190,7 +189,7 @@ public final class ScheduledMessagesConfig extends ConfigSection {
     );
 
     @Override
-    public @NotNull OkaeriSerdesPack getSerdesPack() {
+    public OkaeriSerdesPack getSerdesPack() {
         return registry -> {
             registry.register(new ScheduledMessageSerializer());
             registry.register(new AudienceRuleSerializer());
@@ -199,7 +198,7 @@ public final class ScheduledMessagesConfig extends ConfigSection {
     }
 
     @Override
-    public @NotNull String getFileName() {
+    public String getFileName() {
         return "scheduledMessages.yml";
     }
 }
