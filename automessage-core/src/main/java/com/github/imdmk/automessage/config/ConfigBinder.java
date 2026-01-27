@@ -1,24 +1,14 @@
 package com.github.imdmk.automessage.config;
 
-import com.github.imdmk.automessage.shared.validate.Validator;
-import eu.okaeri.configs.serdes.OkaeriSerdesPack;
 import eu.okaeri.configs.serdes.commons.SerdesCommons;
-import eu.okaeri.configs.yaml.snakeyaml.YamlSnakeYamlConfigurer;
-import org.jetbrains.annotations.NotNull;
 
 import java.io.File;
 
 final class ConfigBinder {
 
-    void bind(@NotNull ConfigSection config, @NotNull File file) {
-        Validator.notNull(config, "config");
-        Validator.notNull(file, "file");
-
-        final OkaeriSerdesPack serdesPack = config.getSerdesPack();
-        final YamlSnakeYamlConfigurer yamlConfigurer = YamlConfigurerFactory.create();
-
-        config.withConfigurer(yamlConfigurer)
-                .withSerdesPack(serdesPack)
+    void bind(ConfigSection config, File file) {
+        config.withConfigurer(YamlConfigurerFactory.create())
+                .withSerdesPack(config.getSerdesPack())
                 .withSerdesPack(new SerdesCommons())
                 .withBindFile(file)
                 .withRemoveOrphans(true);

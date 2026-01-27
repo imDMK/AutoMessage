@@ -14,17 +14,17 @@ public final class AudienceRuleSerializer implements ObjectSerializer<AudienceRu
     }
 
     @Override
-    public void serialize(@NotNull AudienceRule rule, @NotNull SerializationData data, @NotNull GenericsDeclaration generics) {
+    public void serialize(AudienceRule rule, SerializationData data, @NotNull GenericsDeclaration generics) {
         data.add("type", rule.type(), AudienceRule.Type.class);
 
         switch (rule) {
-            case AudienceGroupRule audienceGroupRule -> data.add("group", audienceGroupRule.group(), String.class);
-            case AudiencePermissionRule audiencePermissionRule -> data.add("permission", audiencePermissionRule.permission(), String.class);
+            case AudienceGroupRule group -> data.add("group", group.group(), String.class);
+            case AudiencePermissionRule permission -> data.add("permission", permission.permission(), String.class);
         }
     }
 
     @Override
-    public AudienceRule deserialize(@NotNull DeserializationData data, @NotNull GenericsDeclaration generics) {
+    public AudienceRule deserialize(DeserializationData data, @NotNull GenericsDeclaration generics) {
         final AudienceRule.Type type = data.get("type", AudienceRule.Type.class);
 
         return switch (type) {
