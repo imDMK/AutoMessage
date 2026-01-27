@@ -1,7 +1,6 @@
 package com.github.imdmk.automessage.scheduled.selector;
 
 import com.github.imdmk.automessage.scheduled.ScheduledMessage;
-import org.jetbrains.annotations.NotNull;
 
 import java.util.List;
 import java.util.Optional;
@@ -14,7 +13,7 @@ final class SequentialMessageSelector implements MessageSelector {
 
     @Override
     public Optional<ScheduledMessage> selectNext(
-            @NotNull List<ScheduledMessage> messages,
+            List<ScheduledMessage> messages,
             boolean advanceIndex
     ) {
         final int size = messages.size();

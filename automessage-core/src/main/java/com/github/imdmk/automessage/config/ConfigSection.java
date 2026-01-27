@@ -2,7 +2,6 @@ package com.github.imdmk.automessage.config;
 
 import eu.okaeri.configs.OkaeriConfig;
 import eu.okaeri.configs.serdes.OkaeriSerdesPack;
-import org.jetbrains.annotations.NotNull;
 
 /**
  * Abstract base class for configuration sections.
@@ -26,12 +25,12 @@ public abstract class ConfigSection extends OkaeriConfig {
      *
      * @return non-null serialization/deserialization pack
      */
-    public abstract @NotNull OkaeriSerdesPack getSerdesPack();
+    public abstract OkaeriSerdesPack getSerdesPack();
 
     /**
      * Returns the filename (including extension) used to persist this configuration section.
      *
      * @return non-null configuration file name
      */
-    public abstract @NotNull String getFileName();
+    public abstract String getFileName();
 }

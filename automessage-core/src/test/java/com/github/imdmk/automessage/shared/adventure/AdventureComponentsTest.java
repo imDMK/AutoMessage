@@ -1,5 +1,6 @@
 package com.github.imdmk.automessage.shared.adventure;
 
+import com.github.imdmk.automessage.platform.adventure.AdventureComponents;
 import net.kyori.adventure.text.Component;
 import net.kyori.adventure.text.format.TextDecoration;
 import org.junit.jupiter.api.Test;

@@ -18,14 +18,14 @@ public final class ScheduledMessageSerializer implements ObjectSerializer<Schedu
     }
 
     @Override
-    public void serialize(@NotNull ScheduledMessage notice, @NotNull SerializationData data, @NotNull GenericsDeclaration generics) {
+    public void serialize(ScheduledMessage notice, SerializationData data, @NotNull GenericsDeclaration generics) {
         data.add("name", notice.name(), String.class);
         data.addCollection("notices", notice.notices(), Notice.class);
         data.addCollection("rules", notice.rules(), AudienceRule.class);
     }
 
     @Override
-    public ScheduledMessage deserialize(@NotNull DeserializationData data, @NotNull GenericsDeclaration generics) {
+    public ScheduledMessage deserialize(DeserializationData data, @NotNull GenericsDeclaration generics) {
         String name = data.get("name", String.class);
         List<Notice> notices =  data.getAsList("notices", Notice.class);
         List<AudienceRule> rules = data.getAsList("rules", AudienceRule.class);

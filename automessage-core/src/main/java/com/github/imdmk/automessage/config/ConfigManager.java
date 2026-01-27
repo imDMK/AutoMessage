@@ -1,8 +1,6 @@
 package com.github.imdmk.automessage.config;
 
 import com.github.imdmk.automessage.platform.logger.PluginLogger;
-import com.github.imdmk.automessage.shared.validate.Validator;
-import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Unmodifiable;
 
 import java.io.File;
@@ -23,16 +21,16 @@ public final class ConfigManager {
     private final ConfigBinder binder;
     private final ConfigLifecycle lifecycle;
 
-    public ConfigManager(@NotNull PluginLogger logger, @NotNull File dataFolder) {
-        this.dataFolder = Validator.notNull(dataFolder, "dataFolder");
+    public ConfigManager(PluginLogger logger, File dataFolder) {
+        this.dataFolder = dataFolder;
 
         this.factory = new ConfigFactory();
         this.binder = new ConfigBinder();
         this.lifecycle = new ConfigLifecycle(logger);
     }
 
-    public <T extends ConfigSection> @NotNull T create(@NotNull Class<T> type) {
-        final T config = factory.instantiate(type);
+    public <C extends ConfigSection> C create(Class<C> type) {
+        final C config = factory.create(type);
         final File file = new File(dataFolder, config.getFileName());
 
         binder.bind(config, file);
@@ -42,18 +40,17 @@ public final class ConfigManager {
         return config;
     }
 
-    public void createAll(@NotNull List<Class<? extends ConfigSection>> types) {
+    public void createAll(List<Class<? extends ConfigSection>> types) {
         types.forEach(this::create);
     }
 
     @SuppressWarnings("unchecked")
-    public <T extends ConfigSection> T get(@NotNull Class<T> type) {
-        return (T) byType.get(type);
+    public <C extends ConfigSection> C get(Class<C> type) {
+        return (C) byType.get(type);
     }
 
-    public <T extends ConfigSection> @NotNull T require(@NotNull Class<T> type) {
-        T config = get(type);
-
+    public <C extends ConfigSection> C require(Class<C> type) {
+        final C config = get(type);
         if (config == null) {
             throw new IllegalStateException("Config not created: " + type.getName());
         }
@@ -69,7 +66,8 @@ public final class ConfigManager {
         configs.forEach(lifecycle::save);
     }
 
-    public @NotNull @Unmodifiable Set<ConfigSection> getConfigs() {
+    @Unmodifiable
+    public Set<ConfigSection> getConfigs() {
         return Collections.unmodifiableSet(configs);
     }
 
