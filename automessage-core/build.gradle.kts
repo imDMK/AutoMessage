@@ -11,8 +11,8 @@ dependencies {
     implementation("eu.okaeri:okaeri-configs-serdes-commons:5.0.5")
 
     implementation("org.bstats:bstats-bukkit:3.1.0")
-    implementation("dev.rollczi:litecommands-bukkit:3.10.6")
-    implementation("dev.rollczi:litecommands-annotations:3.10.6")
+    implementation("dev.rollczi:litecommands-bukkit:3.10.9")
+    implementation("dev.rollczi:litecommands-annotations:3.10.9")
 
     testImplementation("org.junit.jupiter:junit-jupiter:6.0.1")
     testImplementation("org.assertj:assertj-core:3.27.7")
