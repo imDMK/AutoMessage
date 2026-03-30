@@ -53,8 +53,8 @@ public final class ScheduledMessageBuilder {
     public ScheduledMessage build() {
         return new ScheduledMessage(
                 this.name,
-                List.copyOf(this.notices),
-                List.copyOf(this.rules)
+                this.notices,
+                this.rules
         );
     }
 }
