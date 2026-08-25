@@ -4,18 +4,25 @@ import com.eternalcode.multification.notice.Notice;
 import com.github.imdmk.automessage.command.dispatcher.DisableCommand;
 import com.github.imdmk.automessage.command.dispatcher.EnableCommand;
 import com.github.imdmk.automessage.command.reload.ReloadCommand;
+import com.github.imdmk.automessage.command.view.ViewCommand;
 import com.github.imdmk.automessage.config.ConfigManager;
 import com.github.imdmk.automessage.config.ConfigReloadService;
 import com.github.imdmk.automessage.message.MessageConfig;
 import com.github.imdmk.automessage.message.MessageService;
+import com.github.imdmk.automessage.platform.litecommands.argument.ScheduledMessageArgument;
+import com.github.imdmk.automessage.platform.litecommands.argument.UnknownScheduledMessage;
 import com.github.imdmk.automessage.platform.litecommands.handler.InvalidUsageHandlerImpl;
 import com.github.imdmk.automessage.platform.litecommands.handler.MissingPermissionsHandlerImpl;
 import com.github.imdmk.automessage.platform.litecommands.handler.NoticeResultHandlerImpl;
+import com.github.imdmk.automessage.platform.litecommands.handler.UnknownScheduledMessageHandler;
 import com.github.imdmk.automessage.platform.logger.BukkitPluginLogger;
 import com.github.imdmk.automessage.platform.logger.PluginLogger;
 import com.github.imdmk.automessage.platform.metrics.MetricsService;
 import com.github.imdmk.automessage.platform.scheduler.BukkitTaskScheduler;
 import com.github.imdmk.automessage.platform.scheduler.TaskScheduler;
+import com.github.imdmk.automessage.scheduled.ScheduledMessage;
+import com.github.imdmk.automessage.scheduled.ScheduledMessageRepository;
+import com.github.imdmk.automessage.scheduled.ScheduledMessageSender;
 import com.github.imdmk.automessage.scheduled.ScheduledMessagesConfig;
 import com.github.imdmk.automessage.scheduled.audience.filter.AudienceFilter;
 import com.github.imdmk.automessage.scheduled.dispatcher.MessageDispatcher;
@@ -55,11 +62,14 @@ final class AutoMessagePlugin {
         this.messageService = new MessageService(messageConfig, plugin);
         this.taskScheduler = new BukkitTaskScheduler(plugin, server.getScheduler());
 
+        final ScheduledMessageRepository messageRepository = ScheduledMessageRepository.config(scheduledMessagesConfig);
+        final ScheduledMessageSender messageSender = new ScheduledMessageSender(messageService);
+
         final MessageDispatcher messageDispatcher = new MessageDispatcher(
-                messageService,
+                messageSender,
                 new MessageSelectorProvider(() -> dispatcherConfig.selector),
                 AudienceFilter.ruleFilter(),
-                () -> scheduledMessagesConfig.messages
+                messageRepository
         );
 
         this.dispatcherService = new MessageDispatcherService(
@@ -77,11 +87,15 @@ final class AutoMessagePlugin {
                 .invalidUsage(new InvalidUsageHandlerImpl(messageService))
                 .missingPermission(new MissingPermissionsHandlerImpl(messageService))
                 .result(Notice.class, new NoticeResultHandlerImpl(messageService))
+                .result(UnknownScheduledMessage.class, new UnknownScheduledMessageHandler(messageService))
+
+                .argument(ScheduledMessage.class, new ScheduledMessageArgument(messageRepository))
 
                 .commands(
                         new DisableCommand(dispatcherConfig, messageService),
                         new EnableCommand(dispatcherConfig, messageService),
-                        new ReloadCommand(logger, configReloadService, taskScheduler, messageService)
+                        new ReloadCommand(logger, configReloadService, taskScheduler, messageService),
+                        new ViewCommand(messageSender, messageService)
                 )
 
                 .build();

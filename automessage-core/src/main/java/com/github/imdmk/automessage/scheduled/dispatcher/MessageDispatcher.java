@@ -1,8 +1,8 @@
 package com.github.imdmk.automessage.scheduled.dispatcher;
 
-import com.eternalcode.multification.notice.Notice;
-import com.github.imdmk.automessage.message.MessageService;
 import com.github.imdmk.automessage.scheduled.ScheduledMessage;
+import com.github.imdmk.automessage.scheduled.ScheduledMessageRepository;
+import com.github.imdmk.automessage.scheduled.ScheduledMessageSender;
 import com.github.imdmk.automessage.scheduled.audience.filter.AudienceFilter;
 import com.github.imdmk.automessage.scheduled.selector.MessageSelector;
 import org.bukkit.entity.Player;
@@ -12,21 +12,21 @@ import java.util.function.Supplier;
 
 public final class MessageDispatcher {
 
-    private final MessageService messageService;
+    private final ScheduledMessageSender sender;
     private final Supplier<MessageSelector> selector;
     private final AudienceFilter filter;
-    private final Supplier<List<ScheduledMessage>> messages;
+    private final ScheduledMessageRepository repository;
 
     public MessageDispatcher(
-            MessageService messageService,
+            ScheduledMessageSender sender,
             Supplier<MessageSelector> selector,
             AudienceFilter filter,
-            Supplier<List<ScheduledMessage>> messages
+            ScheduledMessageRepository repository
     ) {
-        this.messageService = messageService;
+        this.sender = sender;
         this.selector = selector;
         this.filter = filter;
-        this.messages = messages;
+        this.repository = repository;
     }
 
     public void dispatchNext(DispatchTarget target) {
@@ -37,7 +37,7 @@ public final class MessageDispatcher {
             DispatchTarget target,
             boolean advanceSelectorIndex
     ) {
-        final List<ScheduledMessage> messages = this.messages.get();
+        final List<ScheduledMessage> messages = repository.findAll();
         if (messages.isEmpty()) {
             return;
         }
@@ -53,20 +53,8 @@ public final class MessageDispatcher {
     ) {
         for (final Player player : target.recipients()) {
             if (filter.allows(player, message)) {
-                sendToPlayer(player, message);
+                sender.sendAsync(player, message);
             }
-        }
-    }
-
-    private void sendToPlayer(
-            Player player,
-            ScheduledMessage message
-    ) {
-        for (final Notice notice : message.notices()) {
-            messageService.create()
-                    .viewer(player)
-                    .notice(notice)
-                    .sendAsync();
         }
     }
 }
