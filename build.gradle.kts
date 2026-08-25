@@ -1,8 +1,8 @@
 group = "com.github.imdmk.automessage"
-version = "2.0.0"
+version = "2.0.1"
 
 subprojects {
-    version = "2.0.0"
+    version = "2.0.1"
     apply(plugin = "java-library")
 
     repositories {
