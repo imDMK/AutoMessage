@@ -2,7 +2,7 @@ import com.github.jengelman.gradle.plugins.shadow.tasks.ShadowJar
 
 plugins {
     id("net.minecrell.plugin-yml.bukkit") version "0.6.0"
-    id("com.gradleup.shadow") version "9.2.1"
+    id("com.gradleup.shadow") version "9.6.1"
 }
 
 dependencies {
@@ -16,6 +16,10 @@ tasks.build {
 
 tasks.withType<ShadowJar> {
     archiveFileName.set("AutoMessage v${project.version} (MC 1.21.x).jar")
+
+    // Shadow's transformers only see entries that reach them; with the Jar default of EXCLUDE a
+    // second provider file of the same name would be dropped before mergeServiceFiles() runs.
+    duplicatesStrategy = DuplicatesStrategy.INCLUDE
 
     mergeServiceFiles()
 

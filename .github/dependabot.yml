@@ -11,3 +11,10 @@ updates:
       interval: "weekly"
       time: "10:00"
       timezone: "Europe/Warsaw"
+
+  - package-ecosystem: "github-actions"
+    directory: "/"
+    schedule:
+      interval: "weekly"
+      time: "10:00"
+      timezone: "Europe/Warsaw"
