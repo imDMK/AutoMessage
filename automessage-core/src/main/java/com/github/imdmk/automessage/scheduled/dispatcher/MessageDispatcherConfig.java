@@ -5,8 +5,11 @@ import com.github.imdmk.automessage.scheduled.selector.MessageSelectorType;
 import eu.okaeri.configs.annotation.Comment;
 import eu.okaeri.configs.annotation.Header;
 import eu.okaeri.configs.serdes.OkaeriSerdesPack;
+import eu.okaeri.configs.serdes.commons.duration.DurationFormat;
+import eu.okaeri.configs.serdes.commons.duration.DurationSpec;
 
 import java.time.Duration;
+import java.time.temporal.ChronoUnit;
 
 @Header({
         "# ============================================================================",
@@ -16,6 +19,15 @@ import java.time.Duration;
         "# It defines startup timing, repeat intervals, and which message-selection",
         "# strategy the dispatcher should use.",
         "#",
+        "# Time format used by this file:",
+        "#  Every time value is written as a number followed by a unit:",
+        "#    ms -> milliseconds     e.g. 500ms",
+        "#    s  -> seconds          e.g. 30s",
+        "#    m  -> minutes          e.g. 5m",
+        "#    h  -> hours            e.g. 1h",
+        "#  Units can be combined, e.g. 1m30s.",
+        "#  A plain number without a unit is read as SECONDS, so 'period: 10' equals 10s.",
+        "#",
         "# Fields:",
         "#  enabled:",
         "#    Master switch controlling whether automatic message dispatching is active.",
@@ -23,12 +35,13 @@ import java.time.Duration;
         "#    false -> announcements are paused",
         "#",
         "#  period:",
-        "#    Time between consecutive dispatch executions.",
-        "#    Examples: 10s, 1m, 500ms",
+        "#    How much time passes between two announcements.",
+        "#    Examples: 10s (ten seconds), 5m (five minutes), 500ms, 1m30s",
+        "#    Minimum value is 50ms (one server tick); lower values are raised to it.",
         "#",
         "#  initialDelay:",
-        "#    How long the dispatcher should wait before sending the first message",
-        "#    after plugin startup.",
+        "#    How long the dispatcher waits before sending the first announcement",
+        "#    after plugin startup. Uses the same time format as 'period'.",
         "#",
         "#  selector:",
         "#    Strategy determining which scheduled message is selected next.",
@@ -38,8 +51,7 @@ import java.time.Duration;
         "#",
         "# Notes:",
         "#  • This file works together with scheduledMessages.yml.",
-        "#  • After editing this file you must restart the server, as dispatcher",
-        "#    scheduling is configured during plugin initialization.",
+        "#  • Changes are applied by running /automessage reload — no restart required.",
         "#",
         "# Source Code:",
         "#   https://github.com/imDMK/AutoMessage",
@@ -55,10 +67,29 @@ public final class MessageDispatcherConfig extends ConfigSection {
     @Comment({"#", "# Whether automatic scheduled-message dispatching is enabled.", "#"})
     public boolean enabled = true;
 
-    @Comment({"#", "# Delay between automatic dispatch executions.", "#"})
+    @Comment({
+            "#",
+            "# How much time passes between two announcements.",
+            "#",
+            "# Accepted units: ms (milliseconds), s (seconds), m (minutes), h (hours).",
+            "# Examples: 500ms, 10s, 5m, 1h, 1m30s",
+            "# A plain number is read as seconds, so 'period: 10' means 10 seconds.",
+            "#",
+            "# The lowest value the server can schedule is 50ms (one tick).",
+            "#"
+    })
+    @DurationSpec(fallbackUnit = ChronoUnit.SECONDS, format = DurationFormat.SIMPLIFIED)
     public Duration period = Duration.ofSeconds(10);
 
-    @Comment({"#", "# Initial delay before the very first automatic message dispatch.", "#"})
+    @Comment({
+            "#",
+            "# How long to wait after the server starts before the first announcement.",
+            "#",
+            "# Uses the same time format as 'period', e.g. 10s, 1m, 500ms.",
+            "# A plain number is read as seconds. Use 0s to announce immediately.",
+            "#"
+    })
+    @DurationSpec(fallbackUnit = ChronoUnit.SECONDS, format = DurationFormat.SIMPLIFIED)
     public Duration initialDelay = Duration.ofSeconds(10);
 
     @Comment({
