@@ -4,6 +4,7 @@ import com.eternalcode.multification.notice.resolver.NoticeResolverDefaults;
 import com.eternalcode.multification.okaeri.MultificationSerdesPack;
 import com.github.imdmk.automessage.command.dispatcher.messages.ENDispatcherMessages;
 import com.github.imdmk.automessage.command.reload.messages.ENReloadMessages;
+import com.github.imdmk.automessage.command.view.messages.ENViewMessages;
 import com.github.imdmk.automessage.config.ConfigSection;
 import com.github.imdmk.automessage.platform.litecommands.messages.ENLiteCommandsMessages;
 import eu.okaeri.configs.annotation.Comment;
@@ -22,6 +23,7 @@ import eu.okaeri.configs.serdes.OkaeriSerdesPack;
         "#  • liteCommandsMessages   — errors, usage prompts, and permission responses",
         "#  • dispatcherMessages     — messages for enabling/disabling automatic dispatching",
         "#  • reloadMessages         — messages shown during configuration reload operations",
+        "#  • viewMessages           — messages used when previewing a scheduled message",
         "#",
         "# Editing Tips:",
         "#  • Colors follow MiniMessage syntax (<red>, <yellow>, <gray>, <rainbow>, etc.).",
@@ -61,6 +63,13 @@ public final class MessageConfig extends ConfigSection {
             "#"
     })
     public ENReloadMessages reloadMessages = new ENReloadMessages();
+
+    @Comment({
+            "#",
+            "# Messages used by the /automessage view command.",
+            "#"
+    })
+    public ENViewMessages viewMessages = new ENViewMessages();
 
     @Override
     public OkaeriSerdesPack getSerdesPack() {
