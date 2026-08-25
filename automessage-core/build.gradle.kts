@@ -2,7 +2,7 @@ dependencies {
     compileOnlyApi("org.spigotmc:spigot-api:1.21.11-R0.2-SNAPSHOT")
 
     implementation("net.kyori:adventure-platform-bukkit:4.4.1")
-    implementation("net.kyori:adventure-text-minimessage:4.26.1")
+    implementation("net.kyori:adventure-text-minimessage:5.2.0")
 
     implementation("com.eternalcode:multification-bukkit:1.2.4")
     implementation("com.eternalcode:multification-okaeri:1.2.4")
