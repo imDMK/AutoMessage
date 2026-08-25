@@ -30,12 +30,12 @@ public final class BukkitTaskScheduler implements TaskScheduler {
 
     @Override
     public BukkitTask runLaterAsync(Runnable runnable, Duration delay) {
-        return scheduler.runTaskLaterAsynchronously(plugin, runnable, toTicks(delay));
+        return scheduler.runTaskLaterAsynchronously(plugin, runnable, toDelayTicks(delay));
     }
 
     @Override
     public BukkitTask runLaterSync(Runnable runnable, Duration delay) {
-        return scheduler.runTaskLater(plugin, runnable, toTicks(delay));
+        return scheduler.runTaskLater(plugin, runnable, toDelayTicks(delay));
     }
 
     @Override
@@ -44,7 +44,7 @@ public final class BukkitTaskScheduler implements TaskScheduler {
             Duration delay,
             Duration period
     ) {
-        return scheduler.runTaskTimer(plugin, runnable, toTicks(delay), toTicks(period));
+        return scheduler.runTaskTimer(plugin, runnable, toDelayTicks(delay), toPeriodTicks(period));
     }
 
     @Override
@@ -58,7 +58,7 @@ public final class BukkitTaskScheduler implements TaskScheduler {
             Duration delay,
             Duration period
     ) {
-        return scheduler.runTaskTimerAsynchronously(plugin, runnable, toTicks(delay), toTicks(period));
+        return scheduler.runTaskTimerAsynchronously(plugin, runnable, toDelayTicks(delay), toPeriodTicks(period));
     }
 
     @Override
@@ -76,8 +76,19 @@ public final class BukkitTaskScheduler implements TaskScheduler {
         scheduler.cancelTasks(plugin);
     }
 
-    private static int toTicks(Duration duration) {
-        final long ticks = duration.toMillis() / MILLIS_PER_TICK;
-        return ticks <= 0 ? 0 : (int) ticks;
+    private static long toDelayTicks(Duration duration) {
+        return Math.max(0L, toTicks(duration));
+    }
+
+    /**
+     * Bukkit treats a period of zero ticks as "every tick", which would turn a misconfigured
+     * interval into a flood of messages. One tick is the shortest period the server can honour.
+     */
+    private static long toPeriodTicks(Duration duration) {
+        return Math.max(1L, toTicks(duration));
+    }
+
+    private static long toTicks(Duration duration) {
+        return duration.toMillis() / MILLIS_PER_TICK;
     }
 }
