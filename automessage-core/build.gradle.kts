@@ -1,5 +1,5 @@
 dependencies {
-    compileOnlyApi("org.spigotmc:spigot-api:1.21.11-R0.2-SNAPSHOT")
+    compileOnlyApi("org.spigotmc:spigot-api:26.2-R0.1-SNAPSHOT")
 
     implementation("net.kyori:adventure-platform-bukkit:4.4.1")
     implementation("net.kyori:adventure-text-minimessage:4.26.1")
