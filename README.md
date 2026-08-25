@@ -36,6 +36,7 @@
 ✅ **Command support**  
 • `/automessage enable/disable`  
 • `/automessage reload`  
+• `/automessage view <message>` — preview a scheduled message in your own chat, with tab-completion of the names from `scheduledMessages.yml`  
 
 ✅ **Zero-lag optimized**  
 Built with efficiency in mind — AutoMessage has no noticeable impact on server performance, even with hundreds of players online.
