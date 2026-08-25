@@ -45,6 +45,34 @@ Integrates with [Kyori Adventure](https://github.com/KyoriPowered/adventure) for
 
 ---
 
+## ⏱️ Message interval
+
+The interval lives in `messagesDispatcher.yml`:
+
+```yaml
+# How much time passes between two announcements.
+period: 30s
+
+# How long to wait after startup before the first announcement.
+initialDelay: 10s
+```
+
+Every time value carries an explicit unit:
+
+| Unit | Meaning      | Example  |
+|------|--------------|----------|
+| `ms` | milliseconds | `500ms`  |
+| `s`  | seconds      | `30s`    |
+| `m`  | minutes      | `5m`     |
+| `h`  | hours        | `1h`     |
+
+Units can be combined (`1m30s`). A plain number without a unit is read as **seconds**, so
+`period: 10` means ten seconds — the plugin rewrites it as `10s` on the next load.
+
+Both values are applied by `/automessage reload`; a server restart is not required.
+
+---
+
 ## ✨ Showcase
 ![AutoMessage Chat Preview](assets/automessage-preview.gif)
 

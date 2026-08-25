@@ -1,6 +1,6 @@
 package com.github.imdmk.automessage.command.reload;
 
-import com.github.imdmk.automessage.config.ConfigManager;
+import com.github.imdmk.automessage.config.ConfigReloadService;
 import com.github.imdmk.automessage.message.MessageService;
 import com.github.imdmk.automessage.platform.logger.PluginLogger;
 import com.github.imdmk.automessage.platform.scheduler.TaskScheduler;
@@ -15,18 +15,18 @@ import org.bukkit.command.CommandSender;
 public final class ReloadCommand {
 
     private final PluginLogger logger;
-    private final ConfigManager configManager;
+    private final ConfigReloadService configReloadService;
     private final TaskScheduler taskScheduler;
     private final MessageService messageService;
 
     public ReloadCommand(
             PluginLogger logger,
-            ConfigManager configManager,
+            ConfigReloadService configReloadService,
             TaskScheduler taskScheduler,
             MessageService messageService
     ) {
         this.logger = logger;
-        this.configManager = configManager;
+        this.configReloadService = configReloadService;
         this.taskScheduler = taskScheduler;
         this.messageService = messageService;
     }
@@ -35,7 +35,7 @@ public final class ReloadCommand {
     void reload(@Context CommandSender sender) {
         taskScheduler.runAsync(() -> {
             try {
-                configManager.loadAll();
+                configReloadService.reload();
                 messageService.send(sender, n -> n.reloadMessages.configReloadedSuccess());
             } catch (Exception e) {
                 logger.error(e, "Failed to reload plugin config");

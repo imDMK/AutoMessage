@@ -5,6 +5,7 @@ import com.github.imdmk.automessage.command.dispatcher.DisableCommand;
 import com.github.imdmk.automessage.command.dispatcher.EnableCommand;
 import com.github.imdmk.automessage.command.reload.ReloadCommand;
 import com.github.imdmk.automessage.config.ConfigManager;
+import com.github.imdmk.automessage.config.ConfigReloadService;
 import com.github.imdmk.automessage.message.MessageConfig;
 import com.github.imdmk.automessage.message.MessageService;
 import com.github.imdmk.automessage.platform.litecommands.handler.InvalidUsageHandlerImpl;
@@ -19,8 +20,8 @@ import com.github.imdmk.automessage.scheduled.ScheduledMessagesConfig;
 import com.github.imdmk.automessage.scheduled.audience.filter.AudienceFilter;
 import com.github.imdmk.automessage.scheduled.dispatcher.MessageDispatcher;
 import com.github.imdmk.automessage.scheduled.dispatcher.MessageDispatcherConfig;
-import com.github.imdmk.automessage.scheduled.dispatcher.MessageDispatcherTask;
-import com.github.imdmk.automessage.scheduled.selector.MessageSelectorFactory;
+import com.github.imdmk.automessage.scheduled.dispatcher.MessageDispatcherService;
+import com.github.imdmk.automessage.scheduled.selector.MessageSelectorProvider;
 import dev.rollczi.litecommands.LiteCommands;
 import dev.rollczi.litecommands.bukkit.LiteBukkitFactory;
 import org.bukkit.Server;
@@ -35,6 +36,7 @@ final class AutoMessagePlugin {
 
     private final MessageService messageService;
     private final TaskScheduler taskScheduler;
+    private final MessageDispatcherService dispatcherService;
     private final LiteCommands<?> liteCommands;
     private final MetricsService metricsService;
 
@@ -48,18 +50,28 @@ final class AutoMessagePlugin {
         final ScheduledMessagesConfig scheduledMessagesConfig = configManager.create(ScheduledMessagesConfig.class);
         final MessageDispatcherConfig dispatcherConfig = configManager.create(MessageDispatcherConfig.class);
 
+        final ConfigReloadService configReloadService = new ConfigReloadService(configManager);
+
         this.messageService = new MessageService(messageConfig, plugin);
         this.taskScheduler = new BukkitTaskScheduler(plugin, server.getScheduler());
 
         final MessageDispatcher messageDispatcher = new MessageDispatcher(
                 messageService,
-                MessageSelectorFactory.create(dispatcherConfig.selector),
+                new MessageSelectorProvider(() -> dispatcherConfig.selector),
                 AudienceFilter.ruleFilter(),
                 () -> scheduledMessagesConfig.messages
         );
 
-        final MessageDispatcherTask dispatcherTask = new MessageDispatcherTask(server, dispatcherConfig, messageDispatcher);
-        taskScheduler.runTimerAsync(dispatcherTask);
+        this.dispatcherService = new MessageDispatcherService(
+                logger,
+                server,
+                taskScheduler,
+                dispatcherConfig,
+                messageDispatcher
+        );
+
+        dispatcherService.start();
+        configReloadService.register(dispatcherService);
 
         this.liteCommands = LiteBukkitFactory.builder(PLUGIN_PREFIX, plugin, server)
                 .invalidUsage(new InvalidUsageHandlerImpl(messageService))
@@ -69,7 +81,7 @@ final class AutoMessagePlugin {
                 .commands(
                         new DisableCommand(dispatcherConfig, messageService),
                         new EnableCommand(dispatcherConfig, messageService),
-                        new ReloadCommand(logger, configManager, taskScheduler, messageService)
+                        new ReloadCommand(logger, configReloadService, taskScheduler, messageService)
                 )
 
                 .build();
@@ -80,6 +92,7 @@ final class AutoMessagePlugin {
     }
 
     void disable() {
+        dispatcherService.stop();
         configManager.saveAll();
         configManager.clearAll();
         messageService.shutdown();

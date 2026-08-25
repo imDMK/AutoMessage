@@ -13,13 +13,13 @@ import java.util.function.Supplier;
 public final class MessageDispatcher {
 
     private final MessageService messageService;
-    private final MessageSelector selector;
+    private final Supplier<MessageSelector> selector;
     private final AudienceFilter filter;
     private final Supplier<List<ScheduledMessage>> messages;
 
     public MessageDispatcher(
             MessageService messageService,
-            MessageSelector selector,
+            Supplier<MessageSelector> selector,
             AudienceFilter filter,
             Supplier<List<ScheduledMessage>> messages
     ) {
@@ -42,7 +42,8 @@ public final class MessageDispatcher {
             return;
         }
 
-        selector.selectNext(messages, advanceSelectorIndex)
+        selector.get()
+                .selectNext(messages, advanceSelectorIndex)
                 .ifPresent(message -> dispatch(message, target));
     }
 

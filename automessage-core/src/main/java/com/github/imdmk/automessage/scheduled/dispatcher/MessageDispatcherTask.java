@@ -12,15 +12,18 @@ public final class MessageDispatcherTask implements PluginTask {
     private final Server server;
     private final MessageDispatcherConfig dispatcherConfig;
     private final MessageDispatcher messageDispatcher;
+    private final DispatchTiming timing;
 
     public MessageDispatcherTask(
             Server server,
             MessageDispatcherConfig dispatcherConfig,
-            MessageDispatcher messageDispatcher
+            MessageDispatcher messageDispatcher,
+            DispatchTiming timing
     ) {
         this.server = server;
         this.dispatcherConfig = dispatcherConfig;
         this.messageDispatcher = messageDispatcher;
+        this.timing = timing;
     }
 
     @Override
@@ -40,11 +43,11 @@ public final class MessageDispatcherTask implements PluginTask {
 
     @Override
     public Duration delay() {
-        return dispatcherConfig.initialDelay;
+        return timing.initialDelay();
     }
 
     @Override
     public Duration period() {
-        return dispatcherConfig.period;
+        return timing.period();
     }
 }
