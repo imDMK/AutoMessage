@@ -37,7 +37,7 @@ public final class MessageDispatcher {
             DispatchTarget target,
             boolean advanceSelectorIndex
     ) {
-        final List<ScheduledMessage> messages = repository.findAll();
+        final List<ScheduledMessage> messages = repository.findScheduled();
         if (messages.isEmpty()) {
             return;
         }

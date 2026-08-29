@@ -1,5 +1,6 @@
 package com.github.imdmk.automessage.scheduled;
 
+import com.github.imdmk.automessage.scheduled.trigger.MessageTrigger;
 import org.jetbrains.annotations.Unmodifiable;
 
 import java.util.List;
@@ -20,6 +21,19 @@ public interface ScheduledMessageRepository {
      */
     @Unmodifiable
     List<ScheduledMessage> findAll();
+
+    /**
+     * @return the messages that take part in the timed rotation, in configuration order
+     */
+    @Unmodifiable
+    List<ScheduledMessage> findScheduled();
+
+    /**
+     * @param type trigger type to look for
+     * @return the messages fired by that kind of event, in configuration order
+     */
+    @Unmodifiable
+    List<ScheduledMessage> findByTrigger(MessageTrigger.Type type);
 
     /**
      * Finds a message by its configured name, ignoring case.

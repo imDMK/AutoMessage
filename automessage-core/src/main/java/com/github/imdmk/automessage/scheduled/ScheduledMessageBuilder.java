@@ -2,6 +2,7 @@ package com.github.imdmk.automessage.scheduled;
 
 import com.eternalcode.multification.notice.Notice;
 import com.github.imdmk.automessage.scheduled.audience.rule.AudienceRule;
+import com.github.imdmk.automessage.scheduled.trigger.MessageTrigger;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -9,6 +10,7 @@ import java.util.List;
 public final class ScheduledMessageBuilder {
 
     private String name;
+    private MessageTrigger trigger;
 
     private final List<Notice> notices = new ArrayList<>();
     private final List<AudienceRule> rules = new ArrayList<>();
@@ -19,6 +21,11 @@ public final class ScheduledMessageBuilder {
 
     public ScheduledMessageBuilder name(String name) {
         this.name = name;
+        return this;
+    }
+
+    public ScheduledMessageBuilder trigger(MessageTrigger trigger) {
+        this.trigger = trigger;
         return this;
     }
 
@@ -54,7 +61,8 @@ public final class ScheduledMessageBuilder {
         return new ScheduledMessage(
                 this.name,
                 this.notices,
-                this.rules
+                this.rules,
+                this.trigger
         );
     }
 }

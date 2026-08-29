@@ -31,7 +31,11 @@ import com.github.imdmk.automessage.scheduled.dispatcher.MessageDispatcherServic
 import com.github.imdmk.automessage.scheduled.selector.MessageSelectorProvider;
 import dev.rollczi.litecommands.LiteCommands;
 import dev.rollczi.litecommands.bukkit.LiteBukkitFactory;
+import com.github.imdmk.automessage.scheduled.trigger.MessageTriggerListener;
+import com.github.imdmk.automessage.scheduled.trigger.MessageTriggerService;
+import com.github.imdmk.automessage.scheduled.trigger.PlayerCountMilestones;
 import org.bukkit.Server;
+import org.bukkit.event.HandlerList;
 import org.bukkit.plugin.Plugin;
 
 final class AutoMessagePlugin {
@@ -47,6 +51,7 @@ final class AutoMessagePlugin {
     private final MessageDispatcherService dispatcherService;
     private final LiteCommands<?> liteCommands;
     private final MetricsService metricsService;
+    private final MessageTriggerListener triggerListener;
 
     AutoMessagePlugin(Plugin plugin) {
         final Server server = plugin.getServer();
@@ -84,6 +89,17 @@ final class AutoMessagePlugin {
         dispatcherService.start();
         configReloadService.register(dispatcherService);
 
+        this.triggerListener = new MessageTriggerListener(new MessageTriggerService(
+                server,
+                taskScheduler,
+                messageRepository,
+                messageDispatcher,
+                AudienceFilter.ruleFilter(),
+                new PlayerCountMilestones()
+        ));
+
+        server.getPluginManager().registerEvents(triggerListener, plugin);
+
         this.liteCommands = LiteBukkitFactory.builder(PLUGIN_PREFIX, plugin, server)
                 .invalidUsage(new InvalidUsageHandlerImpl(messageService))
                 .missingPermission(new MissingPermissionsHandlerImpl(messageService))
@@ -108,6 +124,10 @@ final class AutoMessagePlugin {
     }
 
     void disable() {
+        // Bukkit clears a plugin's handlers when it is disabled, but this class is also torn down
+        // by the loader on its own, so the listener is detached explicitly.
+        HandlerList.unregisterAll(triggerListener);
+
         dispatcherService.stop();
         configManager.saveAll();
         configManager.clearAll();
