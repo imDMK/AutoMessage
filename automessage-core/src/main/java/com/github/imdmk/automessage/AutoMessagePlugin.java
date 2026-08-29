@@ -28,7 +28,6 @@ import com.github.imdmk.automessage.scheduled.audience.filter.AudienceFilter;
 import com.github.imdmk.automessage.scheduled.dispatcher.MessageDispatcher;
 import com.github.imdmk.automessage.scheduled.dispatcher.MessageDispatcherConfig;
 import com.github.imdmk.automessage.scheduled.dispatcher.MessageDispatcherService;
-import com.github.imdmk.automessage.scheduled.selector.MessageSelectorProvider;
 import dev.rollczi.litecommands.LiteCommands;
 import dev.rollczi.litecommands.bukkit.LiteBukkitFactory;
 import org.bukkit.Server;
@@ -66,19 +65,13 @@ final class AutoMessagePlugin {
         final ScheduledMessageRepository messageRepository = ScheduledMessageRepository.config(scheduledMessagesConfig);
         final ScheduledMessageSender messageSender = new ScheduledMessageSender(messageService);
 
-        final MessageDispatcher messageDispatcher = new MessageDispatcher(
-                messageSender,
-                new MessageSelectorProvider(() -> dispatcherConfig.selector),
-                AudienceFilter.ruleFilter(),
-                messageRepository
-        );
-
         this.dispatcherService = new MessageDispatcherService(
                 logger,
                 server,
                 taskScheduler,
                 dispatcherConfig,
-                messageDispatcher
+                messageRepository,
+                selector -> new MessageDispatcher(messageSender, selector, AudienceFilter.ruleFilter())
         );
 
         dispatcherService.start();

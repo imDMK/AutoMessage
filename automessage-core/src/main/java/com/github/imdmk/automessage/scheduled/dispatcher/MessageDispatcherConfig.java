@@ -1,6 +1,8 @@
 package com.github.imdmk.automessage.scheduled.dispatcher;
 
 import com.github.imdmk.automessage.config.ConfigSection;
+import com.github.imdmk.automessage.scheduled.channel.AnnouncementChannel;
+import com.github.imdmk.automessage.scheduled.channel.AnnouncementChannelSerializer;
 import com.github.imdmk.automessage.scheduled.selector.MessageSelectorType;
 import eu.okaeri.configs.annotation.Comment;
 import eu.okaeri.configs.annotation.Header;
@@ -10,6 +12,8 @@ import eu.okaeri.configs.serdes.commons.duration.DurationSpec;
 
 import java.time.Duration;
 import java.time.temporal.ChronoUnit;
+import java.util.ArrayList;
+import java.util.List;
 
 @Header({
         "# ============================================================================",
@@ -42,6 +46,11 @@ import java.time.temporal.ChronoUnit;
         "#  initialDelay:",
         "#    How long the dispatcher waits before sending the first announcement",
         "#    after plugin startup. Uses the same time format as 'period'.",
+        "#",
+        "#  channels:",
+        "#    Extra announcement streams that run alongside the default one, each with its",
+        "#    own period, initialDelay, selector and on/off switch. See the comment on the",
+        "#    field itself for the exact shape.",
         "#",
         "#  selector:",
         "#    Strategy determining which scheduled message is selected next.",
@@ -100,6 +109,62 @@ public final class MessageDispatcherConfig extends ConfigSection {
     })
     public MessageSelectorType selector = MessageSelectorType.SEQUENTIAL;
 
+    @Comment({
+            "#",
+            "# Additional announcement streams, each with its own schedule and rotation.",
+            "#",
+            "# The 'period', 'initialDelay' and 'selector' above configure the channel named",
+            "# 'default', which is where a message lands when it does not name one. Everything",
+            "# listed here runs alongside it, independently.",
+            "#",
+            "# A message joins a channel with 'channel: <name>' in scheduledMessages.yml.",
+            "# Names are matched ignoring case. Messages naming a channel that does not exist",
+            "# are reported on startup and never sent.",
+            "#",
+            "# Example - shop adverts every fifteen minutes, shuffled, alongside the default",
+            "# tips stream (SHUFFLE is available once that selector ships):",
+            "#",
+            "#   channels:",
+            "#     - name: ads",
+            "#       enabled: true",
+            "#       initialDelay: 1m",
+            "#       period: 15m",
+            "#       selector: RANDOM",
+            "#"
+    })
+    public List<AnnouncementChannel> channels = List.of();
+
+    /**
+     * Every channel that should be scheduled, the implicit default one first.
+     *
+     * <p>
+     * The top-level timing fields predate channels and are still what most installations use, so
+     * they keep working as the default channel's settings rather than being migrated into the
+     * list. That way an existing messagesDispatcher.yml needs no changes at all.
+     * </p>
+     */
+    public List<AnnouncementChannel> channels() {
+        final List<AnnouncementChannel> resolved = new ArrayList<>();
+
+        resolved.add(new AnnouncementChannel(
+                AnnouncementChannel.DEFAULT_NAME,
+                true,
+                initialDelay == null ? Duration.ZERO : initialDelay,
+                period == null ? DispatchTiming.DEFAULT_PERIOD : period,
+                selector == null ? MessageSelectorType.SEQUENTIAL : selector
+        ));
+
+        for (final AnnouncementChannel channel : channels) {
+            // A channel literally named "default" would otherwise shadow the one above and get
+            // scheduled twice, sending every default-channel message in duplicate.
+            if (!channel.isDefault()) {
+                resolved.add(channel);
+            }
+        }
+
+        return List.copyOf(resolved);
+    }
+
     public void setEnabled(boolean enabled) {
         this.enabled = enabled;
     }
@@ -110,7 +175,7 @@ public final class MessageDispatcherConfig extends ConfigSection {
 
     @Override
     public OkaeriSerdesPack getSerdesPack() {
-        return registry -> {};
+        return registry -> registry.register(new AnnouncementChannelSerializer());
     }
 
     @Override

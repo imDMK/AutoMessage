@@ -1,5 +1,7 @@
 package com.github.imdmk.automessage.scheduled;
 
+import com.github.imdmk.automessage.scheduled.channel.AnnouncementChannel;
+
 import java.util.List;
 import java.util.Locale;
 import java.util.Optional;
@@ -24,6 +26,13 @@ final class ConfigScheduledMessageRepository implements ScheduledMessageReposito
     public List<ScheduledMessage> findAll() {
         final List<ScheduledMessage> messages = config.messages;
         return messages == null ? List.of() : List.copyOf(messages);
+    }
+
+    @Override
+    public List<ScheduledMessage> findByChannel(AnnouncementChannel channel) {
+        return findAll().stream()
+                .filter(message -> message.belongsTo(channel))
+                .toList();
     }
 
     @Override
