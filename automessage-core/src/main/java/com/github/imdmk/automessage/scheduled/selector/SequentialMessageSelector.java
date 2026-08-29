@@ -21,22 +21,14 @@ final class SequentialMessageSelector implements MessageSelector {
             return Optional.empty();
         }
 
-        final int current = index.get();
-        final int position = Math.floorMod(current, size);
-        final ScheduledMessage selected = messages.get(position);
+        // A preview and a scheduled tick can land here at the same time, so the position has to
+        // be read and advanced in one step — a separate get/set pair lets both pick the same
+        // message and then skip the next one.
+        final int current = advanceIndex
+                ? index.getAndUpdate(value -> value + 1 >= RESET_THRESHOLD ? 0 : value + 1)
+                : index.get();
 
-        // increment AFTER selecting, if required
-        if (advanceIndex) {
-            int next = current + 1;
-
-            if (next >= RESET_THRESHOLD) {
-                next = 0; // prevent overflow
-            }
-
-            index.set(next);
-        }
-
-        return Optional.of(selected);
+        return Optional.of(messages.get(Math.floorMod(current, size)));
     }
 }
 
