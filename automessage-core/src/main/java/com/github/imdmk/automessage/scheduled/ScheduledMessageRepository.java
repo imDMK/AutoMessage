@@ -1,5 +1,6 @@
 package com.github.imdmk.automessage.scheduled;
 
+import com.github.imdmk.automessage.scheduled.channel.AnnouncementChannel;
 import org.jetbrains.annotations.Unmodifiable;
 
 import java.util.List;
@@ -28,6 +29,13 @@ public interface ScheduledMessageRepository {
      * @return the matching message, or empty when no message uses that name
      */
     Optional<ScheduledMessage> findByName(String name);
+
+    /**
+     * @param channel channel to read
+     * @return the messages that joined the given channel, in configuration order
+     */
+    @Unmodifiable
+    List<ScheduledMessage> findByChannel(AnnouncementChannel channel);
 
     /**
      * @return the names of every configured message, in configuration order
