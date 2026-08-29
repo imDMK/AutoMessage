@@ -6,6 +6,8 @@ plugins {
 dependencies {
     compileOnlyApi("org.spigotmc:spigot-api:${Versions.SPIGOT_API}")
 
+    compileOnly("me.clip:placeholderapi:${Versions.PLACEHOLDER_API}")
+
     implementation("net.kyori:adventure-platform-bukkit:${Versions.KYORI_PLATFORM_BUKKIT}")
     implementation("net.kyori:adventure-text-minimessage:${Versions.KYORI_ADVENTURE}")
 
