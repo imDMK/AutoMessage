@@ -1,6 +1,8 @@
 import com.github.jengelman.gradle.plugins.shadow.tasks.ShadowJar
 
 plugins {
+    `automessage-spigot-compat`
+
     id("net.minecrell.plugin-yml.bukkit") version "0.6.0"
     id("com.gradleup.shadow") version "9.6.1"
 }
@@ -15,7 +17,7 @@ tasks.build {
 }
 
 tasks.withType<ShadowJar> {
-    archiveFileName.set("AutoMessage v${project.version} (MC 1.21.x).jar")
+    archiveFileName.set("AutoMessage v${project.version} (MC ${Versions.SUPPORTED_MINECRAFT_RANGE}).jar")
 
     // Shadow's transformers only see entries that reach them; with the Jar default of EXCLUDE a
     // second provider file of the same name would be dropped before mergeServiceFiles() runs.
@@ -44,13 +46,15 @@ tasks.withType<ShadowJar> {
         relocate(pkg, "$relocationPrefix.$pkg")
     }
 
-    minimize()
+    // No minimize(): Adventure reaches its CraftBukkit serializers and its ServiceLoader
+    // providers reflectively, so the reachability analysis drops classes the plugin needs —
+    // including JSONComponentSerializerProviderImpl, which META-INF/services still points at.
 }
 
 bukkit {
     name = "AutoMessage"
     version = project.version.toString()
-    apiVersion = "1.21"
+    apiVersion = Versions.SPIGOT_API_VERSION
     main = "com.github.imdmk.automessage.AutoMessagePluginLoader"
     author = "imDMK (dominiks8318@gmail.com)"
     description = "High-performance plugin for fully customizable automatic server-wide broadcasts."
