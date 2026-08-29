@@ -1,5 +1,7 @@
 package com.github.imdmk.automessage.scheduled;
 
+import com.github.imdmk.automessage.scheduled.trigger.MessageTrigger;
+
 import java.util.List;
 import java.util.Locale;
 import java.util.Optional;
@@ -24,6 +26,20 @@ final class ConfigScheduledMessageRepository implements ScheduledMessageReposito
     public List<ScheduledMessage> findAll() {
         final List<ScheduledMessage> messages = config.messages;
         return messages == null ? List.of() : List.copyOf(messages);
+    }
+
+    @Override
+    public List<ScheduledMessage> findScheduled() {
+        return findAll().stream()
+                .filter(ScheduledMessage::isScheduled)
+                .toList();
+    }
+
+    @Override
+    public List<ScheduledMessage> findByTrigger(MessageTrigger.Type type) {
+        return findAll().stream()
+                .filter(message -> message.trigger() != null && message.trigger().type() == type)
+                .toList();
     }
 
     @Override

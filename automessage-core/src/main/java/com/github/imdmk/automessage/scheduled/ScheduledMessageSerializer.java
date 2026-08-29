@@ -2,6 +2,7 @@ package com.github.imdmk.automessage.scheduled;
 
 import com.eternalcode.multification.notice.Notice;
 import com.github.imdmk.automessage.scheduled.audience.rule.AudienceRule;
+import com.github.imdmk.automessage.scheduled.trigger.MessageTrigger;
 import eu.okaeri.configs.schema.GenericsDeclaration;
 import eu.okaeri.configs.serdes.DeserializationData;
 import eu.okaeri.configs.serdes.ObjectSerializer;
@@ -22,6 +23,10 @@ public final class ScheduledMessageSerializer implements ObjectSerializer<Schedu
         data.add("name", notice.name(), String.class);
         data.addCollection("notices", notice.notices(), Notice.class);
         data.addCollection("rules", notice.rules(), AudienceRule.class);
+
+        if (notice.trigger() != null) {
+            data.add("trigger", notice.trigger(), MessageTrigger.class);
+        }
     }
 
     @Override
@@ -30,10 +35,15 @@ public final class ScheduledMessageSerializer implements ObjectSerializer<Schedu
         List<Notice> notices =  data.getAsList("notices", Notice.class);
         List<AudienceRule> rules = data.getAsList("rules", AudienceRule.class);
 
+        final MessageTrigger trigger = data.containsKey("trigger")
+                ? data.get("trigger", MessageTrigger.class)
+                : null;
+
         return new ScheduledMessage(
                 name,
                 notices,
-                rules
+                rules,
+                trigger
         );
     }
 }
