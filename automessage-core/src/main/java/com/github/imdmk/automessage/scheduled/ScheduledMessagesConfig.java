@@ -6,6 +6,7 @@ import com.eternalcode.multification.okaeri.MultificationSerdesPack;
 import com.github.imdmk.automessage.config.ConfigSection;
 import com.github.imdmk.automessage.scheduled.audience.rule.AudienceRule;
 import com.github.imdmk.automessage.scheduled.audience.rule.AudienceRuleSerializer;
+import com.github.imdmk.automessage.scheduled.locale.MessageTranslationSerializer;
 import eu.okaeri.configs.annotation.Comment;
 import eu.okaeri.configs.annotation.Header;
 import eu.okaeri.configs.serdes.OkaeriSerdesPack;
@@ -40,6 +41,10 @@ import java.util.List;
         "#               - BossBar",
         "#               - Sound",
         "#",
+        "#  translations:",
+        "#             Optional per-language variants. Each player receives the variant",
+        "#             matching the language their client runs in, and anyone whose",
+        "#             language is not listed gets the default 'notices'.",
         "#  rules:     Optional audience restrictions.",
         "#             Supported rule types:",
         "#               • PERMISSION  -> Only players with this permission receive the message",
@@ -99,6 +104,24 @@ public final class ScheduledMessagesConfig extends ConfigSection {
             "#",
             "#                 • Sound:",
             "#                       - sound: \"minecraft:entity.player.levelup MASTER 1.0 1.0\"",
+            "#",
+            "#   translations:",
+            "#               Optional. Per-language versions of the same announcement. The",
+            "#               locale is matched against the one the player's client reports,",
+            "#               so no command or per-player setting is needed.",
+            "#",
+            "#               A full locale beats a language-only entry, which lets you write",
+            "#               one Portuguese text and still override it for Brazil:",
+            "#",
+            "#                 translations:",
+            "#                   - locale: pl",
+            "#                     notices:",
+            "#                       - \"<gray>Zaglosuj po nagrody!\"",
+            "#                   - locale: pt_br",
+            "#                     notices:",
+            "#                       - \"<gray>Vote por recompensas!\"",
+            "#",
+            "#               Players whose language is not listed receive 'notices' above.",
             "#",
             "#   rules:      Conditions restricting who will receive this message.",
             "#               Supported audience rules:",
@@ -197,6 +220,7 @@ public final class ScheduledMessagesConfig extends ConfigSection {
         return registry -> {
             registry.register(new ScheduledMessageSerializer());
             registry.register(new AudienceRuleSerializer());
+            registry.register(new MessageTranslationSerializer());
             registry.register(new MultificationSerdesPack(NoticeResolverDefaults.createRegistry()));
         };
     }
