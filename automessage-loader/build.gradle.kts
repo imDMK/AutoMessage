@@ -56,6 +56,7 @@ bukkit {
     name = "AutoMessage"
     version = project.version.toString()
     apiVersion = Versions.SPIGOT_API_VERSION
+    softDepend = listOf("PlaceholderAPI")
     main = "com.github.imdmk.automessage.AutoMessagePluginLoader"
     author = "imDMK (dominiks8318@gmail.com)"
     description = "High-performance plugin for fully customizable automatic server-wide broadcasts."

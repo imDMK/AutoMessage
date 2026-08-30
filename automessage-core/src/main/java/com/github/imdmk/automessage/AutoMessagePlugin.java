@@ -18,6 +18,8 @@ import com.github.imdmk.automessage.platform.litecommands.handler.UnknownSchedul
 import com.github.imdmk.automessage.platform.logger.BukkitPluginLogger;
 import com.github.imdmk.automessage.platform.logger.PluginLogger;
 import com.github.imdmk.automessage.platform.metrics.MetricsService;
+import com.github.imdmk.automessage.platform.placeholder.ExternalPlaceholderResolver;
+import com.github.imdmk.automessage.platform.placeholder.ExternalPlaceholderResolverFactory;
 import com.github.imdmk.automessage.platform.scheduler.BukkitTaskScheduler;
 import com.github.imdmk.automessage.platform.scheduler.TaskScheduler;
 import com.github.imdmk.automessage.scheduled.ScheduledMessage;
@@ -64,7 +66,11 @@ final class AutoMessagePlugin {
         this.taskScheduler = new BukkitTaskScheduler(plugin, server.getScheduler());
 
         final ScheduledMessageRepository messageRepository = ScheduledMessageRepository.config(scheduledMessagesConfig);
-        final ScheduledMessageSender messageSender = new ScheduledMessageSender(messageService);
+        final ExternalPlaceholderResolver placeholderResolver =
+                ExternalPlaceholderResolverFactory.create(server, logger);
+
+        final ScheduledMessageSender messageSender =
+                new ScheduledMessageSender(server, messageService, placeholderResolver);
 
         final MessageDispatcher messageDispatcher = new MessageDispatcher(
                 messageSender,

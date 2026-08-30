@@ -11,6 +11,7 @@ subprojects {
         maven("https://repo.eternalcode.pl/releases") // Eternalcode
         maven("https://storehouse.okaeri.eu/repository/maven-public/") // Okaeri
         maven("https://repo.panda-lang.org/releases") // Litecommands
+        maven("https://repo.extendedclip.com/content/repositories/placeholderapi/") // PlaceholderAPI
     }
 
     extensions.configure<JavaPluginExtension> {
