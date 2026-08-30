@@ -3,6 +3,7 @@ package com.github.imdmk.automessage.scheduled.trigger;
 import com.eternalcode.multification.notice.Notice;
 import com.github.imdmk.automessage.scheduled.ScheduledMessage;
 import com.github.imdmk.automessage.scheduled.ScheduledMessageBuilder;
+import com.github.imdmk.automessage.config.ConfigReloadService;
 import com.github.imdmk.automessage.scheduled.ScheduledMessageRepository;
 import com.github.imdmk.automessage.scheduled.ScheduledMessagesConfig;
 import org.bukkit.entity.Player;
@@ -43,7 +44,7 @@ class MessageTriggerTest {
                 message("milestone", MessageTrigger.playerCount(100))
         );
 
-        ScheduledMessageRepository repository = ScheduledMessageRepository.config(config);
+        ScheduledMessageRepository repository = ScheduledMessageRepository.config(config, new ConfigReloadService(null));
 
         assertThat(repository.findScheduled())
                 .extracting(ScheduledMessage::name).containsExactly("rotating");

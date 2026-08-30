@@ -3,6 +3,7 @@ package com.github.imdmk.automessage.scheduled.channel;
 import com.eternalcode.multification.notice.Notice;
 import com.github.imdmk.automessage.scheduled.ScheduledMessage;
 import com.github.imdmk.automessage.scheduled.ScheduledMessageBuilder;
+import com.github.imdmk.automessage.config.ConfigReloadService;
 import com.github.imdmk.automessage.scheduled.ScheduledMessageRepository;
 import com.github.imdmk.automessage.scheduled.ScheduledMessagesConfig;
 import com.github.imdmk.automessage.scheduled.dispatcher.MessageDispatcherConfig;
@@ -57,7 +58,7 @@ class AnnouncementChannelTest {
                 message("another-advert", "ads")
         );
 
-        ScheduledMessageRepository repository = ScheduledMessageRepository.config(config);
+        ScheduledMessageRepository repository = ScheduledMessageRepository.config(config, new ConfigReloadService(null));
 
         assertThat(repository.findByChannel(channel("default")))
                 .extracting(ScheduledMessage::name).containsExactly("tip");

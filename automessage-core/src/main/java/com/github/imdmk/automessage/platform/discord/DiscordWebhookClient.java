@@ -92,6 +92,20 @@ public final class DiscordWebhookClient {
         }
     }
 
+    /**
+     * Releases the client's selector thread and executor.
+     *
+     * <p>
+     * HttpClient is AutoCloseable and keeps threads of its own. They outlive a plugin disable
+     * otherwise, and because they were created under the plugin's class loader they keep it - and
+     * everything it loaded - from ever being collected. That is the classic leak behind a server
+     * that runs out of memory after a few /reload cycles.
+     * </p>
+     */
+    public void close() {
+        httpClient.close();
+    }
+
     private static long parseSeconds(String value) {
         try {
             return (long) (Double.parseDouble(value) * 1000.0D);
