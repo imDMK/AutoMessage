@@ -2,6 +2,7 @@ package com.github.imdmk.automessage.scheduled;
 
 import com.eternalcode.multification.notice.Notice;
 import com.github.imdmk.automessage.scheduled.audience.rule.AudienceRule;
+import com.github.imdmk.automessage.scheduled.locale.MessageTranslation;
 import eu.okaeri.configs.schema.GenericsDeclaration;
 import eu.okaeri.configs.serdes.DeserializationData;
 import eu.okaeri.configs.serdes.ObjectSerializer;
@@ -22,6 +23,12 @@ public final class ScheduledMessageSerializer implements ObjectSerializer<Schedu
         data.add("name", notice.name(), String.class);
         data.addCollection("notices", notice.notices(), Notice.class);
         data.addCollection("rules", notice.rules(), AudienceRule.class);
+
+        // Most servers run in one language; writing an empty list for every message would add
+        // noise to a file people edit by hand.
+        if (!notice.translations().isEmpty()) {
+            data.addCollection("translations", notice.translations(), MessageTranslation.class);
+        }
     }
 
     @Override
@@ -30,10 +37,15 @@ public final class ScheduledMessageSerializer implements ObjectSerializer<Schedu
         List<Notice> notices =  data.getAsList("notices", Notice.class);
         List<AudienceRule> rules = data.getAsList("rules", AudienceRule.class);
 
+        final List<MessageTranslation> translations = data.containsKey("translations")
+                ? data.getAsList("translations", MessageTranslation.class)
+                : List.of();
+
         return new ScheduledMessage(
                 name,
                 notices,
-                rules
+                rules,
+                translations
         );
     }
 }
