@@ -24,7 +24,11 @@ public final class ScheduledMessageSerializer implements ObjectSerializer<Schedu
     public void serialize(ScheduledMessage notice, SerializationData data, @NotNull GenericsDeclaration generics) {
         data.add("name", notice.name(), String.class);
         data.addCollection("notices", notice.notices(), Notice.class);
-        data.addCollection("rules", notice.rules(), AudienceRule.class);
+        // Most messages go to everyone, and an empty "rules: []" on each of them is a line of
+        // noise in a file people read top to bottom.
+        if (!notice.rules().isEmpty()) {
+            data.addCollection("rules", notice.rules(), AudienceRule.class);
+        }
 
         // Each is only written when it differs from the default, so existing files stay
         // untouched and the common case does not grow lines of noise per message.
@@ -49,7 +53,9 @@ public final class ScheduledMessageSerializer implements ObjectSerializer<Schedu
     public ScheduledMessage deserialize(DeserializationData data, @NotNull GenericsDeclaration generics) {
         String name = data.get("name", String.class);
         List<Notice> notices =  data.getAsList("notices", Notice.class);
-        List<AudienceRule> rules = data.getAsList("rules", AudienceRule.class);
+        final List<AudienceRule> rules = data.containsKey("rules")
+                ? data.getAsList("rules", AudienceRule.class)
+                : List.of();
 
         // Absent in every file written before these fields existed; such messages all weigh
         // the same, belong to the default channel and rotate rather than being triggered.
