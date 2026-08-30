@@ -2,6 +2,7 @@ package com.github.imdmk.automessage.platform.litecommands.argument;
 
 import com.eternalcode.multification.notice.Notice;
 import com.github.imdmk.automessage.scheduled.ScheduledMessage;
+import com.github.imdmk.automessage.scheduled.channel.AnnouncementChannel;
 import com.github.imdmk.automessage.scheduled.ScheduledMessageRepository;
 import dev.rollczi.litecommands.argument.Argument;
 import dev.rollczi.litecommands.invocation.Invocation;
@@ -80,6 +81,13 @@ class ScheduledMessageArgumentTest {
             return findAll().stream()
                     .filter(message -> message.name().equalsIgnoreCase(name))
                     .findFirst();
+        }
+
+        @Override
+        public List<ScheduledMessage> findByChannel(AnnouncementChannel channel) {
+            return findAll().stream()
+                    .filter(message -> message.belongsTo(channel))
+                    .toList();
         }
 
         @Override

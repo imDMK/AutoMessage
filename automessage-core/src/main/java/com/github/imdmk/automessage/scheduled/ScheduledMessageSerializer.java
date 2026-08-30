@@ -2,6 +2,7 @@ package com.github.imdmk.automessage.scheduled;
 
 import com.eternalcode.multification.notice.Notice;
 import com.github.imdmk.automessage.scheduled.audience.rule.AudienceRule;
+import com.github.imdmk.automessage.scheduled.channel.AnnouncementChannel;
 import eu.okaeri.configs.schema.GenericsDeclaration;
 import eu.okaeri.configs.serdes.DeserializationData;
 import eu.okaeri.configs.serdes.ObjectSerializer;
@@ -23,10 +24,14 @@ public final class ScheduledMessageSerializer implements ObjectSerializer<Schedu
         data.addCollection("notices", notice.notices(), Notice.class);
         data.addCollection("rules", notice.rules(), AudienceRule.class);
 
-        // Only written when it differs from the default, so existing files stay untouched and
-        // the common case does not grow a line of noise per message.
+        // Both are only written when they differ from the default, so existing files stay
+        // untouched and the common case does not grow two lines of noise per message.
         if (notice.weight() != ScheduledMessage.DEFAULT_WEIGHT) {
             data.add("weight", notice.weight(), Integer.class);
+        }
+
+        if (!AnnouncementChannel.DEFAULT_NAME.equals(notice.channel())) {
+            data.add("channel", notice.channel(), String.class);
         }
     }
 
@@ -36,16 +41,22 @@ public final class ScheduledMessageSerializer implements ObjectSerializer<Schedu
         List<Notice> notices =  data.getAsList("notices", Notice.class);
         List<AudienceRule> rules = data.getAsList("rules", AudienceRule.class);
 
-        // Absent in every file written before weights existed; those messages all weigh the same.
-        int weight = data.containsKey("weight")
+        // Absent in every file written before these fields existed; such messages all weigh the
+        // same and belong to the default channel.
+        final int weight = data.containsKey("weight")
                 ? data.get("weight", Integer.class)
                 : ScheduledMessage.DEFAULT_WEIGHT;
+
+        final String channel = data.containsKey("channel")
+                ? data.get("channel", String.class)
+                : AnnouncementChannel.DEFAULT_NAME;
 
         return new ScheduledMessage(
                 name,
                 notices,
                 rules,
-                weight
+                weight,
+                channel
         );
     }
 }
