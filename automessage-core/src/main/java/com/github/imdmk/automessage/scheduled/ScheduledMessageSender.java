@@ -18,7 +18,8 @@ import java.util.Map;
  * <p>
  * This is the one place where a scheduled message becomes chat, actionbar, title, bossbar or
  * sound output, so automatic broadcasts and manual previews always render identically -
- * placeholders included.
+ * placeholders resolved, and in the language each viewer's client is running where the message
+ * provides one.
  * </p>
  */
 public final class ScheduledMessageSender {
@@ -39,6 +40,11 @@ public final class ScheduledMessageSender {
 
     /**
      * Scans the message once so a broadcast does not repeat the work for every player.
+     *
+     * <p>
+     * Which placeholders a message contains is a property of the message, not of who reads it, so
+     * one scan covers every translation of it too.
+     * </p>
      */
     public MessagePlaceholders placeholdersOf(ScheduledMessage message) {
         return MessagePlaceholders.scan(message, externalPlaceholderResolver);
@@ -61,7 +67,7 @@ public final class ScheduledMessageSender {
     ) {
         final Map<String, String> resolved = placeholders.resolveFor(server, viewer);
 
-        for (final Notice notice : message.notices()) {
+        for (final Notice notice : noticesFor(viewer, message)) {
             broadcast(viewer, notice, resolved).send();
         }
     }
@@ -88,9 +94,17 @@ public final class ScheduledMessageSender {
     ) {
         final Map<String, String> resolved = placeholders.resolveFor(server, viewer);
 
-        for (final Notice notice : message.notices()) {
+        for (final Notice notice : noticesFor(viewer, message)) {
             broadcast(viewer, notice, resolved).sendAsync();
         }
+    }
+
+    /**
+     * Read per viewer rather than once per broadcast: two players watching the same announcement
+     * can be running clients in different languages.
+     */
+    private static java.util.List<Notice> noticesFor(Player viewer, ScheduledMessage message) {
+        return message.noticesFor(viewer.getLocale());
     }
 
     private NoticeBroadcast<CommandSender, MessageConfig, ?> broadcast(

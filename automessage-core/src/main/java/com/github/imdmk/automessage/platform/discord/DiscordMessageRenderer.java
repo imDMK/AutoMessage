@@ -18,6 +18,12 @@ import java.util.List;
  * in a text channel, and mirroring them would post the same sentence two or three times whenever a
  * message uses several channels to say one thing.
  * </p>
+ *
+ * <p>
+ * The default notices are used rather than any translation: a Discord channel has no single reader
+ * whose client language could be consulted. Placeholders are likewise left as written, because the
+ * ones that mean anything - the viewer's name, their world - have no value without a viewer.
+ * </p>
  */
 public final class DiscordMessageRenderer {
 

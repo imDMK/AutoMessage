@@ -6,6 +6,7 @@ import com.eternalcode.multification.okaeri.MultificationSerdesPack;
 import com.github.imdmk.automessage.config.ConfigSection;
 import com.github.imdmk.automessage.scheduled.audience.rule.AudienceRule;
 import com.github.imdmk.automessage.scheduled.audience.rule.AudienceRuleSerializer;
+import com.github.imdmk.automessage.scheduled.locale.MessageTranslationSerializer;
 import com.github.imdmk.automessage.scheduled.trigger.MessageTriggerSerializer;
 import eu.okaeri.configs.annotation.Comment;
 import eu.okaeri.configs.annotation.Header;
@@ -54,6 +55,10 @@ import java.util.List;
         "#  rules:     Optional audience restrictions. Rules listed on a message are combined",
         "#             with AND; the ANY_OF / NONE_OF / NOT rules nest others to express",
         "#             anything more involved.",
+        "#  translations:",
+        "#             Optional per-language variants. Each player receives the variant",
+        "#             matching the language their client runs in, and anyone whose",
+        "#             language is not listed gets the default 'notices'.",
         "#             Supported rule types:",
         "#               • PERMISSION   -> players holding this permission",
         "#               • GROUP        -> players in the given group",
@@ -167,6 +172,23 @@ public final class ScheduledMessagesConfig extends ConfigSection {
             "#               matched ignoring case. Each channel has its own period and",
             "#               rotation, declared in messagesDispatcher.yml. Leave it out and",
             "#               the message uses the default channel.",
+            "#   translations:",
+            "#               Optional. Per-language versions of the same announcement. The",
+            "#               locale is matched against the one the player's client reports,",
+            "#               so no command or per-player setting is needed.",
+            "#",
+            "#               A full locale beats a language-only entry, which lets you write",
+            "#               one Portuguese text and still override it for Brazil:",
+            "#",
+            "#                 translations:",
+            "#                   - locale: pl",
+            "#                     notices:",
+            "#                       - \"<gray>Zaglosuj po nagrody!\"",
+            "#                   - locale: pt_br",
+            "#                     notices:",
+            "#                       - \"<gray>Vote por recompensas!\"",
+            "#",
+            "#               Players whose language is not listed receive 'notices' above.",
             "#",
             "#   rules:      Conditions restricting who will receive this message.",
             "#               Supported audience rules:",
@@ -295,6 +317,7 @@ public final class ScheduledMessagesConfig extends ConfigSection {
             registry.register(new ScheduledMessageSerializer());
             registry.register(new AudienceRuleSerializer());
             registry.register(new MessageTriggerSerializer());
+            registry.register(new MessageTranslationSerializer());
             registry.register(new MultificationSerdesPack(NoticeResolverDefaults.createRegistry()));
         };
     }
