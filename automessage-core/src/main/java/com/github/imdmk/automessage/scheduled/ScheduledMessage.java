@@ -3,6 +3,8 @@ package com.github.imdmk.automessage.scheduled;
 import com.eternalcode.multification.notice.Notice;
 import com.github.imdmk.automessage.scheduled.audience.rule.AudienceRule;
 import com.github.imdmk.automessage.scheduled.channel.AnnouncementChannel;
+import com.github.imdmk.automessage.scheduled.trigger.MessageTrigger;
+import org.jetbrains.annotations.Nullable;
 import org.jetbrains.annotations.Unmodifiable;
 
 import java.util.List;
@@ -13,7 +15,8 @@ public record ScheduledMessage(
         @Unmodifiable List<Notice> notices,
         @Unmodifiable List<AudienceRule> rules,
         int weight,
-        String channel) {
+        String channel,
+        @Nullable MessageTrigger trigger) {
 
     /**
      * Relative weight of a message that does not configure one.
@@ -44,16 +47,27 @@ public record ScheduledMessage(
         rules = List.copyOf(rules);
     }
 
-    /** A message that configures neither weighs the default and joins the default channel. */
+    /**
+     * A message that configures nothing weighs the default, joins the default channel and takes
+     * part in the timed rotation.
+     */
     public ScheduledMessage(
             String name,
             List<Notice> notices,
             List<AudienceRule> rules
     ) {
-        this(name, notices, rules, DEFAULT_WEIGHT, AnnouncementChannel.DEFAULT_NAME);
+        this(name, notices, rules, DEFAULT_WEIGHT, AnnouncementChannel.DEFAULT_NAME, null);
     }
 
     public boolean belongsTo(AnnouncementChannel announcementChannel) {
         return announcementChannel.matches(channel);
+    }
+
+    /**
+     * A triggered message fires on its event and never through the rotation; leaving it in both
+     * would announce it at random moments as well as the one it was written for.
+     */
+    public boolean isScheduled() {
+        return trigger == null;
     }
 }

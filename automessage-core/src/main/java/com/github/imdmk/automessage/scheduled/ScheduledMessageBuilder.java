@@ -3,6 +3,7 @@ package com.github.imdmk.automessage.scheduled;
 import com.eternalcode.multification.notice.Notice;
 import com.github.imdmk.automessage.scheduled.audience.rule.AudienceRule;
 import com.github.imdmk.automessage.scheduled.channel.AnnouncementChannel;
+import com.github.imdmk.automessage.scheduled.trigger.MessageTrigger;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -12,6 +13,7 @@ public final class ScheduledMessageBuilder {
     private String name;
     private int weight = ScheduledMessage.DEFAULT_WEIGHT;
     private String channel = AnnouncementChannel.DEFAULT_NAME;
+    private MessageTrigger trigger;
 
     private final List<Notice> notices = new ArrayList<>();
     private final List<AudienceRule> rules = new ArrayList<>();
@@ -32,6 +34,11 @@ public final class ScheduledMessageBuilder {
 
     public ScheduledMessageBuilder channel(String channel) {
         this.channel = channel;
+        return this;
+    }
+
+    public ScheduledMessageBuilder trigger(MessageTrigger trigger) {
+        this.trigger = trigger;
         return this;
     }
 
@@ -69,7 +76,8 @@ public final class ScheduledMessageBuilder {
                 this.notices,
                 this.rules,
                 this.weight,
-                this.channel
+                this.channel,
+                this.trigger
         );
     }
 }

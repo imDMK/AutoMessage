@@ -32,7 +32,14 @@ import com.github.imdmk.automessage.scheduled.dispatcher.MessageDispatcherConfig
 import com.github.imdmk.automessage.scheduled.dispatcher.MessageDispatcherService;
 import dev.rollczi.litecommands.LiteCommands;
 import dev.rollczi.litecommands.bukkit.LiteBukkitFactory;
+import com.github.imdmk.automessage.scheduled.dispatcher.ScheduledMessageDispatcherFactory;
+import com.github.imdmk.automessage.scheduled.selector.MessageSelectorProvider;
+import com.github.imdmk.automessage.scheduled.selector.MessageSelectorType;
+import com.github.imdmk.automessage.scheduled.trigger.MessageTriggerListener;
+import com.github.imdmk.automessage.scheduled.trigger.MessageTriggerService;
+import com.github.imdmk.automessage.scheduled.trigger.PlayerCountMilestones;
 import org.bukkit.Server;
+import org.bukkit.event.HandlerList;
 import org.bukkit.plugin.Plugin;
 
 final class AutoMessagePlugin {
@@ -48,6 +55,7 @@ final class AutoMessagePlugin {
     private final MessageDispatcherService dispatcherService;
     private final LiteCommands<?> liteCommands;
     private final MetricsService metricsService;
+    private final MessageTriggerListener triggerListener;
 
     AutoMessagePlugin(Plugin plugin) {
         final Server server = plugin.getServer();
@@ -71,17 +79,38 @@ final class AutoMessagePlugin {
         final ScheduledMessageSender messageSender =
                 new ScheduledMessageSender(server, messageService, placeholderResolver);
 
+        final ScheduledMessageDispatcherFactory dispatcherFactory =
+                selector -> new MessageDispatcher(messageSender, selector, AudienceFilter.ruleFilter());
+
         this.dispatcherService = new MessageDispatcherService(
                 logger,
                 server,
                 taskScheduler,
                 dispatcherConfig,
                 messageRepository,
-                selector -> new MessageDispatcher(messageSender, selector, AudienceFilter.ruleFilter())
+                dispatcherFactory
         );
 
         dispatcherService.start();
         configReloadService.register(dispatcherService);
+
+        // A trigger dispatches the one message its event names, so this dispatcher's selector is
+        // never consulted. It still gets a real one rather than a trap that would only fire if
+        // some later change started rotating through triggered messages.
+        final MessageDispatcher triggerDispatcher = dispatcherFactory.create(
+                new MessageSelectorProvider(() -> MessageSelectorType.SEQUENTIAL)
+        );
+
+        this.triggerListener = new MessageTriggerListener(new MessageTriggerService(
+                server,
+                taskScheduler,
+                messageRepository,
+                triggerDispatcher,
+                AudienceFilter.ruleFilter(),
+                new PlayerCountMilestones()
+        ));
+
+        server.getPluginManager().registerEvents(triggerListener, plugin);
 
         this.liteCommands = LiteBukkitFactory.builder(PLUGIN_PREFIX, plugin, server)
                 .invalidUsage(new InvalidUsageHandlerImpl(messageService))
@@ -107,6 +136,10 @@ final class AutoMessagePlugin {
     }
 
     void disable() {
+        // Bukkit clears a plugin's handlers when it is disabled, but this class is also torn down
+        // by the loader on its own, so the listener is detached explicitly.
+        HandlerList.unregisterAll(triggerListener);
+
         dispatcherService.stop();
         configManager.saveAll();
         configManager.clearAll();
