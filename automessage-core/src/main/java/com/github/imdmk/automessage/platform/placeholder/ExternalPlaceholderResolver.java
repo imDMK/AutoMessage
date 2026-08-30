@@ -12,6 +12,18 @@ public interface ExternalPlaceholderResolver {
      */
     String resolve(Player viewer, String token);
 
+    /**
+     * Resolves a token for a destination with no single reader.
+     *
+     * <p>
+     * Some expansions describe the server rather than a player and answer perfectly well without
+     * one; the rest cannot, and say so by handing the token back unchanged.
+     * </p>
+     *
+     * @return the resolved value, or the token itself when it needs a viewer
+     */
+    String resolveWithoutViewer(String token);
+
     boolean available();
 
     /** Used when PlaceholderAPI is not installed; leaves every token exactly as written. */
@@ -20,6 +32,11 @@ public interface ExternalPlaceholderResolver {
 
             @Override
             public String resolve(Player viewer, String token) {
+                return token;
+            }
+
+            @Override
+            public String resolveWithoutViewer(String token) {
                 return token;
             }
 
