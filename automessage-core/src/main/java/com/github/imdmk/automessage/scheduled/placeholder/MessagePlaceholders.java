@@ -65,6 +65,42 @@ public final class MessagePlaceholders {
         return builtins.isEmpty() && externalTokens.isEmpty();
     }
 
+    /**
+     * Resolves what can be resolved for a destination with no single reader.
+     *
+     * <p>
+     * A Discord channel has no client language and no player behind it, so the placeholders that
+     * describe the server answer normally while the ones describing a viewer resolve to nothing.
+     * Dropping them beats leaving the raw token: a reader seeing "Welcome {PLAYER}" learns only
+     * that something is broken.
+     * </p>
+     */
+    @Unmodifiable
+    public Map<String, String> resolveWithoutViewer(Server server) {
+        if (isEmpty()) {
+            return Map.of();
+        }
+
+        final Map<String, String> resolved = new LinkedHashMap<>();
+
+        for (final BuiltinPlaceholder builtin : builtins) {
+            resolved.put(
+                    builtin.token(),
+                    builtin.requiresViewer() ? "" : builtin.resolveForServer(server)
+            );
+        }
+
+        for (final String token : externalTokens) {
+            final String value = externalResolver.resolveWithoutViewer(token);
+
+            // An expansion that needs a player hands the token straight back; showing it raw
+            // would be the same broken output, so it is dropped as well.
+            resolved.put(token, value.equals(token) ? "" : value);
+        }
+
+        return Map.copyOf(resolved);
+    }
+
     @Unmodifiable
     public Map<String, String> resolveFor(Server server, Player viewer) {
         if (isEmpty()) {
