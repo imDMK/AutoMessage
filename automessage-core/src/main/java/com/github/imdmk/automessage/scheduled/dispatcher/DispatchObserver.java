@@ -16,6 +16,17 @@ public interface DispatchObserver {
 
     void onDispatched(ScheduledMessage message, MessagePlaceholders placeholders);
 
+    /**
+     * Releases whatever the observer holds open.
+     *
+     * <p>
+     * An observer talking to the network owns threads, and those threads hold the plugin's class
+     * loader alive. Leaving them running is how a plugin survives its own disable.
+     * </p>
+     */
+    default void shutdown() {
+    }
+
     static DispatchObserver none() {
         return (message, placeholders) -> {
         };

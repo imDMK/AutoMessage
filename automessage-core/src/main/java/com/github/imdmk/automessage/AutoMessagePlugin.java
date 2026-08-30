@@ -59,6 +59,7 @@ final class AutoMessagePlugin {
     private final LiteCommands<?> liteCommands;
     private final MetricsService metricsService;
     private final MessageTriggerListener triggerListener;
+    private final DispatchObserver dispatchObserver;
 
     AutoMessagePlugin(Plugin plugin) {
         final Server server = plugin.getServer();
@@ -75,7 +76,8 @@ final class AutoMessagePlugin {
         this.messageService = new MessageService(messageConfig, plugin);
         this.taskScheduler = new BukkitTaskScheduler(plugin, server.getScheduler());
 
-        final ScheduledMessageRepository messageRepository = ScheduledMessageRepository.config(scheduledMessagesConfig);
+        final ScheduledMessageRepository messageRepository =
+                ScheduledMessageRepository.config(scheduledMessagesConfig, configReloadService);
         final ExternalPlaceholderResolver placeholderResolver =
                 ExternalPlaceholderResolverFactory.create(server, logger);
 
@@ -86,7 +88,7 @@ final class AutoMessagePlugin {
 
         // One observer shared by every channel: mirroring is a property of the announcement, not
         // of the stream it happened to travel on.
-        final DispatchObserver dispatchObserver = DiscordWebhookService.create(server, logger, discordConfig);
+        this.dispatchObserver = DiscordWebhookService.create(server, logger, discordConfig);
 
         final ScheduledMessageDispatcherFactory dispatcherFactory =
                 selector -> new MessageDispatcher(
@@ -157,6 +159,7 @@ final class AutoMessagePlugin {
         messageService.shutdown();
         taskScheduler.shutdown();
         liteCommands.unregister();
+        dispatchObserver.shutdown();
         metricsService.shutdown();
 
         logger.info("%s plugin disabled successfully.", PLUGIN_PREFIX);

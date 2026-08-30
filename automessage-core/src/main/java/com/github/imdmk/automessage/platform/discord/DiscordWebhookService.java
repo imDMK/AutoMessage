@@ -73,4 +73,9 @@ public final class DiscordWebhookService implements DispatchObserver {
                 System.currentTimeMillis()
         );
     }
+
+    @Override
+    public void shutdown() {
+        client.close();
+    }
 }

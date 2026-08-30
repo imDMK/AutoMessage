@@ -1,6 +1,7 @@
 package com.github.imdmk.automessage.scheduled;
 
 import com.eternalcode.multification.notice.Notice;
+import com.github.imdmk.automessage.config.ConfigReloadService;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
@@ -8,6 +9,7 @@ import org.junit.jupiter.api.Test;
 import java.util.ArrayList;
 import java.util.List;
 
+import static org.assertj.core.api.Assertions.assertThat;
 import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertThrows;
 import static org.junit.jupiter.api.Assertions.assertTrue;
@@ -26,7 +28,7 @@ class ScheduledMessageRepositoryTest {
         config = new ScheduledMessagesConfig();
         config.messages = List.of(message("first"), message("second"));
 
-        repository = ScheduledMessageRepository.config(config);
+        repository = ScheduledMessageRepository.config(config, new ConfigReloadService(null));
     }
 
     @Test
@@ -74,5 +76,27 @@ class ScheduledMessageRepositoryTest {
         config.messages = new ArrayList<>(List.of(message("first")));
 
         assertThrows(UnsupportedOperationException.class, () -> repository.findAll().add(message("hack")));
+    }
+
+    @Test
+    @DisplayName("stops serving a message the configuration no longer contains")
+    void reflectsAReplacedMessageList() {
+        // The repository caches its derived views; a reload that does not invalidate them would
+        // keep announcing entries the administrator has just deleted.
+        config.messages = List.of(message("only-one"));
+
+        assertThat(repository.names()).containsExactly("only-one");
+        assertThat(repository.findByName("first")).isEmpty();
+    }
+
+    @Test
+    @DisplayName("picks up a message added after the first read")
+    void reflectsAGrownMessageList() {
+        List<ScheduledMessage> before = repository.findAll();
+
+        config.messages = List.of(message("a"), message("b"), message("c"));
+
+        assertThat(repository.findAll()).hasSize(3).isNotEqualTo(before);
+        assertThat(repository.findScheduled()).hasSize(3);
     }
 }
