@@ -6,6 +6,7 @@ import com.eternalcode.multification.okaeri.MultificationSerdesPack;
 import com.github.imdmk.automessage.config.ConfigSection;
 import com.github.imdmk.automessage.scheduled.audience.rule.AudienceRule;
 import com.github.imdmk.automessage.scheduled.audience.rule.AudienceRuleSerializer;
+import com.github.imdmk.automessage.scheduled.trigger.MessageTriggerSerializer;
 import eu.okaeri.configs.annotation.Comment;
 import eu.okaeri.configs.annotation.Header;
 import eu.okaeri.configs.serdes.OkaeriSerdesPack;
@@ -40,6 +41,12 @@ import java.util.List;
         "#               - BossBar",
         "#               - Sound",
         "#",
+        "#  trigger:   Optional. Makes the message fire on an event instead of on the",
+        "#             timetable. A message with a trigger leaves the rotation entirely.",
+        "#             Supported triggers:",
+        "#               • JOIN         -> sent to a player as they join",
+        "#               • FIRST_JOIN   -> sent the first time a player ever joins",
+        "#               • PLAYER_COUNT -> broadcast when the online count reaches a threshold",
         "#  weight:    Optional relative frequency for the WEIGHTED selector (default 1).",
         "#  channel:   Optional. Which announcement stream this message belongs to, matching",
         "#             a channel declared in messagesDispatcher.yml. Omitted means 'default',",
@@ -129,6 +136,27 @@ public final class ScheduledMessagesConfig extends ConfigSection {
             "#                 • Sound:",
             "#                       - sound: \"minecraft:entity.player.levelup MASTER 1.0 1.0\"",
             "#",
+            "#   trigger:    Optional. Fires the message on an event rather than on the",
+            "#               timetable; such a message never appears in the rotation.",
+            "#",
+            "#                 • Greet a player three seconds after they join, so the",
+            "#                   message is not buried by the server's own join spam:",
+            "#                       trigger:",
+            "#                         type: JOIN",
+            "#                         delay: 3s",
+            "#",
+            "#                 • Welcome a brand-new player:",
+            "#                       trigger:",
+            "#                         type: FIRST_JOIN",
+            "#                         delay: 5s",
+            "#",
+            "#                 • Announce a milestone. Fires once when the count reaches the",
+            "#                   threshold and rearms only after it drops back below:",
+            "#                       trigger:",
+            "#                         type: PLAYER_COUNT",
+            "#                         threshold: 100",
+            "#",
+            "#               Audience rules still apply to triggered messages.",
             "#   weight:     Optional. Relative frequency, used only by the WEIGHTED",
             "#               selector. Defaults to 1 when omitted, so leaving it out keeps",
             "#               every message equally likely. A message of weight 5 appears",
@@ -266,6 +294,7 @@ public final class ScheduledMessagesConfig extends ConfigSection {
         return registry -> {
             registry.register(new ScheduledMessageSerializer());
             registry.register(new AudienceRuleSerializer());
+            registry.register(new MessageTriggerSerializer());
             registry.register(new MultificationSerdesPack(NoticeResolverDefaults.createRegistry()));
         };
     }

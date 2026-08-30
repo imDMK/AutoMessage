@@ -1,6 +1,7 @@
 package com.github.imdmk.automessage.scheduled;
 
 import com.github.imdmk.automessage.scheduled.channel.AnnouncementChannel;
+import com.github.imdmk.automessage.scheduled.trigger.MessageTrigger;
 import org.jetbrains.annotations.Unmodifiable;
 
 import java.util.List;
@@ -23,6 +24,19 @@ public interface ScheduledMessageRepository {
     List<ScheduledMessage> findAll();
 
     /**
+     * @return the messages that take part in the timed rotation, in configuration order
+     */
+    @Unmodifiable
+    List<ScheduledMessage> findScheduled();
+
+    /**
+     * @param type trigger type to look for
+     * @return the messages fired by that kind of event, in configuration order
+     */
+    @Unmodifiable
+    List<ScheduledMessage> findByTrigger(MessageTrigger.Type type);
+
+    /**
      * Finds a message by its configured name, ignoring case.
      *
      * @param name name to look for, may be null
@@ -32,7 +46,9 @@ public interface ScheduledMessageRepository {
 
     /**
      * @param channel channel to read
-     * @return the messages that joined the given channel, in configuration order
+     * @return the rotating messages that joined the given channel, in configuration order.
+     *         Triggered messages are excluded: they fire on their event, and a channel picking
+     *         one up would also announce it at an arbitrary moment.
      */
     @Unmodifiable
     List<ScheduledMessage> findByChannel(AnnouncementChannel channel);

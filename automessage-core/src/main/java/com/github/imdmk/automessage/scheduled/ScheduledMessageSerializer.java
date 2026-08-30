@@ -3,6 +3,7 @@ package com.github.imdmk.automessage.scheduled;
 import com.eternalcode.multification.notice.Notice;
 import com.github.imdmk.automessage.scheduled.audience.rule.AudienceRule;
 import com.github.imdmk.automessage.scheduled.channel.AnnouncementChannel;
+import com.github.imdmk.automessage.scheduled.trigger.MessageTrigger;
 import eu.okaeri.configs.schema.GenericsDeclaration;
 import eu.okaeri.configs.serdes.DeserializationData;
 import eu.okaeri.configs.serdes.ObjectSerializer;
@@ -24,14 +25,18 @@ public final class ScheduledMessageSerializer implements ObjectSerializer<Schedu
         data.addCollection("notices", notice.notices(), Notice.class);
         data.addCollection("rules", notice.rules(), AudienceRule.class);
 
-        // Both are only written when they differ from the default, so existing files stay
-        // untouched and the common case does not grow two lines of noise per message.
+        // Each is only written when it differs from the default, so existing files stay
+        // untouched and the common case does not grow lines of noise per message.
         if (notice.weight() != ScheduledMessage.DEFAULT_WEIGHT) {
             data.add("weight", notice.weight(), Integer.class);
         }
 
         if (!AnnouncementChannel.DEFAULT_NAME.equals(notice.channel())) {
             data.add("channel", notice.channel(), String.class);
+        }
+
+        if (notice.trigger() != null) {
+            data.add("trigger", notice.trigger(), MessageTrigger.class);
         }
     }
 
@@ -41,8 +46,8 @@ public final class ScheduledMessageSerializer implements ObjectSerializer<Schedu
         List<Notice> notices =  data.getAsList("notices", Notice.class);
         List<AudienceRule> rules = data.getAsList("rules", AudienceRule.class);
 
-        // Absent in every file written before these fields existed; such messages all weigh the
-        // same and belong to the default channel.
+        // Absent in every file written before these fields existed; such messages all weigh
+        // the same, belong to the default channel and rotate rather than being triggered.
         final int weight = data.containsKey("weight")
                 ? data.get("weight", Integer.class)
                 : ScheduledMessage.DEFAULT_WEIGHT;
@@ -51,12 +56,17 @@ public final class ScheduledMessageSerializer implements ObjectSerializer<Schedu
                 ? data.get("channel", String.class)
                 : AnnouncementChannel.DEFAULT_NAME;
 
+        final MessageTrigger trigger = data.containsKey("trigger")
+                ? data.get("trigger", MessageTrigger.class)
+                : null;
+
         return new ScheduledMessage(
                 name,
                 notices,
                 rules,
                 weight,
-                channel
+                channel,
+                trigger
         );
     }
 }

@@ -1,6 +1,7 @@
 package com.github.imdmk.automessage.scheduled;
 
 import com.github.imdmk.automessage.scheduled.channel.AnnouncementChannel;
+import com.github.imdmk.automessage.scheduled.trigger.MessageTrigger;
 
 import java.util.List;
 import java.util.Locale;
@@ -29,9 +30,24 @@ final class ConfigScheduledMessageRepository implements ScheduledMessageReposito
     }
 
     @Override
-    public List<ScheduledMessage> findByChannel(AnnouncementChannel channel) {
+    public List<ScheduledMessage> findScheduled() {
         return findAll().stream()
+                .filter(ScheduledMessage::isScheduled)
+                .toList();
+    }
+
+    @Override
+    public List<ScheduledMessage> findByChannel(AnnouncementChannel channel) {
+        // Scheduled only: a triggered message belongs to its event, not to a channel's rotation.
+        return findScheduled().stream()
                 .filter(message -> message.belongsTo(channel))
+                .toList();
+    }
+
+    @Override
+    public List<ScheduledMessage> findByTrigger(MessageTrigger.Type type) {
+        return findAll().stream()
+                .filter(message -> message.trigger() != null && message.trigger().type() == type)
                 .toList();
     }
 
