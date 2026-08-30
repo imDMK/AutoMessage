@@ -20,84 +20,27 @@ import java.util.List;
 
 @Header({
         "# ============================================================================",
-        "#                        AutoMessage — scheduledMessages.yml",
+        "#                        AutoMessage - scheduledMessages.yml",
         "# ============================================================================",
-        "# This file defines all automatically dispatched messages used by AutoMessage.",
-        "# Each entry represents one scheduled announcement, which may contain multiple",
-        "# message formats such as chat, actionbar, title, bossbar, and sound notices.",
+        "# The announcements themselves. Every entry is one message the plugin sends.",
         "#",
-        "# How it works:",
-        "#  • Messages are dispatched in a sequence, based on the selector strategy",
-        "#    configured in messagesDispatcher.yml.",
-        "#  • Each message may contain access rules (audience filters) to restrict",
-        "#    delivery to specific players (groups, permissions, etc.).",
+        "# A message needs only a name and something to say:",
         "#",
-        "# Structure of a scheduled message entry:",
-        "#  name:      Unique identifier of the message.",
-        "#  notices:   One or more notices to send using Multification.",
-        "#             Supported notice types:",
-        "#               - Chat",
-        "#               - Actionbar",
-        "#               - Title / Subtitle",
-        "#               - BossBar",
-        "#               - Sound",
+        "#   - name: vote-reminder",
+        "#     notices:",
+        "#       - \"<gray>Vote for the server and claim your reward!\"",
         "#",
-        "#  trigger:   Optional. Makes the message fire on an event instead of on the",
-        "#             timetable. A message with a trigger leaves the rotation entirely.",
-        "#             Supported triggers:",
-        "#               • JOIN         -> sent to a player as they join",
-        "#               • FIRST_JOIN   -> sent the first time a player ever joins",
-        "#               • PLAYER_COUNT -> broadcast when the online count reaches a threshold",
-        "#  weight:    Optional relative frequency for the WEIGHTED selector (default 1).",
-        "#  channel:   Optional. Which announcement stream this message belongs to, matching",
-        "#             a channel declared in messagesDispatcher.yml. Omitted means 'default',",
-        "#             which is the stream configured by the top-level timing in that file.",
-        "#  rules:     Optional audience restrictions. Rules listed on a message are combined",
-        "#             with AND; the ANY_OF / NONE_OF / NOT rules nest others to express",
-        "#             anything more involved.",
-        "#  translations:",
-        "#             Optional per-language variants. Each player receives the variant",
-        "#             matching the language their client runs in, and anyone whose",
-        "#             language is not listed gets the default 'notices'.",
-        "#             Supported rule types:",
-        "#               • PERMISSION   -> players holding this permission",
-        "#               • GROUP        -> players in the given group",
-        "#               • WORLD        -> players standing in one of the listed worlds",
-        "#               • PLAYER_COUNT -> only while the online count is in range",
-        "#               • PLAYTIME     -> only players whose playtime is in range",
-        "#               • ANY_OF       -> passes when at least one nested rule passes",
-        "#               • NONE_OF      -> passes only when no nested rule passes",
-        "#               • NOT          -> inverts a single nested rule",
+        "# Everything else is optional and documented above the 'messages' field below.",
         "#",
-        "# Placeholders:",
-        "#  Built-in, available with no other plugin installed:",
-        "#    {PLAYER}        Name of the player receiving the message",
-        "#    {DISPLAY_NAME}  Their display name, formatting included",
-        "#    {UUID}          Their unique id",
-        "#    {WORLD}         The world they are currently in",
-        "#    {ONLINE}        Players currently online",
-        "#    {MAX_PLAYERS}   Player slots configured for the server",
-        "#    {DATE}          Current date, dd.MM.yyyy",
-        "#    {TIME}          Current time, HH:mm",
+        "# Conventions used throughout this file:",
+        "#   Formatting   MiniMessage - <red>, <bold>, <gradient:#ff0000:#00ff00>, ...",
+        "#                See https://docs.advntr.dev/minimessage/format.html",
+        "#   Durations    5s, 2m, 500ms, 1m30s. A plain number means seconds.",
+        "#   Sounds       \"namespace:key SOURCE volume pitch\"",
         "#",
-        "#  With PlaceholderAPI installed, any %placeholder% is resolved too, for example",
-        "#  %vault_eco_balance% or %server_tps%. Without it, such tokens are left as written.",
-        "#",
-        "#  Only the placeholders a message actually mentions are resolved, so messages that",
-        "#  use none cost nothing extra to send.",
-        "#",
-        "# Editing recommendations:",
-        "#  • You may freely add or remove message entries.",
-        "#  • MiniMessage formatting (<red>, <yellow>, <rainbow>, etc.) is fully supported.",
-        "#  • Sound format: \"namespace:key SOURCE volume pitch\".",
-        "#  • Duration fields support values like: 5s, 2m, 500ms, 1m30s.",
-        "#    A plain number without a unit is read as seconds.",
-        "#",
-        "# After making changes, reload the plugin via:",
-        "#   /automessage reload",
-        "#",
-        "# To check how an entry looks in-game without waiting for its turn, use:",
-        "#   /automessage view <name>",
+        "# When you are done editing:",
+        "#   /automessage reload            apply the changes, no restart needed",
+        "#   /automessage view <name>       see one message immediately, just for you",
         "#",
         "# Source Code:",
         "#   https://github.com/imDMK/AutoMessage",
@@ -113,201 +56,178 @@ public final class ScheduledMessagesConfig extends ConfigSection {
 
     @Comment({
             "#",
-            "# List of scheduled messages automatically dispatched by the plugin.",
+            "# REQUIRED",
             "#",
-            "# Each message entry consists of the following fields:",
+            "#   name      Identifies the message. Used by /automessage view <name>.",
             "#",
-            "#   name:       Unique identifier for internal use and debugging.",
+            "#   notices   What the player receives. One message may mix several:",
             "#",
-            "#   notices:    One or more message types to send to the player.",
-            "#               Supported notice formats:",
-            "#                 • Chat message:",
-            "#                       - \"<gray>Hello world!\"",
+            "#               - \"<gray>A chat line\"",
+            "#               - actionbar: \"<yellow>Above the hotbar\"",
+            "#               - title: \"<red>Big text\"",
+            "#                 subtitle: \"<gray>Smaller text below\"",
+            "#               - bossbar:",
+            "#                   message: \"<green>Bar at the top\"",
+            "#                   duration: 5s",
+            "#                   color: RED",
+            "#                   overlay: PROGRESS",
+            "#               - sound: \"entity.player.levelup MASTER 1.0 1.0\"",
             "#",
-            "#                 • Actionbar:",
-            "#                       - actionbar: \"<yellow>Actionbar message!\"",
+            "# OPTIONAL",
             "#",
-            "#                 • Title:",
-            "#                       - title: \"<red>Title text\"",
-            "#                         subtitle: \"<gray>Subtitle text\"",
+            "#   channel   Which stream in messagesDispatcher.yml sends this message.",
+            "#             Each stream has its own interval. Omitted means 'default'.",
             "#",
-            "#                 • BossBar:",
-            "#                       - bossbar:",
-            "#                           message: \"<green>BossBar text\"",
-            "#                           duration: 5s",
-            "#                           color: RED",
-            "#                           overlay: PROGRESS",
+            "#               channel: ads",
             "#",
-            "#                 • Sound:",
-            "#                       - sound: \"minecraft:entity.player.levelup MASTER 1.0 1.0\"",
+            "#   weight    How often the WEIGHTED selector picks this message, relative",
+            "#             to the others. Default 1. Use 0 to park a message without",
+            "#             deleting it. Ignored by the other selectors.",
             "#",
-            "#   trigger:    Optional. Fires the message on an event rather than on the",
-            "#               timetable; such a message never appears in the rotation.",
+            "#               weight: 5",
             "#",
-            "#                 • Greet a player three seconds after they join, so the",
-            "#                   message is not buried by the server's own join spam:",
-            "#                       trigger:",
-            "#                         type: JOIN",
-            "#                         delay: 3s",
+            "#   rules     Who receives it. All rules must pass. Omit to send to",
+            "#             everyone.",
             "#",
-            "#                 • Welcome a brand-new player:",
-            "#                       trigger:",
-            "#                         type: FIRST_JOIN",
-            "#                         delay: 5s",
+            "#               rules:",
+            "#                 - type: PERMISSION",
+            "#                   permission: rank.vip",
+            "#                 - type: GROUP",
+            "#                   group: vip",
+            "#                 - type: WORLD",
+            "#                   worlds: [world, world_nether]",
+            "#                 - type: PLAYER_COUNT     # while 1-10 players are online",
+            "#                   min: 1",
+            "#                   max: 10",
+            "#                 - type: PLAYTIME         # players with under 2h played",
+            "#                   max: 2h",
             "#",
-            "#                 • Announce a milestone. Fires once when the count reaches the",
-            "#                   threshold and rearms only after it drops back below:",
-            "#                       trigger:",
-            "#                         type: PLAYER_COUNT",
-            "#                         threshold: 100",
+            "#             ANY_OF, NONE_OF and NOT combine the rules above - use them",
+            "#             for anything AND cannot say, such as \"VIP or moderator\":",
             "#",
-            "#               Audience rules still apply to triggered messages.",
-            "#   weight:     Optional. Relative frequency, used only by the WEIGHTED",
-            "#               selector. Defaults to 1 when omitted, so leaving it out keeps",
-            "#               every message equally likely. A message of weight 5 appears",
-            "#               five times as often as one of weight 1; weight 0 parks the",
-            "#               message without deleting it.",
+            "#               rules:",
+            "#                 - type: ANY_OF",
+            "#                   rules:",
+            "#                     - type: PERMISSION",
+            "#                       permission: rank.vip",
+            "#                     - type: PERMISSION",
+            "#                       permission: rank.mod",
+            "#                 - type: NOT",
+            "#                   rule:",
+            "#                     type: PERMISSION",
+            "#                     permission: automessage.hide",
             "#",
-            "#   channel:    Optional. Name of the announcement channel this message joins,",
-            "#               matched ignoring case. Each channel has its own period and",
-            "#               rotation, declared in messagesDispatcher.yml. Leave it out and",
-            "#               the message uses the default channel.",
-            "#   translations:",
-            "#               Optional. Per-language versions of the same announcement. The",
-            "#               locale is matched against the one the player's client reports,",
-            "#               so no command or per-player setting is needed.",
+            "#   trigger   Sends the message on an event instead of on the timetable.",
+            "#             A message with a trigger leaves the rotation entirely.",
+            "#             Audience rules still apply.",
             "#",
-            "#               A full locale beats a language-only entry, which lets you write",
-            "#               one Portuguese text and still override it for Brazil:",
+            "#               trigger:",
+            "#                 type: JOIN            # or FIRST_JOIN",
+            "#                 delay: 3s             # let the join spam settle first",
             "#",
-            "#                 translations:",
-            "#                   - locale: pl",
-            "#                     notices:",
-            "#                       - \"<gray>Zaglosuj po nagrody!\"",
-            "#                   - locale: pt_br",
-            "#                     notices:",
-            "#                       - \"<gray>Vote por recompensas!\"",
+            "#               trigger:",
+            "#                 type: PLAYER_COUNT    # fires once on reaching 100 online",
+            "#                 threshold: 100",
             "#",
-            "#               Players whose language is not listed receive 'notices' above.",
+            "#   translations",
+            "#             Per-language versions. Each player sees the one matching",
+            "#             their client's language; everyone else sees 'notices'.",
+            "#             A full locale (pt_br) beats a language-only one (pt).",
             "#",
-            "#   rules:      Conditions restricting who will receive this message.",
-            "#               Supported audience rules:",
-            "#                 • Permission rule:",
-            "#                       - type: PERMISSION",
-            "#                         permission: myplugin.vip",
+            "#               translations:",
+            "#                 - locale: pl",
+            "#                   notices:",
+            "#                     - \"<gray>Zaglosuj po nagrody!\"",
             "#",
-            "#                 • Group rule:",
-            "#                       - type: GROUP",
-            "#                         group: vip",
+            "# PLACEHOLDERS - usable in any text above",
             "#",
-            "#                 • World rule:",
-            "#                       - type: WORLD",
-            "#                         worlds:",
-            "#                           - world",
-            "#                           - world_nether",
+            "#   {PLAYER} {DISPLAY_NAME} {UUID} {WORLD}      about the reader",
+            "#   {ONLINE} {MAX_PLAYERS} {DATE} {TIME}        about the server",
             "#",
-            "#                 • Player-count rule (both bounds optional, inclusive):",
-            "#                       - type: PLAYER_COUNT",
-            "#                         min: 1",
-            "#                         max: 10",
+            "#   With PlaceholderAPI installed, %any_placeholder% works too. Without it,",
+            "#   such tokens are left exactly as written.",
             "#",
-            "#                 • Playtime rule (both bounds optional, inclusive).",
-            "#                   Uses the same time units as messagesDispatcher.yml:",
-            "#                       - type: PLAYTIME",
-            "#                         max: 2h",
+            "# A message using every optional field at once:",
             "#",
-            "#                 • Combining rules - VIP or moderator, but not opted out:",
-            "#                       - type: ANY_OF",
-            "#                         rules:",
-            "#                           - type: PERMISSION",
-            "#                             permission: rank.vip",
-            "#                           - type: PERMISSION",
-            "#                             permission: rank.mod",
-            "#                       - type: NOT",
-            "#                         rule:",
-            "#                           type: PERMISSION",
-            "#                           permission: automessage.hide",
-            "#",
-            "# Example full message entry:",
-            "#",
-            "#   - name: example-message",
-            "#     notices:",
-            "#       - \"<green>Hello from AutoMessage!\"",
-            "#       - actionbar: \"<yellow>Actionbar example\"",
-            "#       - title: \"<red>Warning\"",
-            "#         subtitle: \"<gray>Something happened\"",
-            "#       - bossbar:",
-            "#           message: \"<green>BossBar example\"",
-            "#           duration: 3s",
-            "#           color: BLUE",
-            "#           overlay: PROGRESS",
-            "#       - sound: \"minecraft:block.note_block.pling MASTER 1.0 1.5\"",
-            "#",
+            "#   - name: vip-welcome",
             "#     channel: ads",
+            "#     weight: 5",
+            "#     notices:",
+            "#       - \"<gold>Welcome back {PLAYER}! <gray>{ONLINE}/{MAX_PLAYERS} online.\"",
             "#     rules:",
             "#       - type: PERMISSION",
-            "#         permission: myplugin.staff",
-            "#",
-            "# You may add, remove, or edit entries as needed.",
-            "# The dispatcher reads messages sequentially.",
+            "#         permission: rank.vip",
+            "#     trigger:",
+            "#       type: JOIN",
+            "#       delay: 3s",
             "#"
     })
     public List<ScheduledMessage> messages = List.of(
             ScheduledMessageBuilder.create()
-                    .name("first-message")
+                    .name("vote-reminder")
                     .addNotices(
-                            Notice.chat("<dark_gray>[<red>!<dark_gray>] <gray>This is the first announcement of <rainbow>AutoMessage<gray>!"),
+                            Notice.chat("<dark_gray>[<gold>!<dark_gray>] <gray>Enjoying the server? <gold>Vote <gray>for us and claim your reward!"),
                             Notice.sound(Key.key("entity.experience_orb.pickup"), Sound.Source.MASTER, 1.0F, 1.0F)
                     )
                     .build(),
 
             ScheduledMessageBuilder.create()
-                    .name("second-message-actionbar")
-                    .addNotices(Notice.actionbar(
-                            "<dark_gray>[<yellow>!<dark_gray>] <gray>This is the second announcement of <rainbow>AutoMessage<gray>!"
+                    .name("discord-invite")
+                    .addNotice(Notice.actionbar(
+                            "<dark_gray>[<blue>!<dark_gray>] <gray>Join our Discord: <blue>discord.gg/example"
                     ))
                     .build(),
 
             ScheduledMessageBuilder.create()
-                    .name("third-message-title")
-                    .addNotices(Notice.title(
-                            "<dark_gray>[<red>!<dark_gray>]",
-                            "<rainbow>This is the third announcement!"
+                    .name("server-status")
+                    .addNotice(Notice.chat(
+                            "<dark_gray>[<green>!<dark_gray>] <gray>There are <green>{ONLINE}<gray>/<green>{MAX_PLAYERS} <gray>players online right now."
                     ))
                     .build(),
 
             ScheduledMessageBuilder.create()
-                    .name("fourth-message-bossbar")
-                    .addNotices(Notice.bossBar(
+                    .name("event-announcement")
+                    .addNotice(Notice.title(
+                            "<gradient:#ffd700:#ff8c00><bold>EVENT</bold></gradient>",
+                            "<gray>Starting at the arena in 5 minutes!"
+                    ))
+                    .build(),
+
+            ScheduledMessageBuilder.create()
+                    .name("restart-warning")
+                    .addNotice(Notice.bossBar(
                             BossBar.Color.RED,
                             BossBar.Overlay.PROGRESS,
                             Duration.ofSeconds(5),
-                            "<dark_gray>[<red><bold>!<dark_gray>] <rainbow>This is the fourth announcement!"
+                            "<red>The server restarts every night at 04:00"
                     ))
                     .build(),
 
             ScheduledMessageBuilder.create()
-                    .name("multiple-chat-actionbar")
+                    .name("shop-advert")
                     .addNotices(
-                            Notice.chat("<dark_gray>[<red>!<dark_gray>] <gray>This is a multi-channel announcement!"),
-                            Notice.actionbar("<dark_gray>[<red>!<dark_gray>] <gray>This is a multi-channel announcement!")
+                            Notice.chat("<dark_gray>[<light_purple>!<dark_gray>] <gray>Support the server at <light_purple>shop.example.com"),
+                            Notice.actionbar("<light_purple>shop.example.com")
                     )
                     .build(),
 
+            // Only players holding the permission see this one.
             ScheduledMessageBuilder.create()
-                    .name("only-vip-permission")
-                    .addNotice(
-                            Notice.chat("<dark_gray>[<red>!<dark_gray>] <gray>This is a message to only players with `permission.vip`!")
-                    )
-                    .addRule(AudienceRule.permission("permission.vip"))
+                    .name("vip-perk-reminder")
+                    .addNotice(Notice.chat(
+                            "<dark_gray>[<aqua>!<dark_gray>] <gray>VIP tip: use <aqua>/kit vip <gray>once every 12 hours."
+                    ))
+                    .addRule(AudienceRule.permission("rank.vip"))
                     .build(),
 
+            // A GROUP rule matches the permission "group.<name>", which most permission
+            // plugins grant automatically.
             ScheduledMessageBuilder.create()
-                    .name("only-vip-group")
-                    .addNotice(
-                            Notice.chat("<dark_gray>[<red>!<dark_gray>] <gray>This is a message to only players with VIP group!")
-                    )
-                    .addRule(AudienceRule.group("vip"))
+                    .name("newcomer-tip")
+                    .addNotice(Notice.chat(
+                            "<dark_gray>[<yellow>!<dark_gray>] <gray>New here? Type <yellow>/help <gray>to get started."
+                    ))
+                    .addRule(AudienceRule.group("default"))
                     .build()
     );
 
