@@ -12,6 +12,7 @@ import org.junit.jupiter.params.provider.ValueSource;
 
 import java.time.Duration;
 import java.util.List;
+import java.util.Map;
 
 import static org.assertj.core.api.Assertions.assertThat;
 
@@ -61,7 +62,7 @@ class DiscordWebhookTest {
                 Notice.chat("<gradient:#ff0000:#00ff00><bold>Vote</bold></gradient> <gray>for rewards!")
         );
 
-        assertThat(DiscordMessageRenderer.render(message)).isEqualTo("Vote for rewards!");
+        assertThat(DiscordMessageRenderer.render(message, Map.of())).isEqualTo("Vote for rewards!");
     }
 
     @Test
@@ -75,7 +76,7 @@ class DiscordWebhookTest {
         );
 
         // Mirroring these would repeat one sentence several times per announcement.
-        assertThat(DiscordMessageRenderer.render(message)).isEmpty();
+        assertThat(DiscordMessageRenderer.render(message, Map.of())).isEmpty();
     }
 
     @Test
@@ -83,7 +84,28 @@ class DiscordWebhookTest {
     void joinsChatLines() {
         ScheduledMessage message = message(Notice.chat("<red>first", "<gray>second"));
 
-        assertThat(DiscordMessageRenderer.render(message)).isEqualTo("first\nsecond");
+        assertThat(DiscordMessageRenderer.render(message, Map.of())).isEqualTo("first\nsecond");
+    }
+
+    @Test
+    @DisplayName("substitutes server placeholders and drops the viewer ones")
+    void substitutesResolvedPlaceholders() {
+        ScheduledMessage message = message(Notice.chat("<gray>{ONLINE}/{MAX_PLAYERS} online, hi {PLAYER}"));
+
+        // A viewer-scoped placeholder resolves to nothing here; posting "{PLAYER}" raw would
+        // only tell the reader that something is broken.
+        String rendered = DiscordMessageRenderer.render(
+                message,
+                Map.of("{ONLINE}", "47", "{MAX_PLAYERS}", "100", "{PLAYER}", "")
+        );
+
+        assertThat(rendered).isEqualTo("47/100 online, hi");
+    }
+
+    @Test
+    @DisplayName("leaves a message alone when there is nothing to substitute")
+    void withoutPlaceholdersNothingChanges() {
+        assertThat(DiscordMessageRenderer.substitute("plain text", Map.of())).isEqualTo("plain text");
     }
 
     @Test

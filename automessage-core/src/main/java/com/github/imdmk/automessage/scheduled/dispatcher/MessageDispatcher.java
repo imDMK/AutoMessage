@@ -63,6 +63,6 @@ public final class MessageDispatcher {
 
         // Once per announcement, not once per recipient - and after the players have been served,
         // so nothing an observer does can delay what happens on the server.
-        observer.onDispatched(message);
+        observer.onDispatched(message, placeholders);
     }
 }

@@ -22,25 +22,39 @@ import java.util.function.BiFunction;
  * runtime reflection that quietly fails on the servers the plugin claims to support. Servers that
  * want it can write {@code %server_tps%} and let PlaceholderAPI answer.
  * </p>
+ *
+ * <p>
+ * Each constant also declares whether it needs a viewer. That distinction is what lets a
+ * destination with no single reader - a Discord channel, say - still resolve the half of them that
+ * describe the server rather than the person reading.
+ * </p>
  */
 public enum BuiltinPlaceholder {
 
-    PLAYER("{PLAYER}", (server, player) -> player.getName()),
-    DISPLAY_NAME("{DISPLAY_NAME}", (server, player) -> player.getDisplayName()),
-    UUID("{UUID}", (server, player) -> player.getUniqueId().toString()),
-    WORLD("{WORLD}", (server, player) -> player.getWorld().getName()),
+    PLAYER("{PLAYER}", Scope.VIEWER, (server, player) -> player.getName()),
+    DISPLAY_NAME("{DISPLAY_NAME}", Scope.VIEWER, (server, player) -> player.getDisplayName()),
+    UUID("{UUID}", Scope.VIEWER, (server, player) -> player.getUniqueId().toString()),
+    WORLD("{WORLD}", Scope.VIEWER, (server, player) -> player.getWorld().getName()),
 
-    ONLINE("{ONLINE}", (server, player) -> Integer.toString(server.getOnlinePlayers().size())),
-    MAX_PLAYERS("{MAX_PLAYERS}", (server, player) -> Integer.toString(server.getMaxPlayers())),
+    ONLINE("{ONLINE}", Scope.SERVER, (server, player) -> Integer.toString(server.getOnlinePlayers().size())),
+    MAX_PLAYERS("{MAX_PLAYERS}", Scope.SERVER, (server, player) -> Integer.toString(server.getMaxPlayers())),
 
-    DATE("{DATE}", (server, player) -> Formats.now(Formats.DATE)),
-    TIME("{TIME}", (server, player) -> Formats.now(Formats.TIME));
+    DATE("{DATE}", Scope.SERVER, (server, player) -> Formats.now(Formats.DATE)),
+    TIME("{TIME}", Scope.SERVER, (server, player) -> Formats.now(Formats.TIME));
+
+    /** Whether a value describes the server or the person reading it. */
+    public enum Scope {
+        SERVER,
+        VIEWER
+    }
 
     private final String token;
+    private final Scope scope;
     private final BiFunction<Server, Player, String> resolver;
 
-    BuiltinPlaceholder(String token, BiFunction<Server, Player, String> resolver) {
+    BuiltinPlaceholder(String token, Scope scope, BiFunction<Server, Player, String> resolver) {
         this.token = token;
+        this.scope = scope;
         this.resolver = resolver;
     }
 
@@ -48,8 +62,29 @@ public enum BuiltinPlaceholder {
         return token;
     }
 
+    public Scope scope() {
+        return scope;
+    }
+
+    public boolean requiresViewer() {
+        return scope == Scope.VIEWER;
+    }
+
     public String resolve(Server server, Player player) {
         return resolver.apply(server, player);
+    }
+
+    /**
+     * Resolves a value that does not depend on who is reading.
+     *
+     * @throws IllegalStateException when called for a placeholder that needs a viewer
+     */
+    public String resolveForServer(Server server) {
+        if (requiresViewer()) {
+            throw new IllegalStateException(token + " cannot be resolved without a viewer");
+        }
+
+        return resolver.apply(server, null);
     }
 
     /**

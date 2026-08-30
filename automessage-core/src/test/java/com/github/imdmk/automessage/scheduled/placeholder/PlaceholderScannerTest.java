@@ -1,8 +1,10 @@
 package com.github.imdmk.automessage.scheduled.placeholder;
 
 import com.eternalcode.multification.notice.Notice;
+import com.github.imdmk.automessage.platform.placeholder.ExternalPlaceholderResolver;
 import com.github.imdmk.automessage.scheduled.ScheduledMessage;
 import com.github.imdmk.automessage.scheduled.ScheduledMessageBuilder;
+import org.bukkit.Server;
 import net.kyori.adventure.bossbar.BossBar;
 import net.kyori.adventure.key.Key;
 import net.kyori.adventure.sound.Sound;
@@ -11,8 +13,12 @@ import org.junit.jupiter.api.Test;
 
 import java.time.Duration;
 import java.util.List;
+import java.util.Map;
 
 import static org.assertj.core.api.Assertions.assertThat;
+import static org.assertj.core.api.Assertions.assertThatThrownBy;
+import static org.mockito.Mockito.mock;
+import static org.mockito.Mockito.when;
 
 class PlaceholderScannerTest {
 
@@ -108,6 +114,47 @@ class PlaceholderScannerTest {
                 message,
                 com.github.imdmk.automessage.platform.placeholder.ExternalPlaceholderResolver.disabled()
         ).isEmpty()).isTrue();
+    }
+
+    @Test
+    @DisplayName("without a viewer, server values resolve and viewer values drop out")
+    void resolvesWhatItCanWithoutAViewer() {
+        Server server = mock(Server.class);
+        when(server.getOnlinePlayers()).thenAnswer(invocation -> List.of());
+        when(server.getMaxPlayers()).thenReturn(100);
+
+        ScheduledMessage message = message(Notice.chat("{ONLINE}/{MAX_PLAYERS} - hi {PLAYER} in {WORLD}"));
+
+        Map<String, String> resolved = MessagePlaceholders
+                .scan(message, ExternalPlaceholderResolver.disabled())
+                .resolveWithoutViewer(server);
+
+        assertThat(resolved).containsEntry("{ONLINE}", "0").containsEntry("{MAX_PLAYERS}", "100");
+
+        // Nothing here can answer "which player", so those resolve to nothing rather than to a
+        // raw token a Discord reader would see as breakage.
+        assertThat(resolved).containsEntry("{PLAYER}", "").containsEntry("{WORLD}", "");
+    }
+
+    @Test
+    @DisplayName("every builtin declares whether it needs a viewer")
+    void scopesAreDeclared() {
+        assertThat(BuiltinPlaceholder.ONLINE.requiresViewer()).isFalse();
+        assertThat(BuiltinPlaceholder.MAX_PLAYERS.requiresViewer()).isFalse();
+        assertThat(BuiltinPlaceholder.DATE.requiresViewer()).isFalse();
+        assertThat(BuiltinPlaceholder.TIME.requiresViewer()).isFalse();
+
+        assertThat(BuiltinPlaceholder.PLAYER.requiresViewer()).isTrue();
+        assertThat(BuiltinPlaceholder.DISPLAY_NAME.requiresViewer()).isTrue();
+        assertThat(BuiltinPlaceholder.UUID.requiresViewer()).isTrue();
+        assertThat(BuiltinPlaceholder.WORLD.requiresViewer()).isTrue();
+    }
+
+    @Test
+    @DisplayName("asking a viewer-scoped placeholder to resolve without one is a programming error")
+    void viewerScopedRefusesToResolveWithoutAViewer() {
+        assertThatThrownBy(() -> BuiltinPlaceholder.PLAYER.resolveForServer(mock(Server.class)))
+                .isInstanceOf(IllegalStateException.class);
     }
 
     @Test
