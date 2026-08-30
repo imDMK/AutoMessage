@@ -9,7 +9,8 @@ import org.bukkit.entity.Player;
  *
  * <p>
  * This is the one place where a scheduled message becomes chat, actionbar, title, bossbar or
- * sound output, so automatic broadcasts and manual previews always render identically.
+ * sound output, so automatic broadcasts and manual previews always render identically - in the
+ * language each viewer's client is running, where the message provides one.
  * </p>
  */
 public final class ScheduledMessageSender {
@@ -27,7 +28,7 @@ public final class ScheduledMessageSender {
      * @param message message to send
      */
     public void send(Player viewer, ScheduledMessage message) {
-        for (final Notice notice : message.notices()) {
+        for (final Notice notice : message.noticesFor(viewer.getLocale())) {
             messageService.create()
                     .viewer(viewer)
                     .notice(notice)
@@ -42,7 +43,9 @@ public final class ScheduledMessageSender {
      * @param message message to send
      */
     public void sendAsync(Player viewer, ScheduledMessage message) {
-        for (final Notice notice : message.notices()) {
+        // Read here rather than once per broadcast: two players watching the same announcement
+        // can be running clients in different languages.
+        for (final Notice notice : message.noticesFor(viewer.getLocale())) {
             messageService.create()
                     .viewer(viewer)
                     .notice(notice)
