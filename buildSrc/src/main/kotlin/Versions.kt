@@ -42,6 +42,9 @@ object Versions {
 
     const val OKAERI_CONFIGS = "5.0.13"
 
+    /** Soft dependency: only touched when the server actually has PlaceholderAPI installed. */
+    const val PLACEHOLDER_API = "2.12.3"
+
     const val BSTATS_BUKKIT = "3.2.1"
     const val LITECOMMANDS = "3.11.0"
 
