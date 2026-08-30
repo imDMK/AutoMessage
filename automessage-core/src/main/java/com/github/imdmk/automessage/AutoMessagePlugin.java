@@ -17,6 +17,8 @@ import com.github.imdmk.automessage.platform.litecommands.handler.NoticeResultHa
 import com.github.imdmk.automessage.platform.litecommands.handler.UnknownScheduledMessageHandler;
 import com.github.imdmk.automessage.platform.logger.BukkitPluginLogger;
 import com.github.imdmk.automessage.platform.logger.PluginLogger;
+import com.github.imdmk.automessage.platform.discord.DiscordWebhookConfig;
+import com.github.imdmk.automessage.platform.discord.DiscordWebhookService;
 import com.github.imdmk.automessage.platform.metrics.MetricsService;
 import com.github.imdmk.automessage.platform.placeholder.ExternalPlaceholderResolver;
 import com.github.imdmk.automessage.platform.placeholder.ExternalPlaceholderResolverFactory;
@@ -27,6 +29,7 @@ import com.github.imdmk.automessage.scheduled.ScheduledMessageRepository;
 import com.github.imdmk.automessage.scheduled.ScheduledMessageSender;
 import com.github.imdmk.automessage.scheduled.ScheduledMessagesConfig;
 import com.github.imdmk.automessage.scheduled.audience.filter.AudienceFilter;
+import com.github.imdmk.automessage.scheduled.dispatcher.DispatchObserver;
 import com.github.imdmk.automessage.scheduled.dispatcher.MessageDispatcher;
 import com.github.imdmk.automessage.scheduled.dispatcher.MessageDispatcherConfig;
 import com.github.imdmk.automessage.scheduled.dispatcher.MessageDispatcherService;
@@ -79,8 +82,16 @@ final class AutoMessagePlugin {
         final ScheduledMessageSender messageSender =
                 new ScheduledMessageSender(server, messageService, placeholderResolver);
 
+        final DiscordWebhookConfig discordConfig = configManager.create(DiscordWebhookConfig.class);
+
+        // One observer shared by every channel: mirroring is a property of the announcement, not
+        // of the stream it happened to travel on.
+        final DispatchObserver dispatchObserver = DiscordWebhookService.create(logger, discordConfig);
+
         final ScheduledMessageDispatcherFactory dispatcherFactory =
-                selector -> new MessageDispatcher(messageSender, selector, AudienceFilter.ruleFilter());
+                selector -> new MessageDispatcher(
+                        messageSender, selector, AudienceFilter.ruleFilter(), dispatchObserver
+                );
 
         this.dispatcherService = new MessageDispatcherService(
                 logger,
