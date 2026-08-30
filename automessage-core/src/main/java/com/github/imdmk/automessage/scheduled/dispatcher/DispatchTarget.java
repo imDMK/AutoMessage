@@ -4,8 +4,15 @@ import org.bukkit.entity.Player;
 
 import java.util.Collection;
 import java.util.List;
-import java.util.function.Predicate;
 
+/**
+ * Who an announcement is being sent to.
+ *
+ * <p>
+ * Audience rules are applied by the dispatcher rather than by the target, so a target only has to
+ * answer who is in scope: one player for a triggered message, everyone online for a scheduled one.
+ * </p>
+ */
 public interface DispatchTarget {
 
     Collection<? extends Player> recipients();
@@ -16,12 +23,5 @@ public interface DispatchTarget {
 
     static DispatchTarget players(Collection<? extends Player> players) {
         return new DispatchPlayersTarget(players);
-    }
-
-    static DispatchTarget filtered(
-            Collection<? extends Player> players,
-            Predicate<Player> filter
-    ) {
-        return new DispatchFilteredTarget(players, filter);
     }
 }
