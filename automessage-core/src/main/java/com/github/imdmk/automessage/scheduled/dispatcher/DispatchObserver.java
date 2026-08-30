@@ -1,6 +1,7 @@
 package com.github.imdmk.automessage.scheduled.dispatcher;
 
 import com.github.imdmk.automessage.scheduled.ScheduledMessage;
+import com.github.imdmk.automessage.scheduled.placeholder.MessagePlaceholders;
 
 /**
  * Notified once per announcement, after it has gone out to the players.
@@ -13,10 +14,10 @@ import com.github.imdmk.automessage.scheduled.ScheduledMessage;
 @FunctionalInterface
 public interface DispatchObserver {
 
-    void onDispatched(ScheduledMessage message);
+    void onDispatched(ScheduledMessage message, MessagePlaceholders placeholders);
 
     static DispatchObserver none() {
-        return message -> {
+        return (message, placeholders) -> {
         };
     }
 }

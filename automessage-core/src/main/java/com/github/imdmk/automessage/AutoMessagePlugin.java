@@ -86,7 +86,7 @@ final class AutoMessagePlugin {
 
         // One observer shared by every channel: mirroring is a property of the announcement, not
         // of the stream it happened to travel on.
-        final DispatchObserver dispatchObserver = DiscordWebhookService.create(logger, discordConfig);
+        final DispatchObserver dispatchObserver = DiscordWebhookService.create(server, logger, discordConfig);
 
         final ScheduledMessageDispatcherFactory dispatcherFactory =
                 selector -> new MessageDispatcher(

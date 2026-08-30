@@ -3,6 +3,8 @@ package com.github.imdmk.automessage.platform.discord;
 import com.github.imdmk.automessage.platform.logger.PluginLogger;
 import com.github.imdmk.automessage.scheduled.ScheduledMessage;
 import com.github.imdmk.automessage.scheduled.dispatcher.DispatchObserver;
+import com.github.imdmk.automessage.scheduled.placeholder.MessagePlaceholders;
+import org.bukkit.Server;
 
 import java.net.URI;
 import java.util.Optional;
@@ -17,16 +19,16 @@ import java.util.Optional;
  */
 public final class DiscordWebhookService implements DispatchObserver {
 
-    private final PluginLogger logger;
+    private final Server server;
     private final DiscordWebhookConfig config;
     private final DiscordWebhookClient client;
 
     private DiscordWebhookService(
-            PluginLogger logger,
+            Server server,
             DiscordWebhookConfig config,
             DiscordWebhookClient client
     ) {
-        this.logger = logger;
+        this.server = server;
         this.config = config;
         this.client = client;
     }
@@ -35,7 +37,7 @@ public final class DiscordWebhookService implements DispatchObserver {
      * @return a service that posts, or {@link DispatchObserver#none()} when Discord mirroring is
      *         switched off or configured with a URL that is not a Discord webhook
      */
-    public static DispatchObserver create(PluginLogger logger, DiscordWebhookConfig config) {
+    public static DispatchObserver create(Server server, PluginLogger logger, DiscordWebhookConfig config) {
         if (!config.enabled) {
             return DispatchObserver.none();
         }
@@ -51,12 +53,15 @@ public final class DiscordWebhookService implements DispatchObserver {
         }
 
         logger.info("Discord mirroring is enabled.");
-        return new DiscordWebhookService(logger, config, new DiscordWebhookClient(logger, endpoint.get()));
+        return new DiscordWebhookService(server, config, new DiscordWebhookClient(logger, endpoint.get()));
     }
 
     @Override
-    public void onDispatched(ScheduledMessage message) {
-        final String content = DiscordMessageRenderer.render(message);
+    public void onDispatched(ScheduledMessage message, MessagePlaceholders placeholders) {
+        final String content = DiscordMessageRenderer.render(
+                message,
+                placeholders.resolveWithoutViewer(server)
+        );
 
         // A message made only of a title or a sound has nothing to show in a text channel.
         if (content.isBlank()) {

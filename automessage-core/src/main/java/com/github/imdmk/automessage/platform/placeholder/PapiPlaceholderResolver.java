@@ -20,6 +20,18 @@ final class PapiPlaceholderResolver implements ExternalPlaceholderResolver {
     }
 
     @Override
+    public String resolveWithoutViewer(String token) {
+        // PlaceholderAPI accepts a null player and server-scoped expansions answer anyway, but
+        // third-party expansions are written by other people and a player-scoped one may well
+        // dereference it. A broken expansion must not take an announcement down with it.
+        try {
+            return PlaceholderAPI.setPlaceholders((Player) null, token);
+        } catch (RuntimeException e) {
+            return token;
+        }
+    }
+
+    @Override
     public boolean available() {
         return true;
     }
