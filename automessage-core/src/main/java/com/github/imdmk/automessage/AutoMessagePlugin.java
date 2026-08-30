@@ -17,6 +17,8 @@ import com.github.imdmk.automessage.platform.litecommands.handler.NoticeResultHa
 import com.github.imdmk.automessage.platform.litecommands.handler.UnknownScheduledMessageHandler;
 import com.github.imdmk.automessage.platform.logger.BukkitPluginLogger;
 import com.github.imdmk.automessage.platform.logger.PluginLogger;
+import com.github.imdmk.automessage.platform.discord.DiscordWebhookConfig;
+import com.github.imdmk.automessage.platform.discord.DiscordWebhookService;
 import com.github.imdmk.automessage.platform.metrics.MetricsService;
 import com.github.imdmk.automessage.platform.scheduler.BukkitTaskScheduler;
 import com.github.imdmk.automessage.platform.scheduler.TaskScheduler;
@@ -66,11 +68,14 @@ final class AutoMessagePlugin {
         final ScheduledMessageRepository messageRepository = ScheduledMessageRepository.config(scheduledMessagesConfig);
         final ScheduledMessageSender messageSender = new ScheduledMessageSender(messageService);
 
+        final DiscordWebhookConfig discordConfig = configManager.create(DiscordWebhookConfig.class);
+
         final MessageDispatcher messageDispatcher = new MessageDispatcher(
                 messageSender,
                 new MessageSelectorProvider(() -> dispatcherConfig.selector),
                 AudienceFilter.ruleFilter(),
-                messageRepository
+                messageRepository,
+                DiscordWebhookService.create(logger, discordConfig)
         );
 
         this.dispatcherService = new MessageDispatcherService(

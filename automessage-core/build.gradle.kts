@@ -9,6 +9,9 @@ dependencies {
     implementation("net.kyori:adventure-platform-bukkit:${Versions.KYORI_PLATFORM_BUKKIT}")
     implementation("net.kyori:adventure-text-minimessage:${Versions.KYORI_ADVENTURE}")
 
+    // Flattens a rendered component to the words a Discord reader actually sees.
+    implementation("net.kyori:adventure-text-serializer-plain:${Versions.KYORI_ADVENTURE}")
+
     implementation("com.eternalcode:multification-bukkit:${Versions.MULTIFICATION}")
     implementation("com.eternalcode:multification-okaeri:${Versions.MULTIFICATION}")
 

@@ -16,17 +16,20 @@ public final class MessageDispatcher {
     private final Supplier<MessageSelector> selector;
     private final AudienceFilter filter;
     private final ScheduledMessageRepository repository;
+    private final DispatchObserver observer;
 
     public MessageDispatcher(
             ScheduledMessageSender sender,
             Supplier<MessageSelector> selector,
             AudienceFilter filter,
-            ScheduledMessageRepository repository
+            ScheduledMessageRepository repository,
+            DispatchObserver observer
     ) {
         this.sender = sender;
         this.selector = selector;
         this.filter = filter;
         this.repository = repository;
+        this.observer = observer;
     }
 
     public void dispatchNext(DispatchTarget target) {
@@ -56,5 +59,9 @@ public final class MessageDispatcher {
                 sender.sendAsync(player, message);
             }
         }
+
+        // Once per announcement, not once per recipient - and after the players have been served,
+        // so nothing an observer does can delay what happens on the server.
+        observer.onDispatched(message);
     }
 }
