@@ -47,7 +47,9 @@ import java.time.temporal.ChronoUnit;
         "#    Strategy determining which scheduled message is selected next.",
         "#    Supported types:",
         "#       SEQUENTIAL – cycle through messages in order",
-        "#       RANDOM     – choose a random message each time",
+        "#       SHUFFLE    – random order, but every message is shown once before any repeats",
+        "#       RANDOM     – choose a random message each time (may repeat back to back)",
+        "#       WEIGHTED   – random, biased by each message's 'weight' field",
         "#",
         "# Notes:",
         "#  • This file works together with scheduledMessages.yml.",
@@ -95,7 +97,16 @@ public final class MessageDispatcherConfig extends ConfigSection {
     @Comment({
             "#",
             "# Strategy used to select which scheduled message will be dispatched next.",
-            "# Available options: SEQUENTIAL, RANDOM",
+            "# Available options: SEQUENTIAL, SHUFFLE, RANDOM, WEIGHTED",
+            "#",
+            "#   SEQUENTIAL – cycle through the messages in the order they are written.",
+            "#   SHUFFLE    – random order, but every message is shown once before any of",
+            "#                them repeats. Usually what you want instead of RANDOM.",
+            "#   RANDOM     – draw independently every time. The same message can come up",
+            "#                twice or three times in a row.",
+            "#   WEIGHTED   – draw at random, biased by the 'weight' of each message in",
+            "#                scheduledMessages.yml. A message of weight 5 appears five",
+            "#                times as often as one of weight 1.",
             "#"
     })
     public MessageSelectorType selector = MessageSelectorType.SEQUENTIAL;
