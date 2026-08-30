@@ -37,6 +37,7 @@ import org.bukkit.plugin.Plugin;
 final class AutoMessagePlugin {
 
     private static final String PLUGIN_PREFIX = "AutoMessage";
+    private static final String DONATE_URL = "https://paypal.me/dominiksuliga";
 
     private final PluginLogger logger;
     private final ConfigManager configManager;
@@ -103,6 +104,7 @@ final class AutoMessagePlugin {
         this.metricsService = new MetricsService(plugin);
 
         logger.info("%s plugin enabled.", PLUGIN_PREFIX);
+        logger.info("Enjoying %s? You can support its development at %s - thank you!", PLUGIN_PREFIX, DONATE_URL);
     }
 
     void disable() {

@@ -15,6 +15,15 @@ import org.bukkit.scheduler.BukkitTask;
  * cannot take effect while the task is running. Reloading the configuration therefore cancels
  * the current task and schedules a new one with the freshly read timing.
  * </p>
+ *
+ * <p>
+ * The tick itself runs on the main thread: it reads the online player collection and evaluates
+ * the audience rules, and neither is safe to touch asynchronously — the player view is backed by
+ * a list the server mutates on join and quit, and permission lookups race with attachment
+ * changes. Only the delivery of each notice is handed off the main thread, by
+ * {@link com.github.imdmk.automessage.scheduled.ScheduledMessageSender#sendAsync}, so the tick
+ * costs one pass over the online players and nothing else.
+ * </p>
  */
 public final class MessageDispatcherService implements ConfigReloadListener {
 
@@ -53,7 +62,7 @@ public final class MessageDispatcherService implements ConfigReloadListener {
                 timing
         );
 
-        this.task = taskScheduler.runTimerAsync(dispatcherTask);
+        this.task = taskScheduler.runTimerSync(dispatcherTask);
 
         logger.info(
                 "Scheduled automatic messages every %s, first one in %s.",

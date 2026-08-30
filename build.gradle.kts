@@ -2,7 +2,7 @@ group = "com.github.imdmk.automessage"
 version = "2.0.1"
 
 subprojects {
-    version = "2.0.1"
+    version = rootProject.version
     apply(plugin = "java-library")
 
     repositories {
@@ -14,7 +14,7 @@ subprojects {
     }
 
     extensions.configure<JavaPluginExtension> {
-        toolchain.languageVersion.set(JavaLanguageVersion.of(21))
+        toolchain.languageVersion.set(JavaLanguageVersion.of(Versions.JAVA_TOOLCHAIN))
         withJavadocJar()
         withSourcesJar()
     }
@@ -33,6 +33,6 @@ subprojects {
     tasks.withType<JavaCompile>().configureEach {
         options.compilerArgs.addAll(listOf("-Xlint:deprecation", "-Xlint:unchecked", "-parameters"))
         options.encoding = "UTF-8"
-        options.release.set(21)
+        options.release.set(Versions.JAVA_RELEASE)
     }
 }

@@ -1,22 +1,31 @@
+plugins {
+    `automessage-spigot-compat`
+    `automessage-adventure-compat`
+}
+
 dependencies {
-    compileOnlyApi("org.spigotmc:spigot-api:26.2-R0.1-SNAPSHOT")
+    compileOnlyApi("org.spigotmc:spigot-api:${Versions.SPIGOT_API}")
 
-    implementation("net.kyori:adventure-platform-bukkit:4.4.1")
-    implementation("net.kyori:adventure-text-minimessage:5.2.0")
+    implementation("net.kyori:adventure-platform-bukkit:${Versions.KYORI_PLATFORM_BUKKIT}")
+    implementation("net.kyori:adventure-text-minimessage:${Versions.KYORI_ADVENTURE}")
 
-    implementation("com.eternalcode:multification-bukkit:1.2.4")
-    implementation("com.eternalcode:multification-okaeri:1.2.4")
+    implementation("com.eternalcode:multification-bukkit:${Versions.MULTIFICATION}")
+    implementation("com.eternalcode:multification-okaeri:${Versions.MULTIFICATION}")
 
-    api("eu.okaeri:okaeri-configs-yaml-snakeyaml:5.0.13")
-    implementation("eu.okaeri:okaeri-configs-serdes-commons:5.0.13")
+    api("eu.okaeri:okaeri-configs-yaml-snakeyaml:${Versions.OKAERI_CONFIGS}")
+    implementation("eu.okaeri:okaeri-configs-serdes-commons:${Versions.OKAERI_CONFIGS}")
 
-    implementation("org.bstats:bstats-bukkit:3.2.1")
-    implementation("dev.rollczi:litecommands-bukkit:3.11.0")
-    implementation("dev.rollczi:litecommands-annotations:3.11.0")
+    implementation("org.bstats:bstats-bukkit:${Versions.BSTATS_BUKKIT}")
+    implementation("dev.rollczi:litecommands-bukkit:${Versions.LITECOMMANDS}")
+    implementation("dev.rollczi:litecommands-annotations:${Versions.LITECOMMANDS}")
 
-    testImplementation("org.junit.jupiter:junit-jupiter:6.1.3")
-    testImplementation("org.assertj:assertj-core:3.27.7")
-    testImplementation("org.mockito:mockito-core:5.23.0")
-    testImplementation("org.mockito:mockito-junit-jupiter:5.23.0")
+    // compileOnlyApi keeps spigot-api out of the shaded jar, but it also keeps it off the test
+    // runtime classpath - and tests that touch Bukkit types need it there to load at all.
+    testImplementation("org.spigotmc:spigot-api:${Versions.SPIGOT_API}")
+
+    testImplementation("org.junit.jupiter:junit-jupiter:${Versions.JUNIT}")
+    testImplementation("org.assertj:assertj-core:${Versions.ASSERTJ}")
+    testImplementation("org.mockito:mockito-core:${Versions.MOCKITO}")
+    testImplementation("org.mockito:mockito-junit-jupiter:${Versions.MOCKITO}")
     testRuntimeOnly("org.junit.platform:junit-platform-launcher")
 }
