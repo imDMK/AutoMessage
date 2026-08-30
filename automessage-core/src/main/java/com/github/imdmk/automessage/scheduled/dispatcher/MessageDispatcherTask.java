@@ -1,34 +1,50 @@
 package com.github.imdmk.automessage.scheduled.dispatcher;
 
 import com.github.imdmk.automessage.platform.scheduler.PluginTask;
+import com.github.imdmk.automessage.scheduled.ScheduledMessage;
+import com.github.imdmk.automessage.scheduled.ScheduledMessageRepository;
+import com.github.imdmk.automessage.scheduled.channel.AnnouncementChannel;
 import org.bukkit.Server;
 import org.bukkit.entity.Player;
 
 import java.time.Duration;
 import java.util.Collection;
+import java.util.List;
+import java.util.function.BooleanSupplier;
 
+/**
+ * The repeating tick of one announcement channel.
+ */
 public final class MessageDispatcherTask implements PluginTask {
 
     private final Server server;
-    private final MessageDispatcherConfig dispatcherConfig;
+    private final BooleanSupplier masterSwitch;
+    private final AnnouncementChannel channel;
+    private final ScheduledMessageRepository repository;
     private final MessageDispatcher messageDispatcher;
     private final DispatchTiming timing;
 
     public MessageDispatcherTask(
             Server server,
-            MessageDispatcherConfig dispatcherConfig,
+            BooleanSupplier masterSwitch,
+            AnnouncementChannel channel,
+            ScheduledMessageRepository repository,
             MessageDispatcher messageDispatcher,
             DispatchTiming timing
     ) {
         this.server = server;
-        this.dispatcherConfig = dispatcherConfig;
+        this.masterSwitch = masterSwitch;
+        this.channel = channel;
+        this.repository = repository;
         this.messageDispatcher = messageDispatcher;
         this.timing = timing;
     }
 
     @Override
     public void run() {
-        if (!dispatcherConfig.enabled) {
+        // The master switch is read each tick rather than at schedule time, so /automessage
+        // disable takes effect without tearing down and rebuilding every channel's task.
+        if (!masterSwitch.getAsBoolean()) {
             return;
         }
 
@@ -37,8 +53,16 @@ public final class MessageDispatcherTask implements PluginTask {
             return;
         }
 
-        final DispatchTarget target = DispatchTarget.players(onlinePlayers);
-        messageDispatcher.dispatchNext(target);
+        final List<ScheduledMessage> messages = repository.findByChannel(channel);
+        if (messages.isEmpty()) {
+            return;
+        }
+
+        messageDispatcher.dispatchNext(messages, DispatchTarget.players(onlinePlayers));
+    }
+
+    public AnnouncementChannel channel() {
+        return channel;
     }
 
     @Override

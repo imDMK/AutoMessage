@@ -2,6 +2,7 @@ package com.github.imdmk.automessage.scheduled.selector;
 
 import com.eternalcode.multification.notice.Notice;
 import com.github.imdmk.automessage.scheduled.ScheduledMessage;
+import com.github.imdmk.automessage.scheduled.ScheduledMessageBuilder;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 
@@ -16,7 +17,13 @@ class WeightedMessageSelectorTest {
     private final MessageSelector selector = MessageSelectorFactory.create(MessageSelectorType.WEIGHTED);
 
     private static ScheduledMessage message(String name, int weight) {
-        return new ScheduledMessage(name, List.of(Notice.chat("x")), List.of(), weight);
+        // Built rather than constructed directly: ScheduledMessage keeps gaining optional
+        // fields, and the builder is the one call site that does not break each time.
+        return ScheduledMessageBuilder.create()
+                .name(name)
+                .addNotice(Notice.chat("x"))
+                .weight(weight)
+                .build();
     }
 
     private Map<String, Integer> draw(List<ScheduledMessage> source, int rounds) {
