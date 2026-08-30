@@ -73,7 +73,10 @@ public final class MessageDispatcherService implements ConfigReloadListener {
             return;
         }
 
-        for (final AnnouncementChannel channel : dispatcherConfig.channels()) {
+        final List<AnnouncementChannel> channels = dispatcherConfig.channels();
+        forgetSelectorsOfRemovedChannels(channels);
+
+        for (final AnnouncementChannel channel : channels) {
             if (!channel.enabled()) {
                 logger.info("Channel '%s' is disabled and was not scheduled.", channel.name());
                 continue;
@@ -83,6 +86,22 @@ public final class MessageDispatcherService implements ConfigReloadListener {
         }
 
         warnAboutOrphanedMessages();
+    }
+
+    /**
+     * Drops the rotation state of channels that no longer exist.
+     *
+     * <p>
+     * Selectors are deliberately kept across reloads so a channel does not restart its rotation
+     * every time the configuration is read. A channel that has been renamed or deleted, however,
+     * is never asked for again - and a SHUFFLE selector holds a deck of the messages it was
+     * dealing, so leaving the entry behind pins those objects for the life of the server.
+     * </p>
+     */
+    private void forgetSelectorsOfRemovedChannels(List<AnnouncementChannel> channels) {
+        selectorsByChannel.keySet().removeIf(
+                name -> channels.stream().noneMatch(channel -> channel.matches(name))
+        );
     }
 
     /**

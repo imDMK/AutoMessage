@@ -1,5 +1,6 @@
 package com.github.imdmk.automessage.scheduled;
 
+import com.github.imdmk.automessage.config.ConfigReloadService;
 import com.github.imdmk.automessage.scheduled.channel.AnnouncementChannel;
 import com.github.imdmk.automessage.scheduled.trigger.MessageTrigger;
 import org.jetbrains.annotations.Unmodifiable;
@@ -62,10 +63,24 @@ public interface ScheduledMessageRepository {
     /**
      * Creates a repository backed by the given configuration file.
      *
-     * @param config configuration holding the scheduled messages
+     * <p>
+     * The repository derives its views once and keeps them until the configuration changes, so it
+     * registers itself with the reload service rather than leaving the caller to remember. Passing
+     * the service in - instead of testing the returned interface for a listener - keeps that
+     * requirement visible in the signature.
+     * </p>
+     *
+     * @param config        configuration holding the scheduled messages
+     * @param reloadService service notifying the repository that its views are stale
      * @return repository reading straight from the configuration
      */
-    static ScheduledMessageRepository config(ScheduledMessagesConfig config) {
-        return new ConfigScheduledMessageRepository(config);
+    static ScheduledMessageRepository config(
+            ScheduledMessagesConfig config,
+            ConfigReloadService reloadService
+    ) {
+        final ConfigScheduledMessageRepository repository = new ConfigScheduledMessageRepository(config);
+        reloadService.register(repository);
+
+        return repository;
     }
 }
