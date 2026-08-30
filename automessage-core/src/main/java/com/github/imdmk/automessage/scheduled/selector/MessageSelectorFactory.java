@@ -9,7 +9,9 @@ public final class MessageSelectorFactory {
     public static MessageSelector create(MessageSelectorType type) {
         return switch (type) {
             case RANDOM -> new RandomMessageSelector();
+            case SHUFFLE -> new ShuffleMessageSelector();
             case SEQUENTIAL -> new SequentialMessageSelector();
+            case WEIGHTED -> new WeightedMessageSelector();
         };
     }
 }

@@ -9,6 +9,7 @@ import java.util.List;
 public final class ScheduledMessageBuilder {
 
     private String name;
+    private int weight = ScheduledMessage.DEFAULT_WEIGHT;
 
     private final List<Notice> notices = new ArrayList<>();
     private final List<AudienceRule> rules = new ArrayList<>();
@@ -19,6 +20,11 @@ public final class ScheduledMessageBuilder {
 
     public ScheduledMessageBuilder name(String name) {
         this.name = name;
+        return this;
+    }
+
+    public ScheduledMessageBuilder weight(int weight) {
+        this.weight = weight;
         return this;
     }
 
@@ -54,7 +60,8 @@ public final class ScheduledMessageBuilder {
         return new ScheduledMessage(
                 this.name,
                 this.notices,
-                this.rules
+                this.rules,
+                this.weight
         );
     }
 }
