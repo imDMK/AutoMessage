@@ -3,6 +3,7 @@ package com.github.imdmk.automessage.scheduled;
 import com.eternalcode.multification.notice.Notice;
 import com.github.imdmk.automessage.scheduled.audience.rule.AudienceRule;
 import com.github.imdmk.automessage.scheduled.channel.AnnouncementChannel;
+import com.github.imdmk.automessage.scheduled.locale.MessageTranslation;
 import com.github.imdmk.automessage.scheduled.trigger.MessageTrigger;
 import eu.okaeri.configs.schema.GenericsDeclaration;
 import eu.okaeri.configs.serdes.DeserializationData;
@@ -38,6 +39,10 @@ public final class ScheduledMessageSerializer implements ObjectSerializer<Schedu
         if (notice.trigger() != null) {
             data.add("trigger", notice.trigger(), MessageTrigger.class);
         }
+
+        if (!notice.translations().isEmpty()) {
+            data.addCollection("translations", notice.translations(), MessageTranslation.class);
+        }
     }
 
     @Override
@@ -60,13 +65,18 @@ public final class ScheduledMessageSerializer implements ObjectSerializer<Schedu
                 ? data.get("trigger", MessageTrigger.class)
                 : null;
 
+        final List<MessageTranslation> translations = data.containsKey("translations")
+                ? data.getAsList("translations", MessageTranslation.class)
+                : List.of();
+
         return new ScheduledMessage(
                 name,
                 notices,
                 rules,
                 weight,
                 channel,
-                trigger
+                trigger,
+                translations
         );
     }
 }

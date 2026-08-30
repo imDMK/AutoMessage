@@ -2,6 +2,7 @@ package com.github.imdmk.automessage.scheduled.placeholder;
 
 import com.eternalcode.multification.notice.Notice;
 import com.github.imdmk.automessage.scheduled.ScheduledMessage;
+import com.github.imdmk.automessage.scheduled.ScheduledMessageBuilder;
 import net.kyori.adventure.bossbar.BossBar;
 import net.kyori.adventure.key.Key;
 import net.kyori.adventure.sound.Sound;
@@ -66,6 +67,34 @@ class PlaceholderScannerTest {
 
         assertThat(PlaceholderScanner.externalTokensIn(message))
                 .containsExactlyInAnyOrder("%vault_eco_balance%", "%server_tps%");
+    }
+
+    @Test
+    @DisplayName("finds placeholders that appear only in a translation")
+    void scansTranslationsToo() {
+        // A translated message is what a player of that language actually receives, so a
+        // placeholder living only there has to be resolved just the same.
+        ScheduledMessage message = ScheduledMessageBuilder.create()
+                .name("greeting")
+                .addNotice(Notice.chat("Welcome!"))
+                .addTranslation("pl", Notice.chat("Witaj {PLAYER}, gracz nr {ONLINE}"))
+                .build();
+
+        assertThat(PlaceholderScanner.builtinsIn(message))
+                .containsExactlyInAnyOrder(BuiltinPlaceholder.PLAYER, BuiltinPlaceholder.ONLINE);
+    }
+
+    @Test
+    @DisplayName("finds PlaceholderAPI tokens that appear only in a translation")
+    void scansTranslationsForExternalTokens() {
+        ScheduledMessage message = ScheduledMessageBuilder.create()
+                .name("balance")
+                .addNotice(Notice.chat("Your balance"))
+                .addTranslation("pl", Notice.chat("Twoje saldo: %vault_eco_balance%"))
+                .build();
+
+        assertThat(PlaceholderScanner.externalTokensIn(message))
+                .containsExactly("%vault_eco_balance%");
     }
 
     @Test

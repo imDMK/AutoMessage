@@ -4,6 +4,7 @@ import com.eternalcode.multification.notice.Notice;
 import com.eternalcode.multification.notice.NoticePart;
 import com.eternalcode.multification.notice.resolver.text.TextContent;
 import com.github.imdmk.automessage.scheduled.ScheduledMessage;
+import com.github.imdmk.automessage.scheduled.locale.MessageTranslation;
 
 import java.util.LinkedHashSet;
 import java.util.List;
@@ -74,14 +75,25 @@ public final class PlaceholderScanner {
     private static List<String> textsOf(ScheduledMessage message) {
         final List<String> texts = new java.util.ArrayList<>();
 
-        for (final Notice notice : message.notices()) {
+        collect(message.notices(), texts);
+
+        // A translated message is what a player of that language actually receives, so a
+        // placeholder written only in a translation has to be found here too - it would
+        // otherwise reach that player as the literal token.
+        for (final MessageTranslation translation : message.translations()) {
+            collect(translation.notices(), texts);
+        }
+
+        return texts;
+    }
+
+    private static void collect(List<Notice> notices, List<String> texts) {
+        for (final Notice notice : notices) {
             for (final NoticePart<?> part : notice.parts()) {
                 if (part.content() instanceof TextContent textContent) {
                     texts.addAll(textContent.contents());
                 }
             }
         }
-
-        return texts;
     }
 }
