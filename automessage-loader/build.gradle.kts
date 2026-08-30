@@ -5,6 +5,7 @@ plugins {
 
     id("net.minecrell.plugin-yml.bukkit") version "0.6.0"
     id("com.gradleup.shadow") version "9.6.1"
+    id("xyz.jpenilla.run-paper") version "3.1.0"
 }
 
 dependencies {
@@ -59,4 +60,10 @@ bukkit {
     author = "imDMK (dominiks8318@gmail.com)"
     description = "High-performance plugin for fully customizable automatic server-wide broadcasts."
     website = "https://github.com/imDMK/AutoMessage"
+}
+
+tasks {
+    runServer {
+        minecraftVersion("26.2")
+    }
 }
