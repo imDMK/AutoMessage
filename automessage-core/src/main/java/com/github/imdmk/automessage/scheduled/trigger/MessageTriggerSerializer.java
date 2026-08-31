@@ -33,16 +33,38 @@ public final class MessageTriggerSerializer implements ObjectSerializer<MessageT
 
     @Override
     public MessageTrigger deserialize(DeserializationData data, @NotNull GenericsDeclaration generics) {
+        // Both required fields are checked by hand. Left to okaeri they surface as a
+        // NullPointerException naming its own internals, which tells an administrator editing
+        // YAML nothing about which line is wrong.
+        if (!data.containsKey("type")) {
+            throw new IllegalArgumentException(
+                    "a trigger needs a 'type': one of " + java.util.Arrays.toString(MessageTrigger.Type.values())
+            );
+        }
+
         final MessageTrigger.Type type = data.get("type", MessageTrigger.Type.class);
 
-        final Duration delay = data.containsKey("delay")
+        return switch (type) {
+            case JOIN -> new JoinTrigger(delayOf(data), false);
+            case FIRST_JOIN -> new JoinTrigger(delayOf(data), true);
+            case PLAYER_COUNT -> new PlayerCountTrigger(thresholdOf(data));
+        };
+    }
+
+    /** Only the join triggers carry a delay; on any other type the key is not read. */
+    private static Duration delayOf(DeserializationData data) {
+        return data.containsKey("delay")
                 ? DurationParser.parse(data.get("delay", String.class))
                 : Duration.ZERO;
+    }
 
-        return switch (type) {
-            case JOIN -> new JoinTrigger(delay, false);
-            case FIRST_JOIN -> new JoinTrigger(delay, true);
-            case PLAYER_COUNT -> new PlayerCountTrigger(data.get("threshold", Integer.class));
-        };
+    private static int thresholdOf(DeserializationData data) {
+        if (!data.containsKey("threshold")) {
+            throw new IllegalArgumentException(
+                    "a PLAYER_COUNT trigger needs a 'threshold': the online count that fires it"
+            );
+        }
+
+        return data.get("threshold", Integer.class);
     }
 }
