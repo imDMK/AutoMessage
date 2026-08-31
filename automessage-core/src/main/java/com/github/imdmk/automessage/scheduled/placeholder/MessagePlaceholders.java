@@ -1,12 +1,13 @@
 package com.github.imdmk.automessage.scheduled.placeholder;
 
 import com.github.imdmk.automessage.platform.placeholder.ExternalPlaceholderResolver;
-import com.github.imdmk.automessage.scheduled.ScheduledMessage;
+import com.eternalcode.multification.notice.Notice;
 import org.bukkit.Server;
 import org.bukkit.entity.Player;
 import org.jetbrains.annotations.Unmodifiable;
 
 import java.util.LinkedHashMap;
+import java.util.List;
 import java.util.Map;
 import java.util.Set;
 
@@ -46,12 +47,12 @@ public final class MessagePlaceholders {
     }
 
     public static MessagePlaceholders scan(
-            ScheduledMessage message,
+            List<List<Notice>> translations,
             ExternalPlaceholderResolver externalResolver
     ) {
-        final Set<BuiltinPlaceholder> builtins = PlaceholderScanner.builtinsIn(message);
+        final Set<BuiltinPlaceholder> builtins = PlaceholderScanner.builtinsIn(translations);
         final Set<String> externalTokens = externalResolver.available()
-                ? PlaceholderScanner.externalTokensIn(message)
+                ? PlaceholderScanner.externalTokensIn(translations)
                 : Set.of();
 
         if (builtins.isEmpty() && externalTokens.isEmpty()) {

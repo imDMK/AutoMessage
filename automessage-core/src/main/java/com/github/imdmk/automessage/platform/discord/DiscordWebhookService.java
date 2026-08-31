@@ -1,5 +1,7 @@
 package com.github.imdmk.automessage.platform.discord;
 
+import com.eternalcode.multification.notice.Notice;
+import com.github.imdmk.automessage.language.LanguageRegistry;
 import com.github.imdmk.automessage.platform.logger.PluginLogger;
 import com.github.imdmk.automessage.scheduled.ScheduledMessage;
 import com.github.imdmk.automessage.scheduled.dispatcher.DispatchObserver;
@@ -7,6 +9,7 @@ import com.github.imdmk.automessage.scheduled.placeholder.MessagePlaceholders;
 import org.bukkit.Server;
 
 import java.net.URI;
+import java.util.List;
 import java.util.Optional;
 
 /**
@@ -20,15 +23,18 @@ import java.util.Optional;
 public final class DiscordWebhookService implements DispatchObserver {
 
     private final Server server;
+    private final LanguageRegistry languages;
     private final DiscordWebhookConfig config;
     private final DiscordWebhookClient client;
 
     private DiscordWebhookService(
             Server server,
+            LanguageRegistry languages,
             DiscordWebhookConfig config,
             DiscordWebhookClient client
     ) {
         this.server = server;
+        this.languages = languages;
         this.config = config;
         this.client = client;
     }
@@ -37,7 +43,12 @@ public final class DiscordWebhookService implements DispatchObserver {
      * @return a service that posts, or {@link DispatchObserver#none()} when Discord mirroring is
      *         switched off or configured with a URL that is not a Discord webhook
      */
-    public static DispatchObserver create(Server server, PluginLogger logger, DiscordWebhookConfig config) {
+    public static DispatchObserver create(
+            Server server,
+            LanguageRegistry languages,
+            PluginLogger logger,
+            DiscordWebhookConfig config
+    ) {
         if (!config.enabled) {
             return DispatchObserver.none();
         }
@@ -53,13 +64,19 @@ public final class DiscordWebhookService implements DispatchObserver {
         }
 
         logger.info("Discord mirroring is enabled.");
-        return new DiscordWebhookService(server, config, new DiscordWebhookClient(logger, endpoint.get()));
+        return new DiscordWebhookService(server, languages, config, new DiscordWebhookClient(logger, endpoint.get()));
     }
 
     @Override
     public void onDispatched(ScheduledMessage message, MessagePlaceholders placeholders) {
+        final List<Notice> notices = languages.fallback().announcement(message.name());
+
+        if (notices == null) {
+            return;
+        }
+
         final String content = DiscordMessageRenderer.render(
-                message,
+                notices,
                 placeholders.resolveWithoutViewer(server)
         );
 

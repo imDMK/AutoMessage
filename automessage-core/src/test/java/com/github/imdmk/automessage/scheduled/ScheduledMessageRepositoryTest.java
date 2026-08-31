@@ -1,6 +1,5 @@
 package com.github.imdmk.automessage.scheduled;
 
-import com.eternalcode.multification.notice.Notice;
 import com.github.imdmk.automessage.config.ConfigReloadService;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.DisplayName;
@@ -20,7 +19,7 @@ class ScheduledMessageRepositoryTest {
     private ScheduledMessageRepository repository;
 
     private static ScheduledMessage message(String name) {
-        return new ScheduledMessage(name, List.of(Notice.chat("x")), List.of());
+        return new ScheduledMessage(name, List.of());
     }
 
     @BeforeEach

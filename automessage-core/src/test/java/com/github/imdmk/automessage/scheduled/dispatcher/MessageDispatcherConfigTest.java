@@ -2,24 +2,23 @@ package com.github.imdmk.automessage.scheduled.dispatcher;
 
 import com.github.imdmk.automessage.config.ConfigManager;
 import com.github.imdmk.automessage.platform.logger.PluginLogger;
+import com.github.imdmk.automessage.platform.time.DurationFormatter;
+import com.github.imdmk.automessage.scheduled.channel.AnnouncementChannel;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.io.TempDir;
 
-import java.io.File;
 import java.io.IOException;
 import java.nio.file.Files;
 import java.nio.file.Path;
-import com.github.imdmk.automessage.platform.time.DurationFormatter;
-
 import java.time.Duration;
+import java.util.List;
 
-import static org.junit.jupiter.api.Assertions.assertEquals;
-import static org.junit.jupiter.api.Assertions.assertTrue;
+import static org.assertj.core.api.Assertions.assertThat;
 import static org.mockito.Mockito.mock;
 
 /**
- * Guards the meaning of the time values in {@code messagesDispatcher.yml}.
+ * Guards the shape and the time values of {@code config.yml}.
  *
  * @see <a href="https://github.com/imDMK/AutoMessage/issues/101">GH-101</a>
  */
@@ -35,105 +34,96 @@ class MessageDispatcherConfigTest {
     }
 
     private void write(String content) throws IOException {
-        Files.writeString(dataFolder.resolve("messagesDispatcher.yml"), content);
+        Files.writeString(dataFolder.resolve("config.yml"), content);
     }
 
     private String read() throws IOException {
-        return Files.readString(dataFolder.resolve("messagesDispatcher.yml"));
+        return Files.readString(dataFolder.resolve("config.yml"));
     }
 
     @Test
-    @DisplayName("Should write durations with an explicit unit so the file is self-explanatory")
-    void shouldWriteDurationsWithUnit() throws IOException {
-        MessageDispatcherConfig config = load();
+    @DisplayName("ships one explicit default channel, with no settings living outside the list")
+    void shipsOneExplicitChannel() {
+        List<AnnouncementChannel> channels = load().channels();
+
+        assertThat(channels).hasSize(1);
+        assertThat(channels.getFirst().isDefault()).isTrue();
+        assertThat(channels.getFirst().enabled()).isTrue();
+    }
+
+    @Test
+    @DisplayName("writes durations with an explicit unit so the file is self-explanatory")
+    void writesDurationsWithUnit() throws IOException {
+        AnnouncementChannel channel = load().channels().getFirst();
 
         String content = read();
 
         // Asserted against the values the config actually defaults to rather than against
         // literals, so tuning a default does not fail a test about formatting.
-        assertTrue(
-                content.contains("period: " + DurationFormatter.format(config.period)),
-                () -> "expected the period written with its unit in:\n" + content
-        );
-        assertTrue(
-                content.contains("initialDelay: " + DurationFormatter.format(config.initialDelay)),
-                () -> "expected the initial delay written with its unit in:\n" + content
-        );
+        assertThat(content).contains("period: " + DurationFormatter.format(channel.period()));
+        assertThat(content).contains("initialDelay: " + DurationFormatter.format(channel.initialDelay()));
     }
 
     @Test
-    @DisplayName("Should ship defaults a production server can leave alone")
-    void shouldShipUsableDefaults() throws IOException {
-        MessageDispatcherConfig config = load();
+    @DisplayName("ships defaults a production server can leave alone")
+    void shipsUsableDefaults() {
+        AnnouncementChannel channel = load().channels().getFirst();
 
         // Anything under a minute between announcements reads as spam to players, and the
         // shipped file is what most servers will run unchanged.
-        assertTrue(
-                config.period.compareTo(Duration.ofMinutes(1)) >= 0,
-                () -> "default period is too aggressive: " + config.period
-        );
-        assertTrue(
-                config.initialDelay.compareTo(Duration.ZERO) > 0,
-                () -> "players should get a moment after a restart before the first announcement"
-        );
+        assertThat(channel.period()).isGreaterThanOrEqualTo(Duration.ofMinutes(1));
+        assertThat(channel.initialDelay()).isGreaterThan(Duration.ZERO);
     }
 
     @Test
-    @DisplayName("Should read a plain number as seconds")
-    void shouldReadPlainNumberAsSeconds() throws IOException {
+    @DisplayName("reads a channel written by hand, including a plain number as seconds")
+    void readsHandWrittenChannels() throws IOException {
         write("""
                 enabled: true
-                period: 10
-                initialDelay: 30
-                selector: SEQUENTIAL
+                fallbackLanguage: en
+                languages: [en]
+                channels:
+                  - name: ads
+                    enabled: true
+                    initialDelay: 30
+                    period: 1m30s
+                    selector: SHUFFLE
                 """);
 
-        MessageDispatcherConfig config = load();
+        List<AnnouncementChannel> channels = load().channels();
 
-        assertEquals(Duration.ofSeconds(10), config.period);
-        assertEquals(Duration.ofSeconds(30), config.initialDelay);
+        assertThat(channels).hasSize(1);
+        assertThat(channels.getFirst().name()).isEqualTo("ads");
+        assertThat(channels.getFirst().initialDelay()).isEqualTo(Duration.ofSeconds(30));
+        assertThat(channels.getFirst().period()).isEqualTo(Duration.ofSeconds(90));
     }
 
     @Test
-    @DisplayName("Should rewrite a unit-less value with its unit on load")
-    void shouldRewritePlainNumberWithUnit() throws IOException {
+    @DisplayName("rewrites a unit-less value with its unit on load")
+    void rewritesPlainNumberWithUnit() throws IOException {
         write("""
                 enabled: true
-                period: 10
-                initialDelay: 30
-                selector: SEQUENTIAL
+                fallbackLanguage: en
+                languages: [en]
+                channels:
+                  - name: default
+                    enabled: true
+                    initialDelay: 30
+                    period: 10
+                    selector: SEQUENTIAL
                 """);
 
         load();
 
-        String content = read();
-
-        assertTrue(content.contains("period: 10s"), () -> "expected 'period: 10s' in:\n" + content);
-        assertTrue(content.contains("initialDelay: 30s"), () -> "expected 'initialDelay: 30s' in:\n" + content);
+        assertThat(read()).contains("period: 10s").contains("initialDelay: 30s");
     }
 
     @Test
-    @DisplayName("Should support every documented time unit")
-    void shouldSupportDocumentedUnits() throws IOException {
-        write("""
-                enabled: true
-                period: 1m30s
-                initialDelay: 500ms
-                selector: RANDOM
-                """);
-
+    @DisplayName("carries the languages a fresh install starts with")
+    void shipsLanguages() {
         MessageDispatcherConfig config = load();
 
-        assertEquals(Duration.ofSeconds(90), config.period);
-        assertEquals(Duration.ofMillis(500), config.initialDelay);
-    }
-
-    @Test
-    @DisplayName("Should be created in the configured data folder")
-    void shouldUseConfiguredFileName() {
-        MessageDispatcherConfig config = load();
-
-        assertEquals("messagesDispatcher.yml", config.getFileName());
-        assertTrue(new File(dataFolder.toFile(), config.getFileName()).isFile());
+        assertThat(config.languages).contains("en", "pl", "de");
+        assertThat(config.fallbackLanguage).isEqualTo("en");
     }
 }

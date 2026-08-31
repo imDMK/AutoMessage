@@ -1,6 +1,5 @@
 package com.github.imdmk.automessage.scheduled.trigger;
 
-import com.eternalcode.multification.notice.Notice;
 import com.github.imdmk.automessage.scheduled.ScheduledMessage;
 import com.github.imdmk.automessage.scheduled.ScheduledMessageBuilder;
 import com.github.imdmk.automessage.config.ConfigReloadService;
@@ -23,7 +22,6 @@ class MessageTriggerTest {
     private static ScheduledMessage message(String name, MessageTrigger trigger) {
         return ScheduledMessageBuilder.create()
                 .name(name)
-                .addNotice(Notice.chat("x"))
                 .trigger(trigger)
                 .build();
     }
