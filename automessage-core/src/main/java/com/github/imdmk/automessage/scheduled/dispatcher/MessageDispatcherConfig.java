@@ -55,11 +55,13 @@ public final class MessageDispatcherConfig extends ConfigSection {
             "# Examples: 500ms, 10s, 5m, 1h, 1m30s",
             "# A plain number is read as seconds, so 'period: 10' means 10 seconds.",
             "#",
-            "# The lowest value the server can schedule is 50ms (one tick).",
+            "# The lowest value the server can schedule is 50ms (one tick), but anything",
+            "# under a minute reads as spam to players. Five minutes is a comfortable",
+            "# starting point; busy servers often go higher still.",
             "#"
     })
     @DurationSpec(fallbackUnit = ChronoUnit.SECONDS, format = DurationFormat.SIMPLIFIED)
-    public Duration period = Duration.ofSeconds(10);
+    public Duration period = Duration.ofMinutes(5);
 
     @Comment({
             "#",
@@ -67,10 +69,13 @@ public final class MessageDispatcherConfig extends ConfigSection {
             "#",
             "# Uses the same time format as 'period', e.g. 10s, 1m, 500ms.",
             "# A plain number is read as seconds. Use 0s to announce immediately.",
+            "#",
+            "# The default gives players a minute to settle in after a restart before",
+            "# the first announcement arrives.",
             "#"
     })
     @DurationSpec(fallbackUnit = ChronoUnit.SECONDS, format = DurationFormat.SIMPLIFIED)
-    public Duration initialDelay = Duration.ofSeconds(10);
+    public Duration initialDelay = Duration.ofMinutes(1);
 
     @Comment({
             "#",
@@ -87,7 +92,7 @@ public final class MessageDispatcherConfig extends ConfigSection {
             "#                times as often as one of weight 1.",
             "#"
     })
-    public MessageSelectorType selector = MessageSelectorType.SEQUENTIAL;
+    public MessageSelectorType selector = MessageSelectorType.SHUFFLE;
 
     @Comment({
             "#",

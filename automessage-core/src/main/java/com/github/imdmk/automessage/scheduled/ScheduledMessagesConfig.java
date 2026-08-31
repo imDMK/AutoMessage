@@ -7,6 +7,7 @@ import com.github.imdmk.automessage.config.ConfigSection;
 import com.github.imdmk.automessage.scheduled.audience.rule.AudienceRule;
 import com.github.imdmk.automessage.scheduled.audience.rule.AudienceRuleSerializer;
 import com.github.imdmk.automessage.scheduled.locale.MessageTranslationSerializer;
+import com.github.imdmk.automessage.scheduled.trigger.MessageTrigger;
 import com.github.imdmk.automessage.scheduled.trigger.MessageTriggerSerializer;
 import eu.okaeri.configs.annotation.Comment;
 import eu.okaeri.configs.annotation.Header;
@@ -137,7 +138,7 @@ public final class ScheduledMessagesConfig extends ConfigSection {
             "#               translations:",
             "#                 - locale: pl",
             "#                   notices:",
-            "#                     - \"<gray>Zaglosuj po nagrody!\"",
+            "#                     - \"<gray>Zagłosuj po nagrody!\"",
             "#",
             "# PLACEHOLDERS - usable in any text above",
             "#",
@@ -169,20 +170,28 @@ public final class ScheduledMessagesConfig extends ConfigSection {
                             Notice.chat("<dark_gray>[<gold>!<dark_gray>] <gray>Enjoying the server? <gold>Vote <gray>for us and claim your reward!"),
                             Notice.sound(Key.key("entity.experience_orb.pickup"), Sound.Source.MASTER, 1.0F, 1.0F)
                     )
+                    .addTranslation("pl",
+                            Notice.chat("<dark_gray>[<gold>!<dark_gray>] <gray>Podoba Ci się serwer? <gold>Zagłosuj <gray>i odbierz nagrodę!"),
+                            Notice.sound(Key.key("entity.experience_orb.pickup"), Sound.Source.MASTER, 1.0F, 1.0F)
+                    )
+                    .addTranslation("de",
+                            Notice.chat("<dark_gray>[<gold>!<dark_gray>] <gray>Gefällt dir der Server? <gold>Stimme <gray>für uns und hol dir deine Belohnung!"),
+                            Notice.sound(Key.key("entity.experience_orb.pickup"), Sound.Source.MASTER, 1.0F, 1.0F)
+                    )
                     .build(),
 
             ScheduledMessageBuilder.create()
                     .name("discord-invite")
-                    .addNotice(Notice.actionbar(
-                            "<dark_gray>[<blue>!<dark_gray>] <gray>Join our Discord: <blue>discord.gg/example"
-                    ))
+                    .addNotice(Notice.actionbar("<dark_gray>[<blue>!<dark_gray>] <gray>Join our Discord: <blue>discord.gg/example"))
+                    .addTranslation("pl", Notice.actionbar("<dark_gray>[<blue>!<dark_gray>] <gray>Dołącz na nasz Discord: <blue>discord.gg/example"))
+                    .addTranslation("de", Notice.actionbar("<dark_gray>[<blue>!<dark_gray>] <gray>Tritt unserem Discord bei: <blue>discord.gg/example"))
                     .build(),
 
             ScheduledMessageBuilder.create()
                     .name("server-status")
-                    .addNotice(Notice.chat(
-                            "<dark_gray>[<green>!<dark_gray>] <gray>There are <green>{ONLINE}<gray>/<green>{MAX_PLAYERS} <gray>players online right now."
-                    ))
+                    .addNotice(Notice.chat("<dark_gray>[<green>!<dark_gray>] <gray>There are <green>{ONLINE}<gray>/<green>{MAX_PLAYERS} <gray>players online right now."))
+                    .addTranslation("pl", Notice.chat("<dark_gray>[<green>!<dark_gray>] <gray>Aktualnie online: <green>{ONLINE}<gray>/<green>{MAX_PLAYERS} <gray>graczy."))
+                    .addTranslation("de", Notice.chat("<dark_gray>[<green>!<dark_gray>] <gray>Aktuell online: <green>{ONLINE}<gray>/<green>{MAX_PLAYERS} <gray>Spieler."))
                     .build(),
 
             ScheduledMessageBuilder.create()
@@ -191,16 +200,24 @@ public final class ScheduledMessagesConfig extends ConfigSection {
                             "<gradient:#ffd700:#ff8c00><bold>EVENT</bold></gradient>",
                             "<gray>Starting at the arena in 5 minutes!"
                     ))
+                    .addTranslation("pl", Notice.title(
+                            "<gradient:#ffd700:#ff8c00><bold>EVENT</bold></gradient>",
+                            "<gray>Start na arenie za 5 minut!"
+                    ))
+                    .addTranslation("de", Notice.title(
+                            "<gradient:#ffd700:#ff8c00><bold>EVENT</bold></gradient>",
+                            "<gray>Start in der Arena in 5 Minuten!"
+                    ))
                     .build(),
 
             ScheduledMessageBuilder.create()
                     .name("restart-warning")
-                    .addNotice(Notice.bossBar(
-                            BossBar.Color.RED,
-                            BossBar.Overlay.PROGRESS,
-                            Duration.ofSeconds(5),
-                            "<red>The server restarts every night at 04:00"
-                    ))
+                    .addNotice(Notice.bossBar(BossBar.Color.RED, BossBar.Overlay.PROGRESS, Duration.ofSeconds(5),
+                            "<red>The server restarts every night at 04:00"))
+                    .addTranslation("pl", Notice.bossBar(BossBar.Color.RED, BossBar.Overlay.PROGRESS, Duration.ofSeconds(5),
+                            "<red>Serwer restartuje się codziennie o 04:00"))
+                    .addTranslation("de", Notice.bossBar(BossBar.Color.RED, BossBar.Overlay.PROGRESS, Duration.ofSeconds(5),
+                            "<red>Der Server startet täglich um 04:00 Uhr neu"))
                     .build(),
 
             ScheduledMessageBuilder.create()
@@ -209,25 +226,42 @@ public final class ScheduledMessagesConfig extends ConfigSection {
                             Notice.chat("<dark_gray>[<light_purple>!<dark_gray>] <gray>Support the server at <light_purple>shop.example.com"),
                             Notice.actionbar("<light_purple>shop.example.com")
                     )
+                    .addTranslation("pl",
+                            Notice.chat("<dark_gray>[<light_purple>!<dark_gray>] <gray>Wesprzyj serwer na <light_purple>shop.example.com"),
+                            Notice.actionbar("<light_purple>shop.example.com")
+                    )
+                    .addTranslation("de",
+                            Notice.chat("<dark_gray>[<light_purple>!<dark_gray>] <gray>Unterstütze den Server auf <light_purple>shop.example.com"),
+                            Notice.actionbar("<light_purple>shop.example.com")
+                    )
                     .build(),
 
             // Only players holding the permission see this one.
             ScheduledMessageBuilder.create()
                     .name("vip-perk-reminder")
-                    .addNotice(Notice.chat(
-                            "<dark_gray>[<aqua>!<dark_gray>] <gray>VIP tip: use <aqua>/kit vip <gray>once every 12 hours."
-                    ))
+                    .addNotice(Notice.chat("<dark_gray>[<aqua>!<dark_gray>] <gray>VIP tip: use <aqua>/kit vip <gray>once every 12 hours."))
+                    .addTranslation("pl", Notice.chat("<dark_gray>[<aqua>!<dark_gray>] <gray>Wskazówka VIP: użyj <aqua>/kit vip <gray>raz na 12 godzin."))
+                    .addTranslation("de", Notice.chat("<dark_gray>[<aqua>!<dark_gray>] <gray>VIP-Tipp: Nutze <aqua>/kit vip <gray>alle 12 Stunden."))
                     .addRule(AudienceRule.permission("rank.vip"))
                     .build(),
 
-            // A GROUP rule matches the permission "group.<name>", which most permission
-            // plugins grant automatically.
+            // Aimed at players who have not been here long. PLAYTIME reads the server's own
+            // statistic, so it works without any other plugin.
             ScheduledMessageBuilder.create()
                     .name("newcomer-tip")
-                    .addNotice(Notice.chat(
-                            "<dark_gray>[<yellow>!<dark_gray>] <gray>New here? Type <yellow>/help <gray>to get started."
-                    ))
-                    .addRule(AudienceRule.group("default"))
+                    .addNotice(Notice.chat("<dark_gray>[<yellow>!<dark_gray>] <gray>New here? Type <yellow>/help <gray>to get started."))
+                    .addTranslation("pl", Notice.chat("<dark_gray>[<yellow>!<dark_gray>] <gray>Nowy? Wpisz <yellow>/help<gray>, aby zacząć."))
+                    .addTranslation("de", Notice.chat("<dark_gray>[<yellow>!<dark_gray>] <gray>Neu hier? Tippe <yellow>/help<gray>, um zu starten."))
+                    .addRule(AudienceRule.playTime(Duration.ZERO, Duration.ofHours(2)))
+                    .build(),
+
+            // Not part of the rotation: this one fires when a player joins for the first time.
+            ScheduledMessageBuilder.create()
+                    .name("first-join-welcome")
+                    .addNotice(Notice.chat("<dark_gray>[<green>!<dark_gray>] <gray>Welcome to the server, <green>{PLAYER}<gray>! You are player number <green>{ONLINE}<gray> online."))
+                    .addTranslation("pl", Notice.chat("<dark_gray>[<green>!<dark_gray>] <gray>Witaj na serwerze, <green>{PLAYER}<gray>! Jesteś <green>{ONLINE}<gray> graczem online."))
+                    .addTranslation("de", Notice.chat("<dark_gray>[<green>!<dark_gray>] <gray>Willkommen auf dem Server, <green>{PLAYER}<gray>! Du bist Spieler Nummer <green>{ONLINE}<gray> online."))
+                    .trigger(MessageTrigger.firstJoin(Duration.ofSeconds(3)))
                     .build()
     );
 
