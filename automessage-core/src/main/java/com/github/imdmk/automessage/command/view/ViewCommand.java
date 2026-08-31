@@ -41,7 +41,7 @@ public final class ViewCommand {
             @Arg("message") ScheduledMessage message
     ) {
         if (!(commandSender instanceof Player player)) {
-            messageService.send(commandSender, n -> n.viewMessages().viewPlayerOnly());
+            messageService.send(commandSender, n -> n.commands.viewPlayerOnly);
             return;
         }
 
@@ -49,7 +49,7 @@ public final class ViewCommand {
 
         messageService.create()
                 .viewer(player)
-                .notice(notice -> notice.viewMessages().messagePreviewed())
+                .notice(notice -> notice.commands.messagePreviewed)
                 .placeholder("{MESSAGE}", message.name())
                 .send();
     }

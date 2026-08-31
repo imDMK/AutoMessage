@@ -2,39 +2,48 @@ package com.github.imdmk.automessage.scheduled;
 
 import com.eternalcode.multification.notice.Notice;
 import com.eternalcode.multification.notice.NoticeBroadcast;
-import com.github.imdmk.automessage.message.MessageConfig;
+import com.github.imdmk.automessage.language.LanguageConfig;
+import com.github.imdmk.automessage.language.LanguageRegistry;
 import com.github.imdmk.automessage.message.MessageService;
+import com.github.imdmk.automessage.platform.logger.PluginLogger;
 import com.github.imdmk.automessage.platform.placeholder.ExternalPlaceholderResolver;
 import com.github.imdmk.automessage.scheduled.placeholder.MessagePlaceholders;
 import org.bukkit.Server;
 import org.bukkit.command.CommandSender;
 import org.bukkit.entity.Player;
 
+import java.util.List;
+import java.util.Objects;
 import java.util.Map;
 
 /**
  * Turns a {@link ScheduledMessage} into the notices a single player actually receives.
  *
  * <p>
- * This is the one place where a scheduled message becomes chat, actionbar, title, bossbar or
- * sound output, so automatic broadcasts and manual previews always render identically -
- * placeholders resolved, and in the language each viewer's client is running where the message
- * provides one.
+ * The message itself carries no text: scheduledMessages.yml says when a message is sent and to
+ * whom, and the language files say what it says. This is where the two meet, in the language the
+ * viewer's client is running.
  * </p>
  */
 public final class ScheduledMessageSender {
 
     private final Server server;
+    private final PluginLogger logger;
     private final MessageService messageService;
+    private final LanguageRegistry languages;
     private final ExternalPlaceholderResolver externalPlaceholderResolver;
 
     public ScheduledMessageSender(
             Server server,
+            PluginLogger logger,
             MessageService messageService,
+            LanguageRegistry languages,
             ExternalPlaceholderResolver externalPlaceholderResolver
     ) {
         this.server = server;
+        this.logger = logger;
         this.messageService = messageService;
+        this.languages = languages;
         this.externalPlaceholderResolver = externalPlaceholderResolver;
     }
 
@@ -42,20 +51,21 @@ public final class ScheduledMessageSender {
      * Scans the message once so a broadcast does not repeat the work for every player.
      *
      * <p>
-     * Which placeholders a message contains is a property of the message, not of who reads it, so
-     * one scan covers every translation of it too.
+     * Every language is scanned, not just the fallback: a placeholder used only in the Polish
+     * text still has to be resolved for the players reading it.
      * </p>
      */
     public MessagePlaceholders placeholdersOf(ScheduledMessage message) {
-        return MessagePlaceholders.scan(message, externalPlaceholderResolver);
+        return MessagePlaceholders.scan(textOf(message), externalPlaceholderResolver);
     }
 
-    /**
-     * Sends every notice of the message on the calling thread.
-     *
-     * @param viewer  player receiving the message
-     * @param message message to send
-     */
+    private List<List<Notice>> textOf(ScheduledMessage message) {
+        return languages.all().stream()
+                .map(language -> language.announcement(message.name()))
+                .filter(Objects::nonNull)
+                .toList();
+    }
+
     public void send(Player viewer, ScheduledMessage message) {
         send(viewer, message, placeholdersOf(message));
     }
@@ -65,11 +75,7 @@ public final class ScheduledMessageSender {
             ScheduledMessage message,
             MessagePlaceholders placeholders
     ) {
-        final Map<String, String> resolved = placeholders.resolveFor(server, viewer);
-
-        for (final Notice notice : noticesFor(viewer, message)) {
-            broadcast(viewer, notice, resolved).send();
-        }
+        dispatch(viewer, message, placeholders, false);
     }
 
     /**
@@ -79,9 +85,6 @@ public final class ScheduledMessageSender {
      * Placeholder values are resolved before the hand-off, on the caller's thread, because the
      * server state they read is only safe to touch there.
      * </p>
-     *
-     * @param viewer  player receiving the message
-     * @param message message to send
      */
     public void sendAsync(Player viewer, ScheduledMessage message) {
         sendAsync(viewer, message, placeholdersOf(message));
@@ -92,27 +95,48 @@ public final class ScheduledMessageSender {
             ScheduledMessage message,
             MessagePlaceholders placeholders
     ) {
+        dispatch(viewer, message, placeholders, true);
+    }
+
+    private void dispatch(
+            Player viewer,
+            ScheduledMessage message,
+            MessagePlaceholders placeholders,
+            boolean async
+    ) {
+        final List<Notice> notices = languages.announcement(message.name(), viewer.getLocale());
+
+        // A message named in scheduledMessages.yml with no text in any language cannot be sent.
+        // Saying so once beats a player quietly receiving nothing.
+        if (notices == null) {
+            logger.warn(
+                    "Message '%s' has no text in any language file - add it under 'announcements' in lang/%s.yml.",
+                    message.name(),
+                    languages.fallback().code()
+            );
+            return;
+        }
+
         final Map<String, String> resolved = placeholders.resolveFor(server, viewer);
 
-        for (final Notice notice : noticesFor(viewer, message)) {
-            broadcast(viewer, notice, resolved).sendAsync();
+        for (final Notice notice : notices) {
+            final NoticeBroadcast<CommandSender, LanguageConfig, ?> broadcast =
+                    broadcast(viewer, notice, resolved);
+
+            if (async) {
+                broadcast.sendAsync();
+            } else {
+                broadcast.send();
+            }
         }
     }
 
-    /**
-     * Read per viewer rather than once per broadcast: two players watching the same announcement
-     * can be running clients in different languages.
-     */
-    private static java.util.List<Notice> noticesFor(Player viewer, ScheduledMessage message) {
-        return message.noticesFor(viewer.getLocale());
-    }
-
-    private NoticeBroadcast<CommandSender, MessageConfig, ?> broadcast(
+    private NoticeBroadcast<CommandSender, LanguageConfig, ?> broadcast(
             Player viewer,
             Notice notice,
             Map<String, String> placeholders
     ) {
-        NoticeBroadcast<CommandSender, MessageConfig, ?> broadcast = messageService.create()
+        NoticeBroadcast<CommandSender, LanguageConfig, ?> broadcast = messageService.create()
                 .viewer(viewer)
                 .notice(notice);
 

@@ -3,8 +3,6 @@ package com.github.imdmk.automessage.scheduled.placeholder;
 import com.eternalcode.multification.notice.Notice;
 import com.eternalcode.multification.notice.NoticePart;
 import com.eternalcode.multification.notice.resolver.text.TextContent;
-import com.github.imdmk.automessage.scheduled.ScheduledMessage;
-import com.github.imdmk.automessage.scheduled.locale.MessageTranslation;
 
 import java.util.LinkedHashSet;
 import java.util.List;
@@ -39,9 +37,9 @@ public final class PlaceholderScanner {
     /**
      * @return the built-in placeholders written somewhere in the message
      */
-    public static Set<BuiltinPlaceholder> builtinsIn(ScheduledMessage message) {
+    public static Set<BuiltinPlaceholder> builtinsIn(List<List<Notice>> translations) {
         final Set<BuiltinPlaceholder> found = new LinkedHashSet<>();
-        final List<String> texts = textsOf(message);
+        final List<String> texts = textsOf(translations);
 
         for (final BuiltinPlaceholder placeholder : BuiltinPlaceholder.values()) {
             for (final String text : texts) {
@@ -58,10 +56,10 @@ public final class PlaceholderScanner {
     /**
      * @return every {@code %...%} token in the message, left for PlaceholderAPI to interpret
      */
-    public static Set<String> externalTokensIn(ScheduledMessage message) {
+    public static Set<String> externalTokensIn(List<List<Notice>> translations) {
         final Set<String> found = new LinkedHashSet<>();
 
-        for (final String text : textsOf(message)) {
+        for (final String text : textsOf(translations)) {
             final Matcher matcher = EXTERNAL_TOKEN.matcher(text);
 
             while (matcher.find()) {
@@ -72,16 +70,14 @@ public final class PlaceholderScanner {
         return found;
     }
 
-    private static List<String> textsOf(ScheduledMessage message) {
+    private static List<String> textsOf(List<List<Notice>> translations) {
         final List<String> texts = new java.util.ArrayList<>();
 
-        collect(message.notices(), texts);
-
-        // A translated message is what a player of that language actually receives, so a
-        // placeholder written only in a translation has to be found here too - it would
-        // otherwise reach that player as the literal token.
-        for (final MessageTranslation translation : message.translations()) {
-            collect(translation.notices(), texts);
+        // Every language, not just the fallback: a placeholder written only in the Polish text
+        // still has to be resolved for the players reading it, or it reaches them as the
+        // literal token.
+        for (final List<Notice> notices : translations) {
+            collect(notices, texts);
         }
 
         return texts;

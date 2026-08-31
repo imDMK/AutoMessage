@@ -7,7 +7,7 @@ import com.github.imdmk.automessage.command.reload.ReloadCommand;
 import com.github.imdmk.automessage.command.view.ViewCommand;
 import com.github.imdmk.automessage.config.ConfigManager;
 import com.github.imdmk.automessage.config.ConfigReloadService;
-import com.github.imdmk.automessage.message.MessageConfigRegistry;
+import com.github.imdmk.automessage.language.LanguageRegistry;
 import com.github.imdmk.automessage.message.MessageService;
 import com.github.imdmk.automessage.platform.litecommands.argument.ScheduledMessageArgument;
 import com.github.imdmk.automessage.platform.litecommands.argument.UnknownScheduledMessage;
@@ -67,13 +67,17 @@ final class AutoMessagePlugin {
 
         this.configManager = new ConfigManager(logger, plugin.getDataFolder());
 
-        final MessageConfigRegistry messageConfigs = MessageConfigRegistry.load(configManager);
-        final ScheduledMessagesConfig scheduledMessagesConfig = configManager.create(ScheduledMessagesConfig.class);
+        // config.yml first: it names the languages to write out and the one to fall back to.
         final MessageDispatcherConfig dispatcherConfig = configManager.create(MessageDispatcherConfig.class);
+        final ScheduledMessagesConfig scheduledMessagesConfig = configManager.create(ScheduledMessagesConfig.class);
+
+        final LanguageRegistry languages = LanguageRegistry.load(
+                configManager, logger, dispatcherConfig.languages, dispatcherConfig.fallbackLanguage
+        );
 
         final ConfigReloadService configReloadService = new ConfigReloadService(configManager);
 
-        this.messageService = new MessageService(messageConfigs, plugin);
+        this.messageService = new MessageService(languages, plugin);
         this.taskScheduler = new BukkitTaskScheduler(plugin, server.getScheduler());
 
         final ScheduledMessageRepository messageRepository =
@@ -81,14 +85,15 @@ final class AutoMessagePlugin {
         final ExternalPlaceholderResolver placeholderResolver =
                 ExternalPlaceholderResolverFactory.create(server, logger);
 
-        final ScheduledMessageSender messageSender =
-                new ScheduledMessageSender(server, messageService, placeholderResolver);
+        final ScheduledMessageSender messageSender = new ScheduledMessageSender(
+                server, logger, messageService, languages, placeholderResolver
+        );
 
         final DiscordWebhookConfig discordConfig = configManager.create(DiscordWebhookConfig.class);
 
         // One observer shared by every channel: mirroring is a property of the announcement, not
         // of the stream it happened to travel on.
-        this.dispatchObserver = DiscordWebhookService.create(server, logger, discordConfig);
+        this.dispatchObserver = DiscordWebhookService.create(server, languages, logger, discordConfig);
 
         final ScheduledMessageDispatcherFactory dispatcherFactory =
                 selector -> new MessageDispatcher(

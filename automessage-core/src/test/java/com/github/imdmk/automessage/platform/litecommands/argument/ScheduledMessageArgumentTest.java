@@ -1,6 +1,5 @@
 package com.github.imdmk.automessage.platform.litecommands.argument;
 
-import com.eternalcode.multification.notice.Notice;
 import com.github.imdmk.automessage.scheduled.ScheduledMessage;
 import com.github.imdmk.automessage.scheduled.channel.AnnouncementChannel;
 import com.github.imdmk.automessage.scheduled.trigger.MessageTrigger;
@@ -35,7 +34,7 @@ class ScheduledMessageArgumentTest {
     private final ScheduledMessageArgument resolver = new ScheduledMessageArgument(new FakeRepository());
 
     private static ScheduledMessage message(String name) {
-        return new ScheduledMessage(name, List.of(Notice.chat("x")), List.of());
+        return new ScheduledMessage(name, List.of());
     }
 
     @Test

@@ -31,13 +31,38 @@ public final class ConfigManager {
 
     public <C extends ConfigSection> C create(Class<C> type) {
         final C config = factory.create(type);
+
+        initialize(config);
+        byType.put(type, config);
+
+        return config;
+    }
+
+    /**
+     * Initializes a configuration that was constructed by the caller.
+     *
+     * <p>
+     * Language files all share one class and differ only in the file they are bound to, so there
+     * is nothing to look them up by type with - the caller holds them instead.
+     * </p>
+     */
+    public <C extends ConfigSection> C create(C config) {
+        initialize(config);
+        return config;
+    }
+
+    private void initialize(ConfigSection config) {
         final File file = new File(dataFolder, config.getFileName());
 
         binder.bind(config, file);
         lifecycle.initialize(config);
 
-        register(type, config);
-        return config;
+        configs.add(config);
+    }
+
+    /** @return the plugin's data folder, so callers can look for files it does not know about */
+    public File dataFolder() {
+        return dataFolder;
     }
 
     public void createAll(List<Class<? extends ConfigSection>> types) {
@@ -76,8 +101,4 @@ public final class ConfigManager {
         byType.clear();
     }
 
-    private void register(Class<?> type, ConfigSection config) {
-        configs.add(config);
-        byType.put(type, config);
-    }
 }
