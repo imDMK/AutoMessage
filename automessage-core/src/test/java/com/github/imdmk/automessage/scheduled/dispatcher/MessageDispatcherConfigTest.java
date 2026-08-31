@@ -10,6 +10,8 @@ import java.io.File;
 import java.io.IOException;
 import java.nio.file.Files;
 import java.nio.file.Path;
+import com.github.imdmk.automessage.platform.time.DurationFormatter;
+
 import java.time.Duration;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
@@ -43,12 +45,37 @@ class MessageDispatcherConfigTest {
     @Test
     @DisplayName("Should write durations with an explicit unit so the file is self-explanatory")
     void shouldWriteDurationsWithUnit() throws IOException {
-        load();
+        MessageDispatcherConfig config = load();
 
         String content = read();
 
-        assertTrue(content.contains("period: 10s"), () -> "expected 'period: 10s' in:\n" + content);
-        assertTrue(content.contains("initialDelay: 10s"), () -> "expected 'initialDelay: 10s' in:\n" + content);
+        // Asserted against the values the config actually defaults to rather than against
+        // literals, so tuning a default does not fail a test about formatting.
+        assertTrue(
+                content.contains("period: " + DurationFormatter.format(config.period)),
+                () -> "expected the period written with its unit in:\n" + content
+        );
+        assertTrue(
+                content.contains("initialDelay: " + DurationFormatter.format(config.initialDelay)),
+                () -> "expected the initial delay written with its unit in:\n" + content
+        );
+    }
+
+    @Test
+    @DisplayName("Should ship defaults a production server can leave alone")
+    void shouldShipUsableDefaults() throws IOException {
+        MessageDispatcherConfig config = load();
+
+        // Anything under a minute between announcements reads as spam to players, and the
+        // shipped file is what most servers will run unchanged.
+        assertTrue(
+                config.period.compareTo(Duration.ofMinutes(1)) >= 0,
+                () -> "default period is too aggressive: " + config.period
+        );
+        assertTrue(
+                config.initialDelay.compareTo(Duration.ZERO) > 0,
+                () -> "players should get a moment after a restart before the first announcement"
+        );
     }
 
     @Test

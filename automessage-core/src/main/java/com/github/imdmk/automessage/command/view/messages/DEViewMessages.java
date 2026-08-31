@@ -1,0 +1,44 @@
+package com.github.imdmk.automessage.command.view.messages;
+
+import com.eternalcode.multification.notice.Notice;
+import eu.okaeri.configs.OkaeriConfig;
+
+/**
+ * German text for the /automessage view replies.
+ *
+ * <p>
+ * Field documentation lives on {@link ENViewMessages}, which backs messages.yml - keeping it in one
+ * place is why the translated files carry no per-field comments of their own.
+ * </p>
+ */
+public final class DEViewMessages
+        extends OkaeriConfig
+        implements ViewMessages {
+
+    Notice messagePreviewed = Notice.chat(
+            "<dark_gray>• <green>Vorschau der geplanten Nachricht <gray>{MESSAGE}<green>.<dark_gray>"
+    );
+
+    Notice messageNotFound = Notice.chat(
+            "<dark_gray>• <red>Es gibt keine geplante Nachricht namens <gray>{MESSAGE} <red>in scheduledMessages.yml."
+    );
+
+    Notice viewPlayerOnly = Notice.chat(
+            "<dark_gray>• <red>Nur Spieler können geplante Nachrichten in der Vorschau ansehen.<dark_gray>"
+    );
+
+    @Override
+    public Notice messagePreviewed() {
+        return messagePreviewed;
+    }
+
+    @Override
+    public Notice messageNotFound() {
+        return messageNotFound;
+    }
+
+    @Override
+    public Notice viewPlayerOnly() {
+        return viewPlayerOnly;
+    }
+}
