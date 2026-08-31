@@ -50,19 +50,13 @@ public final class MessageDispatcherConfig extends ConfigSection {
 
     @Comment({
             "#",
-            "# Language served to players whose own language has no file in lang/.",
+            "# Language served to players whose own has no file in lang/.",
+            "#",
+            "# Which languages exist is decided by the lang/ folder itself: the plugin",
+            "# writes out the ones it ships on first run, and finds anything you add.",
             "#"
     })
     public String fallbackLanguage = "en";
-
-    @Comment({
-            "#",
-            "# Languages written out on first run. Anything else you drop into lang/ is",
-            "# picked up automatically - this list only decides what a fresh install",
-            "# starts with, and removing a code from it does not delete its file.",
-            "#"
-    })
-    public List<String> languages = List.of("en", "pl", "de");
 
     @Comment({
             "#",

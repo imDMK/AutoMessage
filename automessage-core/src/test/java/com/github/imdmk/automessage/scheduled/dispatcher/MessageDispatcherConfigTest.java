@@ -81,7 +81,6 @@ class MessageDispatcherConfigTest {
         write("""
                 enabled: true
                 fallbackLanguage: en
-                languages: [en]
                 channels:
                   - name: ads
                     enabled: true
@@ -104,7 +103,6 @@ class MessageDispatcherConfigTest {
         write("""
                 enabled: true
                 fallbackLanguage: en
-                languages: [en]
                 channels:
                   - name: default
                     enabled: true
@@ -119,11 +117,21 @@ class MessageDispatcherConfigTest {
     }
 
     @Test
-    @DisplayName("carries the languages a fresh install starts with")
-    void shipsLanguages() {
+    @DisplayName("names a fallback language but does not list which languages exist")
+    void namesOnlyTheFallback() {
         MessageDispatcherConfig config = load();
 
-        assertThat(config.languages).contains("en", "pl", "de");
         assertThat(config.fallbackLanguage).isEqualTo("en");
+    }
+
+    @Test
+    @DisplayName("does not offer a setting for which languages exist - the lang/ folder decides")
+    void doesNotListLanguages() throws IOException {
+        load();
+
+        // A list here would be a choice that changes nothing: files already on disk are found
+        // whether or not they are named, and naming one nobody translated only produces a file
+        // of English text under a foreign name.
+        assertThat(read()).doesNotContain("languages:");
     }
 }
