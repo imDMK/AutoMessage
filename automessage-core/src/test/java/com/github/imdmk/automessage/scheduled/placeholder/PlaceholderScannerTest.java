@@ -2,8 +2,6 @@ package com.github.imdmk.automessage.scheduled.placeholder;
 
 import com.eternalcode.multification.notice.Notice;
 import com.github.imdmk.automessage.platform.placeholder.ExternalPlaceholderResolver;
-import com.github.imdmk.automessage.scheduled.ScheduledMessage;
-import com.github.imdmk.automessage.scheduled.ScheduledMessageBuilder;
 import org.bukkit.Server;
 import net.kyori.adventure.bossbar.BossBar;
 import net.kyori.adventure.key.Key;
@@ -22,14 +20,19 @@ import static org.mockito.Mockito.when;
 
 class PlaceholderScannerTest {
 
-    private static ScheduledMessage message(Notice... notices) {
-        return new ScheduledMessage("test", List.of(notices), List.of());
+    /** The scanner now works on the notice lists of every language, not on the message. */
+    private static List<List<Notice>> message(Notice... notices) {
+        return List.of(List.of(notices));
+    }
+
+    private static List<List<Notice>> languages(List<Notice>... perLanguage) {
+        return List.of(perLanguage);
     }
 
     @Test
     @DisplayName("finds built-in tokens in a chat notice")
     void findsBuiltinsInChat() {
-        ScheduledMessage message = message(Notice.chat("Hi {PLAYER}, {ONLINE} players online"));
+        List<List<Notice>> message = message(Notice.chat("Hi {PLAYER}, {ONLINE} players online"));
 
         assertThat(PlaceholderScanner.builtinsIn(message))
                 .containsExactlyInAnyOrder(BuiltinPlaceholder.PLAYER, BuiltinPlaceholder.ONLINE);
@@ -38,7 +41,7 @@ class PlaceholderScannerTest {
     @Test
     @DisplayName("looks inside titles, actionbars and bossbars, not just chat")
     void scansEveryTextCarryingNoticeType() {
-        ScheduledMessage message = message(
+        List<List<Notice>> message = message(
                 Notice.actionbar("{WORLD}"),
                 Notice.title("{DATE}", "{TIME}"),
                 Notice.bossBar(BossBar.Color.RED, BossBar.Overlay.PROGRESS, Duration.ofSeconds(1), "{MAX_PLAYERS}")
@@ -55,7 +58,7 @@ class PlaceholderScannerTest {
     @Test
     @DisplayName("a sound notice carries no text and contributes no tokens")
     void soundNoticesAreIgnored() {
-        ScheduledMessage message = message(
+        List<List<Notice>> message = message(
                 Notice.sound(Key.key("entity.experience_orb.pickup"), Sound.Source.MASTER, 1.0F, 1.0F)
         );
 
@@ -66,7 +69,7 @@ class PlaceholderScannerTest {
     @Test
     @DisplayName("collects PlaceholderAPI tokens and de-duplicates them")
     void findsExternalTokens() {
-        ScheduledMessage message = message(
+        List<List<Notice>> message = message(
                 Notice.chat("%vault_eco_balance% and %server_tps%"),
                 Notice.actionbar("%server_tps% again")
         );
@@ -80,11 +83,7 @@ class PlaceholderScannerTest {
     void scansTranslationsToo() {
         // A translated message is what a player of that language actually receives, so a
         // placeholder living only there has to be resolved just the same.
-        ScheduledMessage message = ScheduledMessageBuilder.create()
-                .name("greeting")
-                .addNotice(Notice.chat("Welcome!"))
-                .addTranslation("pl", Notice.chat("Witaj {PLAYER}, gracz nr {ONLINE}"))
-                .build();
+        List<List<Notice>> message = languages(List.of(Notice.chat("Welcome!")), List.of(Notice.chat("Witaj {PLAYER}, gracz nr {ONLINE}")));
 
         assertThat(PlaceholderScanner.builtinsIn(message))
                 .containsExactlyInAnyOrder(BuiltinPlaceholder.PLAYER, BuiltinPlaceholder.ONLINE);
@@ -93,11 +92,7 @@ class PlaceholderScannerTest {
     @Test
     @DisplayName("finds PlaceholderAPI tokens that appear only in a translation")
     void scansTranslationsForExternalTokens() {
-        ScheduledMessage message = ScheduledMessageBuilder.create()
-                .name("balance")
-                .addNotice(Notice.chat("Your balance"))
-                .addTranslation("pl", Notice.chat("Twoje saldo: %vault_eco_balance%"))
-                .build();
+        List<List<Notice>> message = languages(List.of(Notice.chat("Your balance")), List.of(Notice.chat("Twoje saldo: %vault_eco_balance%")));
 
         assertThat(PlaceholderScanner.externalTokensIn(message))
                 .containsExactly("%vault_eco_balance%");
@@ -106,7 +101,7 @@ class PlaceholderScannerTest {
     @Test
     @DisplayName("a message without placeholders yields nothing to resolve")
     void plainMessageHasNoTokens() {
-        ScheduledMessage message = message(Notice.chat("<red>Just a plain announcement"));
+        List<List<Notice>> message = message(Notice.chat("<red>Just a plain announcement"));
 
         assertThat(PlaceholderScanner.builtinsIn(message)).isEmpty();
         assertThat(PlaceholderScanner.externalTokensIn(message)).isEmpty();
@@ -123,7 +118,7 @@ class PlaceholderScannerTest {
         when(server.getOnlinePlayers()).thenAnswer(invocation -> List.of());
         when(server.getMaxPlayers()).thenReturn(100);
 
-        ScheduledMessage message = message(Notice.chat("{ONLINE}/{MAX_PLAYERS} - hi {PLAYER} in {WORLD}"));
+        List<List<Notice>> message = message(Notice.chat("{ONLINE}/{MAX_PLAYERS} - hi {PLAYER} in {WORLD}"));
 
         Map<String, String> resolved = MessagePlaceholders
                 .scan(message, ExternalPlaceholderResolver.disabled())
@@ -160,7 +155,7 @@ class PlaceholderScannerTest {
     @Test
     @DisplayName("external tokens are left alone when PlaceholderAPI is absent")
     void externalTokensSkippedWithoutPapi() {
-        ScheduledMessage message = message(Notice.chat("%vault_eco_balance%"));
+        List<List<Notice>> message = message(Notice.chat("%vault_eco_balance%"));
 
         MessagePlaceholders placeholders = MessagePlaceholders.scan(
                 message,

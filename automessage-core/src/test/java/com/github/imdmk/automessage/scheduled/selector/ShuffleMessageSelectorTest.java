@@ -1,6 +1,5 @@
 package com.github.imdmk.automessage.scheduled.selector;
 
-import com.eternalcode.multification.notice.Notice;
 import com.github.imdmk.automessage.scheduled.ScheduledMessage;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
@@ -15,7 +14,7 @@ class ShuffleMessageSelectorTest {
     private final MessageSelector selector = MessageSelectorFactory.create(MessageSelectorType.SHUFFLE);
 
     private static ScheduledMessage message(String name) {
-        return new ScheduledMessage(name, List.of(Notice.chat("x")), List.of());
+        return new ScheduledMessage(name, List.of());
     }
 
     private static List<ScheduledMessage> messages(String... names) {

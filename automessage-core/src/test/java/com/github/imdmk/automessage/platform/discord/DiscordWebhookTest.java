@@ -1,7 +1,6 @@
 package com.github.imdmk.automessage.platform.discord;
 
 import com.eternalcode.multification.notice.Notice;
-import com.github.imdmk.automessage.scheduled.ScheduledMessage;
 import net.kyori.adventure.bossbar.BossBar;
 import net.kyori.adventure.key.Key;
 import net.kyori.adventure.sound.Sound;
@@ -18,8 +17,8 @@ import static org.assertj.core.api.Assertions.assertThat;
 
 class DiscordWebhookTest {
 
-    private static ScheduledMessage message(Notice... notices) {
-        return new ScheduledMessage("test", List.of(notices), List.of());
+    private static List<Notice> message(Notice... notices) {
+        return List.of(notices);
     }
 
     @ParameterizedTest
@@ -58,7 +57,7 @@ class DiscordWebhookTest {
     @Test
     @DisplayName("mirrors chat lines and flattens MiniMessage to plain text")
     void rendersChatAsPlainText() {
-        ScheduledMessage message = message(
+        List<Notice> message = message(
                 Notice.chat("<gradient:#ff0000:#00ff00><bold>Vote</bold></gradient> <gray>for rewards!")
         );
 
@@ -68,7 +67,7 @@ class DiscordWebhookTest {
     @Test
     @DisplayName("skips notice types a text channel cannot show")
     void skipsNonChatNotices() {
-        ScheduledMessage message = message(
+        List<Notice> message = message(
                 Notice.actionbar("<red>action bar"),
                 Notice.title("<red>title", "<gray>subtitle"),
                 Notice.bossBar(BossBar.Color.RED, BossBar.Overlay.PROGRESS, Duration.ofSeconds(1), "boss"),
@@ -82,7 +81,7 @@ class DiscordWebhookTest {
     @Test
     @DisplayName("joins several chat lines with newlines")
     void joinsChatLines() {
-        ScheduledMessage message = message(Notice.chat("<red>first", "<gray>second"));
+        List<Notice> message = message(Notice.chat("<red>first", "<gray>second"));
 
         assertThat(DiscordMessageRenderer.render(message, Map.of())).isEqualTo("first\nsecond");
     }
@@ -90,7 +89,7 @@ class DiscordWebhookTest {
     @Test
     @DisplayName("substitutes server placeholders and drops the viewer ones")
     void substitutesResolvedPlaceholders() {
-        ScheduledMessage message = message(Notice.chat("<gray>{ONLINE}/{MAX_PLAYERS} online, hi {PLAYER}"));
+        List<Notice> message = message(Notice.chat("<gray>{ONLINE}/{MAX_PLAYERS} online, hi {PLAYER}"));
 
         // A viewer-scoped placeholder resolves to nothing here; posting "{PLAYER}" raw would
         // only tell the reader that something is broken.

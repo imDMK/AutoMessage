@@ -3,7 +3,6 @@ package com.github.imdmk.automessage.platform.discord;
 import com.eternalcode.multification.notice.Notice;
 import com.eternalcode.multification.notice.NoticePart;
 import com.eternalcode.multification.notice.resolver.chat.ChatContent;
-import com.github.imdmk.automessage.scheduled.ScheduledMessage;
 import net.kyori.adventure.text.minimessage.MiniMessage;
 import net.kyori.adventure.text.serializer.plain.PlainTextComponentSerializer;
 
@@ -21,8 +20,8 @@ import java.util.Map;
  * </p>
  *
  * <p>
- * The default notices are used rather than any translation: a Discord channel has no single reader
- * whose client language could be consulted. Placeholders describing the server are substituted
+ * The fallback language is used rather than any translation: a Discord channel has no single
+ * reader whose client language could be consulted. Placeholders describing the server are substituted
  * normally; the ones describing a viewer have no value here and are removed rather than posted as
  * raw tokens.
  * </p>
@@ -37,14 +36,14 @@ public final class DiscordMessageRenderer {
     }
 
     /**
-     * @param message      message being announced
+     * @param notices      the announcement in the fallback language
      * @param placeholders values to substitute, already resolved for a reader-less destination
      * @return the message as plain text, or empty when it has nothing a text channel can show
      */
-    public static String render(ScheduledMessage message, Map<String, String> placeholders) {
+    public static String render(List<Notice> notices, Map<String, String> placeholders) {
         final List<String> lines = new ArrayList<>();
 
-        for (final Notice notice : message.notices()) {
+        for (final Notice notice : notices) {
             for (final NoticePart<?> part : notice.parts()) {
                 if (part.content() instanceof ChatContent chat) {
                     for (final String line : chat.contents()) {
