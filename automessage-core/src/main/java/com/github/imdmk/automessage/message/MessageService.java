@@ -4,6 +4,8 @@ import com.eternalcode.multification.adventure.AudienceConverter;
 import com.eternalcode.multification.bukkit.BukkitMultification;
 import com.eternalcode.multification.notice.provider.NoticeProvider;
 import com.eternalcode.multification.translation.TranslationProvider;
+import com.github.imdmk.automessage.language.LanguageConfig;
+import com.github.imdmk.automessage.language.LanguageRegistry;
 import net.kyori.adventure.platform.AudienceProvider;
 import net.kyori.adventure.platform.bukkit.BukkitAudiences;
 import net.kyori.adventure.text.Component;
@@ -13,28 +15,28 @@ import org.bukkit.command.CommandSender;
 import org.bukkit.entity.Player;
 import org.bukkit.plugin.Plugin;
 
-public final class MessageService extends BukkitMultification<MessageConfig> {
+public final class MessageService extends BukkitMultification<LanguageConfig> {
 
     private static final MiniMessage MINI_MESSAGE = MiniMessage.miniMessage();
 
-    private final MessageConfigRegistry messages;
+    private final LanguageRegistry languages;
     private final AudienceProvider audienceProvider;
 
     public MessageService(
-            MessageConfigRegistry messages,
+            LanguageRegistry languages,
             Plugin plugin
     ) {
-        this.messages = messages;
+        this.languages = languages;
         this.audienceProvider = BukkitAudiences.create(plugin);
     }
 
     /**
-     * Multification passes the viewer's locale here, which is what lets two players sitting in the
-     * same chat read the same reply in different languages.
+     * Multification hands the viewer's locale here, which is what lets two players in the same
+     * chat read the same reply in different languages.
      */
     @Override
-    protected TranslationProvider<MessageConfig> translationProvider() {
-        return messages::provide;
+    protected TranslationProvider<LanguageConfig> translationProvider() {
+        return languages::provide;
     }
 
     @Override
@@ -52,7 +54,7 @@ public final class MessageService extends BukkitMultification<MessageConfig> {
         };
     }
 
-    public void send(CommandSender sender, NoticeProvider<MessageConfig> notice) {
+    public void send(CommandSender sender, NoticeProvider<LanguageConfig> notice) {
         create().viewer(sender).notice(notice).send();
     }
 

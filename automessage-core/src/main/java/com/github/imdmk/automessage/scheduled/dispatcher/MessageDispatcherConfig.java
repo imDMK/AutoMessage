@@ -7,26 +7,22 @@ import com.github.imdmk.automessage.scheduled.selector.MessageSelectorType;
 import eu.okaeri.configs.annotation.Comment;
 import eu.okaeri.configs.annotation.Header;
 import eu.okaeri.configs.serdes.OkaeriSerdesPack;
-import eu.okaeri.configs.serdes.commons.duration.DurationFormat;
-import eu.okaeri.configs.serdes.commons.duration.DurationSpec;
 
 import java.time.Duration;
-import java.time.temporal.ChronoUnit;
-import java.util.ArrayList;
 import java.util.List;
 
 @Header({
         "# ============================================================================",
-        "#                        AutoMessage - messagesDispatcher.yml",
+        "#                             AutoMessage - config.yml",
         "# ============================================================================",
-        "# When announcements go out. What they say lives in scheduledMessages.yml.",
+        "# How often announcements go out, and in what language.",
         "#",
-        "# Out of the box there is one stream, named 'default', configured by the",
-        "# settings below. Add entries under 'channels' when different announcements",
-        "# need different intervals - tips every five minutes, shop adverts every",
-        "# twenty.",
+        "# Announcements are grouped into channels. A channel has its own interval and",
+        "# its own rotation, so tips can run every five minutes while shop adverts run",
+        "# every twenty. Messages join a channel by name in scheduledMessages.yml; one",
+        "# that names none joins 'default'.",
         "#",
-        "# Time format used throughout this file:",
+        "# Time format:",
         "#   500ms   milliseconds        5m      minutes",
         "#   30s     seconds             1h      hours",
         "#   1m30s   units combine       10      a plain number means seconds",
@@ -44,111 +40,68 @@ import java.util.List;
 })
 public final class MessageDispatcherConfig extends ConfigSection {
 
-    @Comment({"#", "# Whether automatic scheduled-message dispatching is enabled.", "#"})
+    @Comment({
+            "#",
+            "# Master switch. Turning this off pauses every channel at once, which is",
+            "# what /automessage disable does.",
+            "#"
+    })
     public boolean enabled = true;
 
     @Comment({
             "#",
-            "# How much time passes between two announcements.",
-            "#",
-            "# Accepted units: ms (milliseconds), s (seconds), m (minutes), h (hours).",
-            "# Examples: 500ms, 10s, 5m, 1h, 1m30s",
-            "# A plain number is read as seconds, so 'period: 10' means 10 seconds.",
-            "#",
-            "# The lowest value the server can schedule is 50ms (one tick), but anything",
-            "# under a minute reads as spam to players. Five minutes is a comfortable",
-            "# starting point; busy servers often go higher still.",
+            "# Language served to players whose own language has no file in lang/.",
             "#"
     })
-    @DurationSpec(fallbackUnit = ChronoUnit.SECONDS, format = DurationFormat.SIMPLIFIED)
-    public Duration period = Duration.ofMinutes(5);
+    public String fallbackLanguage = "en";
 
     @Comment({
             "#",
-            "# How long to wait after the server starts before the first announcement.",
-            "#",
-            "# Uses the same time format as 'period', e.g. 10s, 1m, 500ms.",
-            "# A plain number is read as seconds. Use 0s to announce immediately.",
-            "#",
-            "# The default gives players a minute to settle in after a restart before",
-            "# the first announcement arrives.",
+            "# Languages written out on first run. Anything else you drop into lang/ is",
+            "# picked up automatically - this list only decides what a fresh install",
+            "# starts with, and removing a code from it does not delete its file.",
             "#"
     })
-    @DurationSpec(fallbackUnit = ChronoUnit.SECONDS, format = DurationFormat.SIMPLIFIED)
-    public Duration initialDelay = Duration.ofMinutes(1);
+    public List<String> languages = List.of("en", "pl", "de");
 
     @Comment({
             "#",
-            "# Strategy used to select which scheduled message will be dispatched next.",
-            "# Available options: SEQUENTIAL, SHUFFLE, RANDOM, WEIGHTED",
+            "# The announcement channels. Every one is written out in full - there is no",
+            "# implicit channel and no setting outside this list.",
             "#",
-            "#   SEQUENTIAL – cycle through the messages in the order they are written.",
-            "#   SHUFFLE    – random order, but every message is shown once before any of",
-            "#                them repeats. Usually what you want instead of RANDOM.",
-            "#   RANDOM     – draw independently every time. The same message can come up",
-            "#                twice or three times in a row.",
-            "#   WEIGHTED   – draw at random, biased by the 'weight' of each message in",
-            "#                scheduledMessages.yml. A message of weight 5 appears five",
-            "#                times as often as one of weight 1.",
+            "#   name          What messages refer to in scheduledMessages.yml. Matched",
+            "#                 ignoring case. 'default' is where a message with no",
+            "#                 channel of its own lands.",
+            "#   enabled       Turns this one channel off without deleting it.",
+            "#   initialDelay  How long after startup its first message is sent.",
+            "#   period        How much time passes between two of its messages.",
+            "#   selector      Which message it picks next:",
+            "#                   SHUFFLE     random order, every message shown once",
+            "#                               before any repeats. Usually what you want.",
+            "#                   SEQUENTIAL  straight down the list, in order.",
+            "#                   RANDOM      drawn independently - can repeat back to back.",
+            "#                   WEIGHTED    random, biased by each message's 'weight'.",
+            "#",
+            "# To add a stream, copy an entry and give it a new name:",
+            "#",
+            "#   - name: ads",
+            "#     enabled: true",
+            "#     initialDelay: 2m",
+            "#     period: 20m",
+            "#     selector: SHUFFLE",
+            "#",
+            "# then put 'channel: ads' on the messages that belong to it.",
             "#"
     })
-    public MessageSelectorType selector = MessageSelectorType.SHUFFLE;
-
-    @Comment({
-            "#",
-            "# Additional announcement streams, each with its own schedule and rotation.",
-            "#",
-            "# The 'period', 'initialDelay' and 'selector' above configure the channel named",
-            "# 'default', which is where a message lands when it does not name one. Everything",
-            "# listed here runs alongside it, independently.",
-            "#",
-            "# A message joins a channel with 'channel: <name>' in scheduledMessages.yml.",
-            "# Names are matched ignoring case. Messages naming a channel that does not exist",
-            "# are reported on startup and never sent.",
-            "#",
-            "# Example - shop adverts every fifteen minutes, shuffled, running alongside",
-            "# the default tips stream:",
-            "#",
-            "#   channels:",
-            "#     - name: ads",
-            "#       enabled: true",
-            "#       initialDelay: 1m",
-            "#       period: 15m",
-            "#       selector: SHUFFLE",
-            "#"
-    })
-    public List<AnnouncementChannel> channels = List.of();
-
-    /**
-     * Every channel that should be scheduled, the implicit default one first.
-     *
-     * <p>
-     * The top-level timing fields predate channels and are still what most installations use, so
-     * they keep working as the default channel's settings rather than being migrated into the
-     * list. That way an existing messagesDispatcher.yml needs no changes at all.
-     * </p>
-     */
-    public List<AnnouncementChannel> channels() {
-        final List<AnnouncementChannel> resolved = new ArrayList<>();
-
-        resolved.add(new AnnouncementChannel(
-                AnnouncementChannel.DEFAULT_NAME,
-                true,
-                initialDelay == null ? Duration.ZERO : initialDelay,
-                period == null ? DispatchTiming.DEFAULT_PERIOD : period,
-                selector == null ? MessageSelectorType.SEQUENTIAL : selector
-        ));
-
-        for (final AnnouncementChannel channel : channels) {
-            // A channel literally named "default" would otherwise shadow the one above and get
-            // scheduled twice, sending every default-channel message in duplicate.
-            if (!channel.isDefault()) {
-                resolved.add(channel);
-            }
-        }
-
-        return List.copyOf(resolved);
-    }
+    public List<AnnouncementChannel> channels = List.of(
+            new AnnouncementChannel(
+                    AnnouncementChannel.DEFAULT_NAME,
+                    true,
+                    Duration.ofMinutes(1),
+                    Duration.ofMinutes(5),
+                    MessageSelectorType.SHUFFLE
+            )
+    );
 
     public void setEnabled(boolean enabled) {
         this.enabled = enabled;
@@ -158,6 +111,14 @@ public final class MessageDispatcherConfig extends ConfigSection {
         return enabled;
     }
 
+    /**
+     * @return every configured channel; a file with none leaves the plugin silent, which is
+     *         reported rather than guessed at
+     */
+    public List<AnnouncementChannel> channels() {
+        return List.copyOf(channels);
+    }
+
     @Override
     public OkaeriSerdesPack getSerdesPack() {
         return registry -> registry.register(new AnnouncementChannelSerializer());
@@ -165,6 +126,6 @@ public final class MessageDispatcherConfig extends ConfigSection {
 
     @Override
     public String getFileName() {
-        return "messagesDispatcher.yml";
+        return "config.yml";
     }
 }

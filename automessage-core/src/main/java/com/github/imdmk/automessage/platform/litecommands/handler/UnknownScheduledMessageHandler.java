@@ -23,7 +23,7 @@ public final class UnknownScheduledMessageHandler implements ResultHandler<Comma
     ) {
         messageService.create()
                 .viewer(invocation.sender())
-                .notice(notice -> notice.viewMessages().messageNotFound())
+                .notice(notice -> notice.commands.messageNotFound)
                 .placeholder("{MESSAGE}", result.name())
                 .send();
     }

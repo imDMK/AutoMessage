@@ -1,107 +1,72 @@
 package com.github.imdmk.automessage.scheduled;
 
-import com.eternalcode.multification.notice.Notice;
 import com.github.imdmk.automessage.scheduled.audience.rule.AudienceRule;
+import com.github.imdmk.automessage.scheduled.channel.AnnouncementChannel;
+import com.github.imdmk.automessage.scheduled.trigger.MessageTrigger;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 
+import java.time.Duration;
 import java.util.List;
 
-import static org.junit.jupiter.api.Assertions.assertEquals;
-import static org.junit.jupiter.api.Assertions.assertThrows;
+import static org.assertj.core.api.Assertions.assertThat;
+import static org.assertj.core.api.Assertions.assertThatThrownBy;
 
 class ScheduledMessageTest {
 
     @Test
-    @DisplayName("Should create ScheduledMessage when valid arguments are provided")
-    void shouldCreateScheduledMessage() {
-        // given
-        var notice = Notice.chat("hello");
-        var rule = AudienceRule.permission("test.permission");
+    @DisplayName("carries only what decides when a message is sent and to whom")
+    void holdsScheduling() {
+        AudienceRule rule = AudienceRule.permission("test.permission");
 
-        // when
-        ScheduledMessage message = new ScheduledMessage(
-                "example",
-                List.of(notice),
-                List.of(rule)
-        );
+        ScheduledMessage message = new ScheduledMessage("example", List.of(rule));
 
-        // then
-        assertEquals("example", message.name());
-        assertEquals(List.of(notice), message.notices());
-        assertEquals(List.of(rule), message.rules());
+        assertThat(message.name()).isEqualTo("example");
+        assertThat(message.rules()).containsExactly(rule);
+        assertThat(message.weight()).isEqualTo(ScheduledMessage.DEFAULT_WEIGHT);
+        assertThat(message.channel()).isEqualTo(AnnouncementChannel.DEFAULT_NAME);
+        assertThat(message.trigger()).isNull();
+        assertThat(message.isScheduled()).isTrue();
     }
 
     @Test
-    @DisplayName("Should throw when name is null")
-    void shouldFailWhenNameNull() {
-        var notice = Notice.chat("test");
-
-        assertThrows(NullPointerException.class, () ->
-                new ScheduledMessage(
-                        null,
-                        List.of(notice),
-                        List.of()
-                )
-        );
+    @DisplayName("a message with no rules is not a configuration error - it goes to everyone")
+    void rulesAreOptional() {
+        assertThat(new ScheduledMessage("example", List.of()).rules()).isEmpty();
     }
 
     @Test
-    @DisplayName("Should throw when notices list is null")
-    void shouldFailWhenNoticesNull() {
-        assertThrows(NullPointerException.class, () ->
-                new ScheduledMessage(
-                        "msg",
-                        null,
-                        List.of()
-                )
-        );
+    @DisplayName("rejects a message with no name, since the name is what ties it to its text")
+    void requiresAName() {
+        assertThatThrownBy(() -> new ScheduledMessage(null, List.of()))
+                .isInstanceOf(NullPointerException.class);
     }
 
     @Test
-    @DisplayName("Should throw when notices list is empty")
-    void shouldFailWhenNoticesEmpty() {
-        assertThrows(IllegalArgumentException.class, () ->
-                new ScheduledMessage(
-                        "msg",
-                        List.of(),
-                        List.of()
-                )
-        );
+    @DisplayName("rejects a negative weight")
+    void rejectsNegativeWeight() {
+        assertThatThrownBy(() ->
+                new ScheduledMessage("m", List.of(), -1, AnnouncementChannel.DEFAULT_NAME, null)
+        ).isInstanceOf(IllegalArgumentException.class);
     }
 
     @Test
-    @DisplayName("Should produce unmodifiable notice and rule lists")
-    void shouldMakeCollectionsUnmodifiable() {
-        var notice = Notice.chat("test");
-        var rule = AudienceRule.permission("perm");
+    @DisplayName("hands out an unmodifiable rule list")
+    void rulesAreUnmodifiable() {
+        ScheduledMessage message = new ScheduledMessage("m", List.of(AudienceRule.permission("p")));
 
-        ScheduledMessage message = new ScheduledMessage(
-                "msg",
-                List.of(notice),
-                List.of(rule)
-        );
-
-        assertThrows(UnsupportedOperationException.class, () ->
-                message.notices().add(Notice.chat("other"))
-        );
-
-        assertThrows(UnsupportedOperationException.class, () ->
-                message.rules().add(AudienceRule.group("vip"))
-        );
+        assertThatThrownBy(() -> message.rules().add(AudienceRule.group("vip")))
+                .isInstanceOf(UnsupportedOperationException.class);
     }
 
     @Test
-    @DisplayName("Record equality should compare field values")
-    void shouldRespectRecordEquality() {
-        var n1 = Notice.chat("x");
-        var r1 = AudienceRule.permission("p");
+    @DisplayName("a triggered message leaves the timed rotation")
+    void triggeredMessagesAreNotScheduled() {
+        ScheduledMessage message = ScheduledMessageBuilder.create()
+                .name("welcome")
+                .trigger(MessageTrigger.firstJoin(Duration.ofSeconds(3)))
+                .build();
 
-        ScheduledMessage a = new ScheduledMessage("name", List.of(n1), List.of(r1));
-        ScheduledMessage b = new ScheduledMessage("name", List.of(n1), List.of(r1));
-
-        assertEquals(a, b);
-        assertEquals(a.hashCode(), b.hashCode());
+        assertThat(message.isScheduled()).isFalse();
     }
 }
-

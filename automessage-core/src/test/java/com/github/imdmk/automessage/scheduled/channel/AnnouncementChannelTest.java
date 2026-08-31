@@ -1,6 +1,5 @@
 package com.github.imdmk.automessage.scheduled.channel;
 
-import com.eternalcode.multification.notice.Notice;
 import com.github.imdmk.automessage.scheduled.ScheduledMessage;
 import com.github.imdmk.automessage.scheduled.ScheduledMessageBuilder;
 import com.github.imdmk.automessage.config.ConfigReloadService;
@@ -21,7 +20,6 @@ class AnnouncementChannelTest {
     private static ScheduledMessage message(String name, String channel) {
         return ScheduledMessageBuilder.create()
                 .name(name)
-                .addNotice(Notice.chat("x"))
                 .channel(channel)
                 .build();
     }
@@ -36,7 +34,7 @@ class AnnouncementChannelTest {
     @DisplayName("a message that names no channel joins the default one")
     void missingChannelBecomesDefault() {
         assertThat(message("m", null).channel()).isEqualTo(AnnouncementChannel.DEFAULT_NAME);
-        assertThat(new ScheduledMessage("m", List.of(Notice.chat("x")), List.of()).channel())
+        assertThat(new ScheduledMessage("m", List.of()).channel())
                 .isEqualTo(AnnouncementChannel.DEFAULT_NAME);
     }
 
@@ -68,41 +66,24 @@ class AnnouncementChannelTest {
     }
 
     @Test
-    @DisplayName("the legacy top-level timing keeps working as the default channel")
-    void legacyConfigBecomesTheDefaultChannel() {
+    @DisplayName("every channel is spelled out in the list, with none implied")
+    void channelsAreExplicit() {
         MessageDispatcherConfig config = new MessageDispatcherConfig();
-        config.initialDelay = Duration.ofSeconds(5);
-        config.period = Duration.ofMinutes(2);
-        config.selector = MessageSelectorType.RANDOM;
-
-        List<AnnouncementChannel> channels = config.channels();
-
-        assertThat(channels).hasSize(1);
-        assertThat(channels.getFirst().isDefault()).isTrue();
-        assertThat(channels.getFirst().period()).isEqualTo(Duration.ofMinutes(2));
-        assertThat(channels.getFirst().selector()).isEqualTo(MessageSelectorType.RANDOM);
-    }
-
-    @Test
-    @DisplayName("extra channels run alongside the default one")
-    void extraChannelsAreAppended() {
-        MessageDispatcherConfig config = new MessageDispatcherConfig();
-        config.channels = List.of(new AnnouncementChannel(
-                "ads", true, Duration.ofMinutes(1), Duration.ofMinutes(15), MessageSelectorType.RANDOM
-        ));
+        config.channels = List.of(channel("default"), channel("ads"));
 
         assertThat(config.channels())
                 .extracting(AnnouncementChannel::name)
-                .containsExactly(AnnouncementChannel.DEFAULT_NAME, "ads");
+                .containsExactly("default", "ads");
     }
 
     @Test
-    @DisplayName("a channel redeclaring 'default' does not schedule it twice")
-    void redeclaredDefaultIsIgnored() {
+    @DisplayName("a server may drop the default channel entirely and run only its own")
+    void defaultChannelIsNotForced() {
         MessageDispatcherConfig config = new MessageDispatcherConfig();
-        config.channels = List.of(channel("Default"));
+        config.channels = List.of(channel("ads"));
 
-        // Scheduling it twice would send every default-channel message in duplicate.
-        assertThat(config.channels()).hasSize(1);
+        // Nothing re-adds 'default': what the file says is what runs, which is the point of
+        // making the list the single source.
+        assertThat(config.channels()).extracting(AnnouncementChannel::name).containsExactly("ads");
     }
 }

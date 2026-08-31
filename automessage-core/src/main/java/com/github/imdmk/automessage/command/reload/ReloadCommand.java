@@ -36,10 +36,10 @@ public final class ReloadCommand {
         taskScheduler.runAsync(() -> {
             try {
                 configReloadService.reload();
-                messageService.send(sender, n -> n.reloadMessages().configReloadedSuccess());
+                messageService.send(sender, n -> n.commands.configReloadedSuccess);
             } catch (Exception e) {
                 logger.error(e, "Failed to reload plugin config");
-                messageService.send(sender, n -> n.reloadMessages().configReloadFailed());
+                messageService.send(sender, n -> n.commands.configReloadFailed);
             }
         });
     }

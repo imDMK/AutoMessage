@@ -1,6 +1,5 @@
 package com.github.imdmk.automessage.scheduled.selector;
 
-import com.eternalcode.multification.notice.Notice;
 import com.github.imdmk.automessage.scheduled.ScheduledMessage;
 import com.github.imdmk.automessage.scheduled.ScheduledMessageBuilder;
 import org.junit.jupiter.api.DisplayName;
@@ -21,7 +20,6 @@ class WeightedMessageSelectorTest {
         // fields, and the builder is the one call site that does not break each time.
         return ScheduledMessageBuilder.create()
                 .name(name)
-                .addNotice(Notice.chat("x"))
                 .weight(weight)
                 .build();
     }
