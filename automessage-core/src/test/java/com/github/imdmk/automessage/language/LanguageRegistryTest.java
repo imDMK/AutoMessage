@@ -28,7 +28,7 @@ class LanguageRegistryTest {
     }
 
     private LanguageRegistry load() {
-        return LanguageRegistry.load(configManager, mock(PluginLogger.class), List.of("en", "pl", "de"), "en");
+        return LanguageRegistry.load(configManager, mock(PluginLogger.class), "en");
     }
 
     @Test
@@ -128,5 +128,19 @@ class LanguageRegistryTest {
                         .isNotNull();
             }
         }
+    }
+
+    @Test
+    @DisplayName("writes out the languages the build ships, without being told to")
+    void shipsItsOwnLanguages() {
+        LanguageRegistry registry = load();
+
+        assertThat(registry.all())
+                .extracting(LanguageConfig::code)
+                .contains("en", "pl", "de");
+
+        assertThat(dataFolder.resolve("lang/en.yml")).exists();
+        assertThat(dataFolder.resolve("lang/pl.yml")).exists();
+        assertThat(dataFolder.resolve("lang/de.yml")).exists();
     }
 }

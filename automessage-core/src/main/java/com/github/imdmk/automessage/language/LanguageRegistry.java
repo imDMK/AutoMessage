@@ -39,18 +39,18 @@ public final class LanguageRegistry {
     }
 
     /**
-     * @param shipped codes written out on first run, so a fresh install is not an empty folder
-     * @param fallbackCode language served to players whose own is missing
+     * @param fallbackCode language served to players whose own has no file
      */
     public static LanguageRegistry load(
             ConfigManager configManager,
             PluginLogger logger,
-            List<String> shipped,
             String fallbackCode
     ) {
         final LanguageRegistry registry = new LanguageRegistry(logger);
 
-        for (final String code : shipped) {
+        // Written out first so a fresh install is not an empty folder; discovery below cannot
+        // create a file that does not exist yet.
+        for (final String code : ShippedLanguages.CODES) {
             registry.open(configManager, code);
         }
 
@@ -58,6 +58,12 @@ public final class LanguageRegistry {
         // a hand-written lang/en.yml is already open and is not opened twice.
         for (final String code : registry.discover(configManager.dataFolder())) {
             registry.open(configManager, code);
+        }
+
+        if (registry.byCode.isEmpty()) {
+            throw new IllegalStateException(
+                    "No language files could be loaded from lang/ - AutoMessage has nothing to say."
+            );
         }
 
         registry.fallback = registry.byCode.get(LanguageCode.normalize(fallbackCode));

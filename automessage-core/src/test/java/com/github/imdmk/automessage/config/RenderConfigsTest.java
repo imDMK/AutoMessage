@@ -28,9 +28,7 @@ class RenderConfigsTest {
         manager.create(ScheduledMessagesConfig.class);
         manager.create(DiscordWebhookConfig.class);
 
-        LanguageRegistry.load(
-                manager, mock(PluginLogger.class), dispatcher.languages, dispatcher.fallbackLanguage
-        );
+        LanguageRegistry.load(manager, mock(PluginLogger.class), dispatcher.fallbackLanguage);
 
         manager.saveAll();
     }

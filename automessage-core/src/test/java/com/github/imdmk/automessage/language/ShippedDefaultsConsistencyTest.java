@@ -29,9 +29,7 @@ class ShippedDefaultsConsistencyTest {
         ConfigManager configManager = new ConfigManager(mock(PluginLogger.class), dataFolder.toFile());
 
         ScheduledMessagesConfig messages = configManager.create(ScheduledMessagesConfig.class);
-        LanguageRegistry languages = LanguageRegistry.load(
-                configManager, mock(PluginLogger.class), List.of("en", "pl", "de"), "en"
-        );
+        LanguageRegistry languages = LanguageRegistry.load(configManager, mock(PluginLogger.class), "en");
 
         for (ScheduledMessage message : messages.messages) {
             for (LanguageConfig language : languages.all()) {
@@ -51,9 +49,7 @@ class ShippedDefaultsConsistencyTest {
         ConfigManager configManager = new ConfigManager(mock(PluginLogger.class), dataFolder.toFile());
 
         ScheduledMessagesConfig messages = configManager.create(ScheduledMessagesConfig.class);
-        LanguageRegistry languages = LanguageRegistry.load(
-                configManager, mock(PluginLogger.class), List.of("en", "pl", "de"), "en"
-        );
+        LanguageRegistry languages = LanguageRegistry.load(configManager, mock(PluginLogger.class), "en");
 
         List<String> known = messages.messages.stream().map(ScheduledMessage::name).toList();
 

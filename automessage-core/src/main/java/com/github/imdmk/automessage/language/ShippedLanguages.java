@@ -26,6 +26,17 @@ import java.util.Map;
  */
 final class ShippedLanguages {
 
+    /**
+     * The languages this build carries translations for.
+     *
+     * <p>
+     * Not a setting: it is a fact about the jar. Anything else is added by dropping a file into
+     * lang/, which the registry finds on its own - so exposing this as a config option would only
+     * offer a choice that changes nothing, while inviting a code nobody has translated.
+     * </p>
+     */
+    static final List<String> CODES = List.of("en", "pl", "de");
+
     private ShippedLanguages() {
         throw new UnsupportedOperationException("This is a utility class and cannot be instantiated.");
     }

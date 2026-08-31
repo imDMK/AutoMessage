@@ -71,9 +71,8 @@ final class AutoMessagePlugin {
         final MessageDispatcherConfig dispatcherConfig = configManager.create(MessageDispatcherConfig.class);
         final ScheduledMessagesConfig scheduledMessagesConfig = configManager.create(ScheduledMessagesConfig.class);
 
-        final LanguageRegistry languages = LanguageRegistry.load(
-                configManager, logger, dispatcherConfig.languages, dispatcherConfig.fallbackLanguage
-        );
+        final LanguageRegistry languages =
+                LanguageRegistry.load(configManager, logger, dispatcherConfig.fallbackLanguage);
 
         final ConfigReloadService configReloadService = new ConfigReloadService(configManager);
 
