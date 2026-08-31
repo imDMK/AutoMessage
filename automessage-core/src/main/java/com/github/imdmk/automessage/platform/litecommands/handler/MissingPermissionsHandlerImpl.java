@@ -23,7 +23,7 @@ public final class MissingPermissionsHandlerImpl implements MissingPermissionsHa
     ) {
         messageService.create()
                 .viewer(invocation.sender())
-                .notice(n -> n.liteCommandsMessages.commandPermissionMissing())
+                .notice(n -> n.liteCommandsMessages().commandPermissionMissing())
                 .placeholder("{PERMISSIONS}", String.join(", ", permissions.getPermissions()))
                 .send();
     }

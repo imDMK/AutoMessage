@@ -17,20 +17,24 @@ public final class MessageService extends BukkitMultification<MessageConfig> {
 
     private static final MiniMessage MINI_MESSAGE = MiniMessage.miniMessage();
 
-    private final MessageConfig messageConfig;
+    private final MessageConfigRegistry messages;
     private final AudienceProvider audienceProvider;
 
     public MessageService(
-            MessageConfig messageConfig,
+            MessageConfigRegistry messages,
             Plugin plugin
     ) {
-        this.messageConfig = messageConfig;
+        this.messages = messages;
         this.audienceProvider = BukkitAudiences.create(plugin);
     }
 
+    /**
+     * Multification passes the viewer's locale here, which is what lets two players sitting in the
+     * same chat read the same reply in different languages.
+     */
     @Override
     protected TranslationProvider<MessageConfig> translationProvider() {
-        return provider -> messageConfig;
+        return messages::provide;
     }
 
     @Override

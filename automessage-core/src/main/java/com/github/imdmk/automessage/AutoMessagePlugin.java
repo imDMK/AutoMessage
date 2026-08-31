@@ -7,7 +7,7 @@ import com.github.imdmk.automessage.command.reload.ReloadCommand;
 import com.github.imdmk.automessage.command.view.ViewCommand;
 import com.github.imdmk.automessage.config.ConfigManager;
 import com.github.imdmk.automessage.config.ConfigReloadService;
-import com.github.imdmk.automessage.message.MessageConfig;
+import com.github.imdmk.automessage.message.MessageConfigRegistry;
 import com.github.imdmk.automessage.message.MessageService;
 import com.github.imdmk.automessage.platform.litecommands.argument.ScheduledMessageArgument;
 import com.github.imdmk.automessage.platform.litecommands.argument.UnknownScheduledMessage;
@@ -67,13 +67,13 @@ final class AutoMessagePlugin {
 
         this.configManager = new ConfigManager(logger, plugin.getDataFolder());
 
-        final MessageConfig messageConfig = configManager.create(MessageConfig.class);
+        final MessageConfigRegistry messageConfigs = MessageConfigRegistry.load(configManager);
         final ScheduledMessagesConfig scheduledMessagesConfig = configManager.create(ScheduledMessagesConfig.class);
         final MessageDispatcherConfig dispatcherConfig = configManager.create(MessageDispatcherConfig.class);
 
         final ConfigReloadService configReloadService = new ConfigReloadService(configManager);
 
-        this.messageService = new MessageService(messageConfig, plugin);
+        this.messageService = new MessageService(messageConfigs, plugin);
         this.taskScheduler = new BukkitTaskScheduler(plugin, server.getScheduler());
 
         final ScheduledMessageRepository messageRepository =

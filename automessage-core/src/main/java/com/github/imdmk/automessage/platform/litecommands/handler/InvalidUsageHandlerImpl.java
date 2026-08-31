@@ -28,7 +28,7 @@ public final class InvalidUsageHandlerImpl implements InvalidUsageHandler<Comman
         if (schematic.isOnlyFirst()) {
             messageService.create()
                     .viewer(sender)
-                    .notice(notice -> notice.liteCommandsMessages.commandUsageInvalid())
+                    .notice(notice -> notice.liteCommandsMessages().commandUsageInvalid())
                     .placeholder("{USAGE}", schematic.first())
                     .send();
             return;
@@ -36,13 +36,13 @@ public final class InvalidUsageHandlerImpl implements InvalidUsageHandler<Comman
 
         messageService.create()
                 .viewer(sender)
-                .notice(notice -> notice.liteCommandsMessages.commandUsageHeader())
+                .notice(notice -> notice.liteCommandsMessages().commandUsageHeader())
                 .send();
 
         for (final String sch : schematic.all()) {
             messageService.create()
                     .viewer(sender)
-                    .notice(notice -> notice.liteCommandsMessages.commandUsageEntry())
+                    .notice(notice -> notice.liteCommandsMessages().commandUsageEntry())
                     .placeholder("{USAGE}", sch)
                     .send();
         }

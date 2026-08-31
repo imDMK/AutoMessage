@@ -1,85 +1,26 @@
 package com.github.imdmk.automessage.message;
 
-import com.eternalcode.multification.notice.resolver.NoticeResolverDefaults;
-import com.eternalcode.multification.okaeri.MultificationSerdesPack;
-import com.github.imdmk.automessage.command.dispatcher.messages.ENDispatcherMessages;
-import com.github.imdmk.automessage.command.reload.messages.ENReloadMessages;
-import com.github.imdmk.automessage.command.view.messages.ENViewMessages;
-import com.github.imdmk.automessage.config.ConfigSection;
-import com.github.imdmk.automessage.platform.litecommands.messages.ENLiteCommandsMessages;
-import eu.okaeri.configs.annotation.Comment;
-import eu.okaeri.configs.annotation.Header;
-import eu.okaeri.configs.serdes.OkaeriSerdesPack;
+import com.github.imdmk.automessage.command.dispatcher.messages.DispatcherMessages;
+import com.github.imdmk.automessage.command.reload.messages.ReloadMessages;
+import com.github.imdmk.automessage.command.view.messages.ViewMessages;
+import com.github.imdmk.automessage.platform.litecommands.messages.LiteCommandsMessages;
 
-@Header({
-        "# ============================================================================",
-        "#                              AutoMessage — messages.yml",
-        "# ============================================================================",
-        "# This configuration file defines all user-facing messages used by AutoMessage.",
-        "# It centralizes command responses, dispatcher status messages, and reload",
-        "# notifications, allowing full customization without modifying code.",
-        "#",
-        "# Sections:",
-        "#  • liteCommandsMessages   — errors, usage prompts, and permission responses",
-        "#  • dispatcherMessages     — messages for enabling/disabling automatic dispatching",
-        "#  • reloadMessages         — messages shown during configuration reload operations",
-        "#  • viewMessages           — messages used when previewing a scheduled message",
-        "#",
-        "# Editing Tips:",
-        "#  • Colors follow MiniMessage syntax (<red>, <yellow>, <gray>, <rainbow>, etc.).",
-        "#  • Reload the plugin after editing: /automessage reload",
-        "#",
-        "# Source Code:",
-        "#   https://github.com/imDMK/AutoMessage",
-        "#",
-        "# Support development:",
-        "#   GitHub Sponsors: https://github.com/sponsors/imDMK",
-        "#   PayPal:          https://paypal.me/dominiksuliga",
-        "#",
-        "# Thank you for using AutoMessage!",
-        "# ============================================================================"
-})
-public final class MessageConfig extends ConfigSection {
+/**
+ * Everything the plugin itself says to a player, in one language.
+ *
+ * <p>
+ * One implementation per shipped language, each backed by its own file. Which one a player gets is
+ * decided by {@link MessageConfigRegistry} from the language their client is running, so a server
+ * does not have to choose a single language for everyone.
+ * </p>
+ */
+public interface MessageConfig {
 
-    @Comment({
-            "#",
-            "# Messages used by the LiteCommands subsystem.",
-            "# Contains permission errors, usage hints, and syntax messages.",
-            "#"
-    })
-    public ENLiteCommandsMessages liteCommandsMessages = new ENLiteCommandsMessages();
+    LiteCommandsMessages liteCommandsMessages();
 
-    @Comment({
-            "#",
-            "# Messages used by dispatcher-related commands.",
-            "#"
-    })
-    public ENDispatcherMessages dispatcherMessages = new ENDispatcherMessages();
+    DispatcherMessages dispatcherMessages();
 
-    @Comment({
-            "#",
-            "# Messages used during configuration reload commands.",
-            "# Includes success and failure notifications.",
-            "#"
-    })
-    public ENReloadMessages reloadMessages = new ENReloadMessages();
+    ReloadMessages reloadMessages();
 
-    @Comment({
-            "#",
-            "# Messages used by the /automessage view command.",
-            "#"
-    })
-    public ENViewMessages viewMessages = new ENViewMessages();
-
-    @Override
-    public OkaeriSerdesPack getSerdesPack() {
-        return registry -> {
-            registry.register(new MultificationSerdesPack(NoticeResolverDefaults.createRegistry()));
-        };
-    }
-
-    @Override
-    public String getFileName() {
-        return "messages.yml";
-    }
+    ViewMessages viewMessages();
 }
