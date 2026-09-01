@@ -1,21 +1,11 @@
 package com.github.imdmk.automessage.scheduled.audience.rule;
 
-import org.bukkit.entity.Player;
+import com.github.imdmk.automessage.platform.viewer.Viewer;
 
 import java.time.Duration;
 import java.util.List;
 import java.util.Set;
 
-/**
- * One condition a player must satisfy to receive a message.
- *
- * <p>
- * The rules listed on a message are combined with AND. {@link AudienceAnyOfRule},
- * {@link AudienceNoneOfRule} and {@link AudienceNotRule} nest rules inside one another, which
- * turns that flat list into an expression tree and makes conditions like "VIP or moderator, but
- * not in the arena" expressible without duplicating the message.
- * </p>
- */
 public sealed interface AudienceRule
         permits AudiencePermissionRule,
                 AudienceGroupRule,
@@ -70,7 +60,7 @@ public sealed interface AudienceRule
         return new AudienceNotRule(rule);
     }
 
-    boolean test(Player player);
+    boolean test(Viewer viewer, AudienceContext context);
 
     enum Type {
         PERMISSION,

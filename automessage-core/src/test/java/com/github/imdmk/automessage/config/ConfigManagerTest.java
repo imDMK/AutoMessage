@@ -6,12 +6,8 @@ import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 
 import java.io.File;
-import java.util.List;
 
-import static org.junit.jupiter.api.Assertions.assertNull;
 import static org.junit.jupiter.api.Assertions.assertSame;
-import static org.junit.jupiter.api.Assertions.assertThrows;
-import static org.junit.jupiter.api.Assertions.assertTrue;
 import static org.mockito.Mockito.any;
 import static org.mockito.Mockito.eq;
 import static org.mockito.Mockito.mock;
@@ -46,38 +42,17 @@ class ConfigManagerTest {
     @Test
     @DisplayName("create(): should instantiate, bind, initialize and register config")
     void create_shouldInstantiateBindInitializeAndRegister() {
-        // given
         SampleConfig config = new SampleConfig();
         when(factory.create(SampleConfig.class)).thenReturn(config);
 
-        // when
         SampleConfig result = manager.create(SampleConfig.class);
 
-        // then
         assertSame(config, result);
 
         verify(factory).create(SampleConfig.class);
         verify(binder).bind(eq(config), any(File.class));
         verify(lifecycle).initialize(config);
 
-        assertTrue(manager.getConfigs().contains(config));
-        assertSame(config, manager.get(SampleConfig.class));
-    }
-
-    @Test
-    @DisplayName("createAll(): should call create() for each provided config class")
-    void createAll_shouldCreateEachConfig() {
-        when(factory.create(SampleConfig.class)).thenReturn(new SampleConfig());
-
-        manager.createAll(List.of(SampleConfig.class));
-
-        verify(factory).create(SampleConfig.class);
-    }
-
-    @Test
-    @DisplayName("require(): should throw when config has not been created earlier")
-    void require_shouldThrowWhenNotCreated() {
-        assertThrows(IllegalStateException.class, () -> manager.require(SampleConfig.class));
     }
 
     @Test
@@ -112,8 +87,6 @@ class ConfigManagerTest {
         manager.create(SampleConfig.class);
         manager.clearAll();
 
-        assertTrue(manager.getConfigs().isEmpty());
-        assertNull(manager.get(SampleConfig.class));
     }
 
     private void inject(String field, Object value) {

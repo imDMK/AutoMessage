@@ -2,7 +2,7 @@ package com.github.imdmk.automessage.scheduled.dispatcher;
 
 import com.github.imdmk.automessage.config.ConfigManager;
 import com.github.imdmk.automessage.platform.logger.PluginLogger;
-import com.github.imdmk.automessage.platform.time.DurationFormatter;
+import com.github.imdmk.automessage.notice.time.DurationFormatter;
 import com.github.imdmk.automessage.scheduled.channel.AnnouncementChannel;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
@@ -17,11 +17,6 @@ import java.util.List;
 import static org.assertj.core.api.Assertions.assertThat;
 import static org.mockito.Mockito.mock;
 
-/**
- * Guards the shape and the time values of {@code config.yml}.
- *
- * @see <a href="https://github.com/imDMK/AutoMessage/issues/101">GH-101</a>
- */
 class MessageDispatcherConfigTest {
 
     private final PluginLogger logger = mock(PluginLogger.class);
@@ -47,7 +42,7 @@ class MessageDispatcherConfigTest {
         List<AnnouncementChannel> channels = load().channels();
 
         assertThat(channels).hasSize(1);
-        assertThat(channels.getFirst().isDefault()).isTrue();
+        assertThat(channels.getFirst().matches(AnnouncementChannel.DEFAULT_NAME)).isTrue();
         assertThat(channels.getFirst().enabled()).isTrue();
     }
 

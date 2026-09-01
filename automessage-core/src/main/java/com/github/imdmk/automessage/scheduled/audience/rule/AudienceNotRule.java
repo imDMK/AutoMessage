@@ -1,15 +1,12 @@
 package com.github.imdmk.automessage.scheduled.audience.rule;
 
-import org.bukkit.entity.Player;
+import com.github.imdmk.automessage.platform.viewer.Viewer;
 
-/**
- * Inverts a single nested rule.
- */
 public record AudienceNotRule(AudienceRule rule) implements AudienceRule {
 
     @Override
-    public boolean test(Player player) {
-        return !rule.test(player);
+    public boolean test(Viewer viewer, AudienceContext context) {
+        return !rule.test(viewer, context);
     }
 
     @Override

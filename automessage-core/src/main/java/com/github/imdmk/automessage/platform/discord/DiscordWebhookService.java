@@ -1,50 +1,38 @@
 package com.github.imdmk.automessage.platform.discord;
 
-import com.eternalcode.multification.notice.Notice;
+import com.github.imdmk.automessage.notice.Notice;
 import com.github.imdmk.automessage.language.LanguageRegistry;
 import com.github.imdmk.automessage.platform.logger.PluginLogger;
 import com.github.imdmk.automessage.scheduled.ScheduledMessage;
 import com.github.imdmk.automessage.scheduled.dispatcher.DispatchObserver;
 import com.github.imdmk.automessage.scheduled.placeholder.MessagePlaceholders;
-import org.bukkit.Server;
+import com.github.imdmk.automessage.platform.viewer.ViewerRegistry;
 
 import java.net.URI;
 import java.util.List;
 import java.util.Optional;
 
-/**
- * Mirrors each dispatched announcement to a Discord channel.
- *
- * <p>
- * Observes the dispatcher rather than sitting inside it, so a Discord outage cannot affect what
- * players on the server receive.
- * </p>
- */
 public final class DiscordWebhookService implements DispatchObserver {
 
-    private final Server server;
+    private final ViewerRegistry viewers;
     private final LanguageRegistry languages;
     private final DiscordWebhookConfig config;
     private final DiscordWebhookClient client;
 
     private DiscordWebhookService(
-            Server server,
+            ViewerRegistry viewers,
             LanguageRegistry languages,
             DiscordWebhookConfig config,
             DiscordWebhookClient client
     ) {
-        this.server = server;
+        this.viewers = viewers;
         this.languages = languages;
         this.config = config;
         this.client = client;
     }
 
-    /**
-     * @return a service that posts, or {@link DispatchObserver#none()} when Discord mirroring is
-     *         switched off or configured with a URL that is not a Discord webhook
-     */
     public static DispatchObserver create(
-            Server server,
+            ViewerRegistry viewers,
             LanguageRegistry languages,
             PluginLogger logger,
             DiscordWebhookConfig config
@@ -64,7 +52,7 @@ public final class DiscordWebhookService implements DispatchObserver {
         }
 
         logger.info("Discord mirroring is enabled.");
-        return new DiscordWebhookService(server, languages, config, new DiscordWebhookClient(logger, endpoint.get()));
+        return new DiscordWebhookService(viewers, languages, config, new DiscordWebhookClient(logger, endpoint.get()));
     }
 
     @Override
@@ -77,7 +65,7 @@ public final class DiscordWebhookService implements DispatchObserver {
 
         final String content = DiscordMessageRenderer.render(
                 notices,
-                placeholders.resolveWithoutViewer(server)
+                placeholders.resolveWithoutViewer(viewers)
         );
 
         // A message made only of a title or a sound has nothing to show in a text channel.

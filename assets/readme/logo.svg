@@ -1,0 +1,61 @@
+<svg width="312" height="312" viewBox="0 0 312 312" fill="none" xmlns="http://www.w3.org/2000/svg" role="img" aria-labelledby="logoTitle logoDesc">
+  <title id="logoTitle">AutoMessage</title>
+  <desc id="logoDesc">A speech bubble carrying three announcement dots, with broadcast waves radiating from behind it.</desc>
+
+  <defs>
+    <linearGradient id="tile" x1="0" y1="0" x2="312" y2="312" gradientUnits="userSpaceOnUse">
+      <stop stop-color="#0A1023"/>
+      <stop offset="0.55" stop-color="#080B18"/>
+      <stop offset="1" stop-color="#07131D"/>
+    </linearGradient>
+
+    <linearGradient id="bubble" x1="62" y1="78" x2="250" y2="196" gradientUnits="userSpaceOnUse">
+      <stop stop-color="#A78BFA"/>
+      <stop offset="0.5" stop-color="#7C8CFF"/>
+      <stop offset="1" stop-color="#45D7E8"/>
+    </linearGradient>
+
+    <radialGradient id="glow" cx="0" cy="0" r="1" gradientTransform="translate(140 128) rotate(28) scale(190 165)" gradientUnits="userSpaceOnUse">
+      <stop stop-color="#7157FF" stop-opacity="0.40"/>
+      <stop offset="1" stop-color="#7157FF" stop-opacity="0"/>
+    </radialGradient>
+
+    <pattern id="logoGrid" width="26" height="26" patternUnits="userSpaceOnUse">
+      <path d="M26 0H0V26" stroke="#A8B2D1" stroke-opacity="0.05"/>
+      <circle cx="1" cy="1" r="1" fill="#A8B2D1" fill-opacity="0.13"/>
+    </pattern>
+
+    <filter id="lift" x="-40%" y="-40%" width="180%" height="180%">
+      <feDropShadow dx="0" dy="10" stdDeviation="14" flood-color="#000000" flood-opacity="0.45"/>
+    </filter>
+
+    <clipPath id="tileClip">
+      <rect width="312" height="312" rx="72"/>
+    </clipPath>
+  </defs>
+
+  <g clip-path="url(#tileClip)">
+    <rect width="312" height="312" fill="url(#tile)"/>
+    <rect width="312" height="312" fill="url(#logoGrid)"/>
+    <rect width="312" height="312" fill="url(#glow)"/>
+
+    <!-- Broadcast, radiating from behind the bubble. -->
+    <g stroke="#45D7E8" stroke-linecap="round" fill="none">
+      <path d="M244.9 113.2 A92 92 0 0 0 202.0 57.3" stroke-width="11" stroke-opacity="0.90"/>
+      <path d="M264.2 108.0 A112 112 0 0 0 212.0 40.0" stroke-width="11" stroke-opacity="0.55"/>
+      <path d="M283.5 102.8 A132 132 0 0 0 222.0 22.7" stroke-width="11" stroke-opacity="0.26"/>
+    </g>
+
+    <!-- The message itself. -->
+    <g filter="url(#lift)">
+      <path d="M96 78 H216 A34 34 0 0 1 250 112 V162 A34 34 0 0 1 216 196 H154 L108 230 V196 H96 A34 34 0 0 1 62 162 V112 A34 34 0 0 1 96 78 Z" fill="url(#bubble)"/>
+    </g>
+
+    <!-- Three announcements in rotation; the gold one is the turn being taken. -->
+    <circle cx="112" cy="137" r="12" fill="#0A1023" fill-opacity="0.82"/>
+    <circle cx="156" cy="137" r="12" fill="#0A1023" fill-opacity="0.82"/>
+    <circle cx="200" cy="137" r="12" fill="#F7C65B"/>
+
+    <rect x="1" y="1" width="310" height="310" rx="71" stroke="#A8B2D1" stroke-opacity="0.10" fill="none"/>
+  </g>
+</svg>

@@ -59,6 +59,7 @@ final class ConfigRepresenter extends Representer {
     }
 
     private class RepresentMap implements Represent {
+        @Override
         public Node representData(Object data) {
             return representMapping(Tag.MAP, (Map<?, ?>) data, DumperOptions.FlowStyle.BLOCK);
         }

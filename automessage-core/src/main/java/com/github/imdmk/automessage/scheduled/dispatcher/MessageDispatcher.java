@@ -5,7 +5,8 @@ import com.github.imdmk.automessage.scheduled.ScheduledMessageSender;
 import com.github.imdmk.automessage.scheduled.audience.filter.AudienceFilter;
 import com.github.imdmk.automessage.scheduled.placeholder.MessagePlaceholders;
 import com.github.imdmk.automessage.scheduled.selector.MessageSelector;
-import org.bukkit.entity.Player;
+import com.github.imdmk.automessage.platform.viewer.Viewer;
+import com.github.imdmk.automessage.scheduled.audience.rule.AudienceContext;
 
 import java.util.List;
 import java.util.function.Supplier;
@@ -15,17 +16,20 @@ public final class MessageDispatcher {
     private final ScheduledMessageSender sender;
     private final Supplier<MessageSelector> selector;
     private final AudienceFilter filter;
+    private final AudienceContext audienceContext;
     private final DispatchObserver observer;
 
     public MessageDispatcher(
             ScheduledMessageSender sender,
             Supplier<MessageSelector> selector,
             AudienceFilter filter,
+            AudienceContext audienceContext,
             DispatchObserver observer
     ) {
         this.sender = sender;
         this.selector = selector;
         this.filter = filter;
+        this.audienceContext = audienceContext;
         this.observer = observer;
     }
 
@@ -55,9 +59,9 @@ public final class MessageDispatcher {
         // reading it, so the scan happens once here rather than once per recipient.
         final MessagePlaceholders placeholders = sender.placeholdersOf(message);
 
-        for (final Player player : target.recipients()) {
-            if (filter.allows(player, message)) {
-                sender.sendAsync(player, message, placeholders);
+        for (final Viewer viewer : target.recipients()) {
+            if (filter.allows(viewer, message, audienceContext)) {
+                sender.send(viewer, message, placeholders);
             }
         }
 

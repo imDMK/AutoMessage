@@ -1,17 +1,9 @@
 package com.github.imdmk.automessage.language;
 
-import com.eternalcode.multification.notice.Notice;
+import com.github.imdmk.automessage.notice.Notice;
 import eu.okaeri.configs.OkaeriConfig;
 import eu.okaeri.configs.annotation.Comment;
 
-/**
- * Everything the plugin says in reply to a command.
- *
- * <p>
- * One flat section rather than four nested ones: there are thirteen messages in total, and a
- * translator reading the file should not have to remember which subsection a string lives in.
- * </p>
- */
 public class CommandMessages extends OkaeriConfig {
 
     @Comment({"#", "# {PERMISSIONS} - the permissions the player is missing.", "#"})

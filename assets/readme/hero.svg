@@ -1,0 +1,149 @@
+<svg width="1600" height="520" viewBox="0 0 1600 520" fill="none" xmlns="http://www.w3.org/2000/svg" role="img" aria-labelledby="title description">
+  <title id="title">AutoMessage — multiplatform Minecraft announcements</title>
+  <desc id="description">A dark product banner showing the AutoMessage name, its right message, right player, right moment tagline, and a live announcement preview.</desc>
+
+  <defs>
+    <linearGradient id="background" x1="60" y1="20" x2="1530" y2="530" gradientUnits="userSpaceOnUse">
+      <stop stop-color="#080B18"/>
+      <stop offset="0.48" stop-color="#0A1023"/>
+      <stop offset="1" stop-color="#07131D"/>
+    </linearGradient>
+    <linearGradient id="brand" x1="175" y1="210" x2="825" y2="315" gradientUnits="userSpaceOnUse">
+      <stop stop-color="#A78BFA"/>
+      <stop offset="0.48" stop-color="#7C8CFF"/>
+      <stop offset="1" stop-color="#45D7E8"/>
+    </linearGradient>
+    <linearGradient id="event" x1="1085" y1="150" x2="1400" y2="150" gradientUnits="userSpaceOnUse">
+      <stop stop-color="#F7C65B"/>
+      <stop offset="0.5" stop-color="#FF8A65"/>
+      <stop offset="1" stop-color="#F472B6"/>
+    </linearGradient>
+    <linearGradient id="bar" x1="1052" y1="310" x2="1418" y2="310" gradientUnits="userSpaceOnUse">
+      <stop stop-color="#8B5CF6"/>
+      <stop offset="0.55" stop-color="#6677FF"/>
+      <stop offset="1" stop-color="#42D3E4"/>
+    </linearGradient>
+    <radialGradient id="purpleGlow" cx="0" cy="0" r="1" gradientTransform="translate(448 255) rotate(20) scale(555 365)" gradientUnits="userSpaceOnUse">
+      <stop stop-color="#7157FF" stop-opacity="0.28"/>
+      <stop offset="1" stop-color="#7157FF" stop-opacity="0"/>
+    </radialGradient>
+    <radialGradient id="cyanGlow" cx="0" cy="0" r="1" gradientTransform="translate(1330 310) rotate(130) scale(420 390)" gradientUnits="userSpaceOnUse">
+      <stop stop-color="#22D3EE" stop-opacity="0.18"/>
+      <stop offset="1" stop-color="#22D3EE" stop-opacity="0"/>
+    </radialGradient>
+    <pattern id="grid" width="52" height="52" patternUnits="userSpaceOnUse">
+      <path d="M52 0H0V52" stroke="#A8B2D1" stroke-opacity="0.055"/>
+      <circle cx="1" cy="1" r="1" fill="#A8B2D1" fill-opacity="0.16"/>
+    </pattern>
+    <filter id="shadow" x="-30%" y="-30%" width="160%" height="160%">
+      <feDropShadow dx="0" dy="22" stdDeviation="28" flood-color="#000000" flood-opacity="0.42"/>
+    </filter>
+    <filter id="softGlow" x="-50%" y="-50%" width="200%" height="200%">
+      <feGaussianBlur stdDeviation="20"/>
+    </filter>
+  </defs>
+
+  <rect width="1600" height="520" rx="30" fill="url(#background)"/>
+  <rect width="1600" height="520" rx="30" fill="url(#grid)"/>
+  <rect width="1600" height="520" rx="30" fill="url(#purpleGlow)"/>
+  <rect width="1600" height="520" rx="30" fill="url(#cyanGlow)"/>
+  <path d="M0 434C258 369 457 493 733 429C986 371 1209 326 1600 412V520H0V434Z" fill="#10172B" fill-opacity="0.5"/>
+
+  <g opacity="0.7">
+    <circle cx="134" cy="92" r="3" fill="#A78BFA"/>
+    <circle cx="1510" cy="74" r="3" fill="#45D7E8"/>
+    <circle cx="897" cy="438" r="2" fill="#A78BFA"/>
+    <path d="M146 92H245" stroke="#A78BFA" stroke-opacity="0.25"/>
+    <path d="M1410 74H1510" stroke="#45D7E8" stroke-opacity="0.25"/>
+  </g>
+
+  <g font-family="Inter, ui-sans-serif, system-ui, -apple-system, BlinkMacSystemFont, Segoe UI, sans-serif">
+    <g transform="translate(112 74)">
+      <rect width="304" height="40" rx="20" fill="#131A32" stroke="#8B7CF6" stroke-opacity="0.45"/>
+      <circle cx="23" cy="20" r="5" fill="#8B7CF6"/>
+      <circle cx="23" cy="20" r="10" stroke="#8B7CF6" stroke-opacity="0.25"/>
+      <text x="42" y="25" fill="#C8C7E8" font-size="14" font-weight="700" letter-spacing="2.1">MULTIPLATFORM ANNOUNCEMENTS</text>
+    </g>
+
+    <text x="106" y="236" fill="url(#brand)" font-size="92" font-weight="780" letter-spacing="-4.4">AutoMessage</text>
+    <text x="112" y="286" fill="#F6F7FB" font-size="29" font-weight="650" letter-spacing="-0.6">Right message. Right player. Right moment.</text>
+    <text x="112" y="326" fill="#9CA7C2" font-size="18" font-weight="450">Schedule, target, trigger and localize every server announcement.</text>
+
+    <g transform="translate(112 365)">
+      <g>
+        <rect width="124" height="38" rx="11" fill="#11182D" stroke="#A78BFA" stroke-opacity="0.24"/>
+        <circle cx="19" cy="19" r="4" fill="#A78BFA"/>
+        <text x="33" y="24" fill="#C9CCE0" font-size="13" font-weight="720" letter-spacing="1.1">SCHEDULE</text>
+      </g>
+      <g transform="translate(136)">
+        <rect width="112" height="38" rx="11" fill="#11182D" stroke="#8B8CFF" stroke-opacity="0.24"/>
+        <circle cx="19" cy="19" r="4" fill="#8B8CFF"/>
+        <text x="33" y="24" fill="#C9CCE0" font-size="13" font-weight="720" letter-spacing="1.1">TARGET</text>
+      </g>
+      <g transform="translate(260)">
+        <rect width="116" height="38" rx="11" fill="#11182D" stroke="#5DBDE9" stroke-opacity="0.24"/>
+        <circle cx="19" cy="19" r="4" fill="#5DBDE9"/>
+        <text x="33" y="24" fill="#C9CCE0" font-size="13" font-weight="720" letter-spacing="1.1">TRIGGER</text>
+      </g>
+      <g transform="translate(388)">
+        <rect width="128" height="38" rx="11" fill="#11182D" stroke="#45D7E8" stroke-opacity="0.24"/>
+        <circle cx="19" cy="19" r="4" fill="#45D7E8"/>
+        <text x="33" y="24" fill="#C9CCE0" font-size="13" font-weight="720" letter-spacing="1.1">LOCALIZE</text>
+      </g>
+    </g>
+
+    <text x="112" y="460" fill="#68738F" font-size="13" font-weight="650" letter-spacing="1.4">BUKKIT  ·  FOLIA  ·  SPONGE  ·  VELOCITY  ·  FABRIC  ·  MINESTOM</text>
+
+    <g filter="url(#shadow)">
+      <rect x="970" y="58" width="520" height="404" rx="28" fill="#0C1224" stroke="#8893B5" stroke-opacity="0.2"/>
+      <rect x="986" y="74" width="488" height="372" rx="20" fill="#080D1B" stroke="#FFFFFF" stroke-opacity="0.045"/>
+
+      <circle cx="1013" cy="101" r="5" fill="#FF6B6B"/>
+      <circle cx="1031" cy="101" r="5" fill="#F7C65B"/>
+      <circle cx="1049" cy="101" r="5" fill="#42D392"/>
+      <text x="1080" y="106" fill="#6F7B98" font-size="11" font-weight="720" letter-spacing="1.7">LIVE ANNOUNCEMENT</text>
+      <rect x="1392" y="90" width="54" height="22" rx="11" fill="#12293A" stroke="#45D7E8" stroke-opacity="0.28"/>
+      <circle cx="1407" cy="101" r="4" fill="#45D7E8"/>
+      <text x="1418" y="105" fill="#7CE7F3" font-size="10" font-weight="750">ON</text>
+
+      <rect x="1014" y="132" width="432" height="104" rx="15" fill="#0E162B" stroke="#A78BFA" stroke-opacity="0.15"/>
+      <text x="1230" y="174" text-anchor="middle" fill="url(#event)" font-size="31" font-weight="820" letter-spacing="2.6">EVENT NIGHT</text>
+      <text x="1230" y="204" text-anchor="middle" fill="#AAB3CB" font-size="15" font-weight="520">The arena opens in 05:00</text>
+
+      <rect x="1014" y="251" width="432" height="49" rx="12" fill="#0D1427"/>
+      <rect x="1014" y="251" width="3" height="49" rx="2" fill="#F7C65B"/>
+      <text x="1031" y="272" fill="#F7C65B" font-size="12" font-weight="760">!</text>
+      <text x="1048" y="272" fill="#D8DBE8" font-size="12" font-weight="570">Vote now and claim your reward</text>
+      <text x="1031" y="288" fill="#697590" font-size="10">Personalized for every eligible player</text>
+
+      <rect x="1014" y="316" width="432" height="24" rx="12" fill="#11182C" stroke="#98A2C0" stroke-opacity="0.08"/>
+      <rect x="1018" y="320" width="316" height="16" rx="8" fill="url(#bar)"/>
+      <text x="1230" y="332" text-anchor="middle" fill="#F2F4FB" font-size="9" font-weight="750" letter-spacing="0.8">SERVER RESTART · 10 MINUTES</text>
+
+      <g transform="translate(1014 365)">
+        <rect width="71" height="26" rx="8" fill="#141B31"/>
+        <text x="35.5" y="17" text-anchor="middle" fill="#9EA7C0" font-size="10" font-weight="650">CHAT</text>
+        <rect x="79" width="86" height="26" rx="8" fill="#141B31"/>
+        <text x="122" y="17" text-anchor="middle" fill="#9EA7C0" font-size="10" font-weight="650">ACTION BAR</text>
+        <rect x="173" width="67" height="26" rx="8" fill="#141B31"/>
+        <text x="206.5" y="17" text-anchor="middle" fill="#9EA7C0" font-size="10" font-weight="650">TITLE</text>
+        <rect x="248" width="83" height="26" rx="8" fill="#141B31"/>
+        <text x="289.5" y="17" text-anchor="middle" fill="#9EA7C0" font-size="10" font-weight="650">BOSS BAR</text>
+        <rect x="339" width="73" height="26" rx="8" fill="#141B31"/>
+        <text x="375.5" y="17" text-anchor="middle" fill="#9EA7C0" font-size="10" font-weight="650">SOUND</text>
+      </g>
+
+      <path d="M1014 417H1446" stroke="#6E7894" stroke-opacity="0.16"/>
+      <circle cx="1024" cy="430" r="3" fill="#42D392"/>
+      <text x="1036" y="434" fill="#697590" font-size="10" font-weight="600">SHUFFLE</text>
+      <text x="1112" y="434" fill="#424C66" font-size="10">·</text>
+      <text x="1127" y="434" fill="#697590" font-size="10" font-weight="600">VIP + WORLD</text>
+      <text x="1225" y="434" fill="#424C66" font-size="10">·</text>
+      <text x="1240" y="434" fill="#697590" font-size="10" font-weight="600">EN / PL / DE</text>
+      <text x="1336" y="434" fill="#424C66" font-size="10">·</text>
+      <text x="1351" y="434" fill="#697590" font-size="10" font-weight="600">DISCORD</text>
+    </g>
+  </g>
+
+  <rect x="0.75" y="0.75" width="1598.5" height="518.5" rx="29.25" stroke="#B8C0D8" stroke-opacity="0.13" stroke-width="1.5"/>
+</svg>

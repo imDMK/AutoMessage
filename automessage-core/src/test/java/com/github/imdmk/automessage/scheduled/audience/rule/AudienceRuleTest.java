@@ -1,55 +1,115 @@
 package com.github.imdmk.automessage.scheduled.audience.rule;
 
-import org.bukkit.Server;
-import org.bukkit.Statistic;
-import org.bukkit.World;
-import org.bukkit.entity.Player;
+import com.github.imdmk.automessage.platform.viewer.PlaytimeSource;
+import com.github.imdmk.automessage.platform.viewer.Viewer;
+import com.github.imdmk.automessage.platform.viewer.ViewerRegistry;
+import net.kyori.adventure.audience.Audience;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 
 import java.time.Duration;
-import java.util.Collections;
+import java.util.Collection;
 import java.util.List;
+import java.util.Optional;
+import java.util.Set;
+import java.util.UUID;
 
 import static org.assertj.core.api.Assertions.assertThat;
 import static org.assertj.core.api.Assertions.assertThatThrownBy;
-import static org.mockito.Mockito.RETURNS_DEEP_STUBS;
-import static org.mockito.Mockito.doReturn;
-import static org.mockito.Mockito.mock;
-import static org.mockito.Mockito.when;
 
 class AudienceRuleTest {
 
-    private static final int TICKS_PER_HOUR = 20 * 60 * 60;
+    private record FakeViewer(String name, String worldName, Set<String> permissions) implements Viewer {
 
-    private static Player playerInWorld(String worldName) {
-        Player player = mock(Player.class, RETURNS_DEEP_STUBS);
-        World world = mock(World.class);
-        when(world.getName()).thenReturn(worldName);
-        when(player.getWorld()).thenReturn(world);
-        return player;
+        static FakeViewer inWorld(String world) {
+            return new FakeViewer("Steve", world, Set.of());
+        }
+
+        static FakeViewer with(String... permissions) {
+            return new FakeViewer("Steve", "world", Set.of(permissions));
+        }
+
+        static FakeViewer plain() {
+            return new FakeViewer("Steve", null, Set.of());
+        }
+
+        @Override
+        public UUID uniqueId() {
+            return UUID.nameUUIDFromBytes(name.getBytes());
+        }
+
+        @Override
+        public String displayName() {
+            return name;
+        }
+
+        @Override
+        public String locale() {
+            return "en_us";
+        }
+
+        @Override
+        public Optional<String> world() {
+            return Optional.ofNullable(worldName);
+        }
+
+        @Override
+        public boolean hasPermission(String permission) {
+            return permissions.contains(permission);
+        }
+
+        @Override
+        public boolean isPlayer() {
+            return true;
+        }
+
+        @Override
+        public boolean isOnline() {
+            return true;
+        }
+
+        @Override
+        public Audience audience() {
+            return Audience.empty();
+        }
     }
 
-    private static Player playerWithOnlineCount(int online) {
-        Player player = mock(Player.class);
-        Server server = mock(Server.class);
-        // getOnlinePlayers() is declared as Collection<? extends Player>; the captured wildcard
-        // makes thenReturn() unusable here, so the stub is installed the untyped way.
-        doReturn(List.copyOf(Collections.nCopies(online, player))).when(server).getOnlinePlayers();
-        when(player.getServer()).thenReturn(server);
-        return player;
+    private static AudienceContext context(int online, Duration playtime) {
+        ViewerRegistry viewers = new ViewerRegistry() {
+
+            @Override
+            public Collection<Viewer> online() {
+                return List.of();
+            }
+
+            @Override
+            public int onlineCount() {
+                return online;
+            }
+
+            @Override
+            public int maxPlayers() {
+                return 100;
+            }
+        };
+
+        PlaytimeSource playtimeSource = playtime == null
+                ? PlaytimeSource.unavailable()
+                : viewer -> Optional.of(playtime);
+
+        return AudienceContext.of(viewers, playtimeSource);
     }
 
-    private static Player playerWithHoursPlayed(int hours) {
-        Player player = mock(Player.class);
-        when(player.getStatistic(Statistic.PLAY_ONE_MINUTE)).thenReturn(hours * TICKS_PER_HOUR);
-        return player;
-    }
+    private static final AudienceContext ANY = context(1, Duration.ofHours(1));
 
-    private static Player playerWithPermission(String permission) {
-        Player player = mock(Player.class);
-        when(player.hasPermission(permission)).thenReturn(true);
-        return player;
+    @Test
+    @DisplayName("permission and group rules read the viewer's permissions")
+    void permissionRules() {
+        assertThat(AudienceRule.permission("rank.vip").test(FakeViewer.with("rank.vip"), ANY)).isTrue();
+        assertThat(AudienceRule.permission("rank.vip").test(FakeViewer.with("other"), ANY)).isFalse();
+
+        // A group rule is a permission rule with a prefix, which is how permission plugins grant them.
+        assertThat(AudienceRule.group("vip").test(FakeViewer.with("group.vip"), ANY)).isTrue();
     }
 
     @Test
@@ -57,8 +117,15 @@ class AudienceRuleTest {
     void worldRuleIsCaseInsensitive() {
         AudienceRule rule = AudienceRule.worlds("World_Nether");
 
-        assertThat(rule.test(playerInWorld("world_nether"))).isTrue();
-        assertThat(rule.test(playerInWorld("world"))).isFalse();
+        assertThat(rule.test(FakeViewer.inWorld("world_nether"), ANY)).isTrue();
+        assertThat(rule.test(FakeViewer.inWorld("world"), ANY)).isFalse();
+    }
+
+    @Test
+    @DisplayName("a viewer with no world matches no world rule instead of throwing")
+    void worldRuleWithoutAWorld() {
+        // The console, and everyone on a proxy.
+        assertThat(AudienceRule.worlds("world").test(FakeViewer.plain(), ANY)).isFalse();
     }
 
     @Test
@@ -66,30 +133,33 @@ class AudienceRuleTest {
     void playerCountRuleRespectsBothBounds() {
         AudienceRule rule = AudienceRule.playerCount(2, 10);
 
-        assertThat(rule.test(playerWithOnlineCount(1))).isFalse();
-        assertThat(rule.test(playerWithOnlineCount(2))).isTrue();
-        assertThat(rule.test(playerWithOnlineCount(10))).isTrue();
-        assertThat(rule.test(playerWithOnlineCount(11))).isFalse();
+        assertThat(rule.test(FakeViewer.plain(), context(1, null))).isFalse();
+        assertThat(rule.test(FakeViewer.plain(), context(2, null))).isTrue();
+        assertThat(rule.test(FakeViewer.plain(), context(10, null))).isTrue();
+        assertThat(rule.test(FakeViewer.plain(), context(11, null))).isFalse();
     }
 
     @Test
     @DisplayName("an open-ended player-count rule has no upper bound")
     void playerCountRuleCanBeOpenEnded() {
-        assertThat(AudiencePlayerCountRule.atLeast(50).test(playerWithOnlineCount(5_000))).isTrue();
+        assertThat(new AudiencePlayerCountRule(50, AudiencePlayerCountRule.UNBOUNDED).test(FakeViewer.plain(), context(5_000, null))).isTrue();
     }
 
     @Test
     @DisplayName("playtime rule separates newcomers from veterans")
     void playTimeRuleBoundsPlaytime() {
-        AudienceRule newcomers = AudiencePlayTimeRule.below(Duration.ofHours(2));
+        AudienceRule newcomers = new AudiencePlayTimeRule(Duration.ZERO, Duration.ofHours(2));
 
-        assertThat(newcomers.test(playerWithHoursPlayed(1))).isTrue();
-        assertThat(newcomers.test(playerWithHoursPlayed(3))).isFalse();
+        assertThat(newcomers.test(FakeViewer.plain(), context(1, Duration.ofHours(1)))).isTrue();
+        assertThat(newcomers.test(FakeViewer.plain(), context(1, Duration.ofHours(3)))).isFalse();
+    }
 
-        AudienceRule veterans = AudiencePlayTimeRule.atLeast(Duration.ofHours(100));
-
-        assertThat(veterans.test(playerWithHoursPlayed(150))).isTrue();
-        assertThat(veterans.test(playerWithHoursPlayed(10))).isFalse();
+    @Test
+    @DisplayName("a platform that keeps no playtime matches nobody rather than everybody")
+    void playTimeRuleWithoutASource() {
+        // Treating "unknown" as zero would make every veteran on a proxy look like a newcomer.
+        assertThat(new AudiencePlayTimeRule(Duration.ZERO, Duration.ofHours(2))
+                .test(FakeViewer.plain(), context(1, null))).isFalse();
     }
 
     @Test
@@ -100,8 +170,8 @@ class AudienceRuleTest {
                 AudienceRule.permission("rank.mod")
         );
 
-        assertThat(rule.test(playerWithPermission("rank.mod"))).isTrue();
-        assertThat(rule.test(playerWithPermission("rank.none"))).isFalse();
+        assertThat(rule.test(FakeViewer.with("rank.mod"), ANY)).isTrue();
+        assertThat(rule.test(FakeViewer.with("rank.none"), ANY)).isFalse();
     }
 
     @Test
@@ -109,8 +179,8 @@ class AudienceRuleTest {
     void noneOfIsANor() {
         AudienceRule rule = AudienceRule.noneOf(AudienceRule.permission("rank.vip"));
 
-        assertThat(rule.test(playerWithPermission("rank.vip"))).isFalse();
-        assertThat(rule.test(playerWithPermission("something.else"))).isTrue();
+        assertThat(rule.test(FakeViewer.with("rank.vip"), ANY)).isFalse();
+        assertThat(rule.test(FakeViewer.with("something.else"), ANY)).isTrue();
     }
 
     @Test
@@ -118,14 +188,13 @@ class AudienceRuleTest {
     void notInverts() {
         AudienceRule rule = AudienceRule.not(AudienceRule.permission("hide.ads"));
 
-        assertThat(rule.test(playerWithPermission("hide.ads"))).isFalse();
-        assertThat(rule.test(playerWithPermission("other"))).isTrue();
+        assertThat(rule.test(FakeViewer.with("hide.ads"), ANY)).isFalse();
+        assertThat(rule.test(FakeViewer.with("other"), ANY)).isTrue();
     }
 
     @Test
     @DisplayName("combinators nest to any depth")
     void combinatorsNest() {
-        // VIP or moderator, but never someone who opted out.
         AudienceRule rule = AudienceRule.anyOf(List.of(
                 AudienceRule.permission("rank.vip"),
                 AudienceRule.anyOf(
@@ -134,8 +203,8 @@ class AudienceRuleTest {
                 )
         ));
 
-        assertThat(rule.test(playerWithPermission("rank.vip"))).isTrue();
-        assertThat(rule.test(playerWithPermission("rank.mod"))).isTrue();
+        assertThat(rule.test(FakeViewer.with("rank.vip"), ANY)).isTrue();
+        assertThat(rule.test(FakeViewer.with("rank.mod"), ANY)).isTrue();
     }
 
     @Test

@@ -10,11 +10,9 @@ import org.junit.jupiter.api.Test;
 import java.io.File;
 import java.nio.file.Files;
 import java.nio.file.Path;
-import java.util.List;
 
 import static org.mockito.Mockito.mock;
 
-/** Throwaway harness: renders the configuration files a fresh install would write. */
 class RenderConfigsTest {
 
     @Test
@@ -28,7 +26,7 @@ class RenderConfigsTest {
         manager.create(ScheduledMessagesConfig.class);
         manager.create(DiscordWebhookConfig.class);
 
-        LanguageRegistry.load(manager, mock(PluginLogger.class), dispatcher.fallbackLanguage);
+        LanguageRegistry.load(manager, mock(PluginLogger.class), () -> dispatcher.fallbackLanguage);
 
         manager.saveAll();
     }

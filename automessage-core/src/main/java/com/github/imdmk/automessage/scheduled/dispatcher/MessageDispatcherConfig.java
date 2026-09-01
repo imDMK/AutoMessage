@@ -105,10 +105,6 @@ public final class MessageDispatcherConfig extends ConfigSection {
         return enabled;
     }
 
-    /**
-     * @return every configured channel; a file with none leaves the plugin silent, which is
-     *         reported rather than guessed at
-     */
     public List<AnnouncementChannel> channels() {
         return List.copyOf(channels);
     }

@@ -1,17 +1,9 @@
 package com.github.imdmk.automessage.scheduled.trigger;
 
-import org.bukkit.entity.Player;
-
 import java.time.Duration;
 
-/**
- * Fires for the player who just joined.
- *
- * @param delay          how long to wait after the join before sending; the join itself floods
- *                       chat with the server's own messages, and an announcement landing in the
- *                       middle of that is simply not read
- * @param firstJoinOnly  restricts the message to players the server has never seen before
- */
+// firstJoin is passed in rather than asked of the viewer: "has played here before" is spelled
+// differently on every platform, and some cannot answer it at all.
 public record JoinTrigger(Duration delay, boolean firstJoinOnly) implements MessageTrigger {
 
     public JoinTrigger {
@@ -20,8 +12,8 @@ public record JoinTrigger(Duration delay, boolean firstJoinOnly) implements Mess
         }
     }
 
-    public boolean appliesTo(Player player) {
-        return !firstJoinOnly || !player.hasPlayedBefore();
+    public boolean appliesTo(boolean firstJoin) {
+        return !firstJoinOnly || firstJoin;
     }
 
     @Override

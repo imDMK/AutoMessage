@@ -4,9 +4,9 @@ build/
 !**/src/main/**/build/
 !**/src/test/**/build/
 
-### run-paper ###
-# Working directory of the runServer task: a whole Paper install, worlds and logs.
-/automessage-loader/run/
+### run-paper / run-velocity / loom ###
+# Working directories of the runServer tasks: whole server installs, worlds and logs.
+**/run/
 
 ### IntelliJ IDEA ###
 .idea/
@@ -38,6 +38,13 @@ bin/
 
 ### VS Code ###
 .vscode/
+
+### JVM crash and heap dumps ###
+# A heap dump is written next to the working directory when a build runs out of memory, and one
+# of these is 750 MB - large enough that GitHub refuses the push that carries it.
+*.hprof
+hs_err_pid*.log
+replay_pid*.log
 
 ### Mac OS ###
 .DS_Store

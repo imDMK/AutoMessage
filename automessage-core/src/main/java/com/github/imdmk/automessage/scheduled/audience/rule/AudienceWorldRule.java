@@ -1,6 +1,6 @@
 package com.github.imdmk.automessage.scheduled.audience.rule;
 
-import org.bukkit.entity.Player;
+import com.github.imdmk.automessage.platform.viewer.Viewer;
 import org.jetbrains.annotations.Unmodifiable;
 
 import java.util.LinkedHashSet;
@@ -8,14 +8,6 @@ import java.util.List;
 import java.util.Locale;
 import java.util.Set;
 
-/**
- * Restricts a message to players standing in one of the named worlds.
- *
- * <p>
- * This is what keeps lobby advertising out of the event arena, and minigame instructions out of
- * the survival world.
- * </p>
- */
 public record AudienceWorldRule(@Unmodifiable Set<String> worlds) implements AudienceRule {
 
     public AudienceWorldRule {
@@ -35,8 +27,12 @@ public record AudienceWorldRule(@Unmodifiable Set<String> worlds) implements Aud
     }
 
     @Override
-    public boolean test(Player player) {
-        return worlds.contains(player.getWorld().getName().toLowerCase(Locale.ROOT));
+    public boolean test(Viewer viewer, AudienceContext context) {
+        // A viewer with no world - the console, or anyone on a proxy - is in none of them, so
+        // the rule simply does not match rather than throwing.
+        return viewer.world()
+                .map(world -> worlds.contains(world.toLowerCase(Locale.ROOT)))
+                .orElse(false);
     }
 
     @Override

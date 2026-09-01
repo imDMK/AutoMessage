@@ -4,20 +4,17 @@ import com.github.imdmk.automessage.platform.scheduler.PluginTask;
 import com.github.imdmk.automessage.scheduled.ScheduledMessage;
 import com.github.imdmk.automessage.scheduled.ScheduledMessageRepository;
 import com.github.imdmk.automessage.scheduled.channel.AnnouncementChannel;
-import org.bukkit.Server;
-import org.bukkit.entity.Player;
+import com.github.imdmk.automessage.platform.viewer.Viewer;
+import com.github.imdmk.automessage.platform.viewer.ViewerRegistry;
 
 import java.time.Duration;
 import java.util.Collection;
 import java.util.List;
 import java.util.function.BooleanSupplier;
 
-/**
- * The repeating tick of one announcement channel.
- */
 public final class MessageDispatcherTask implements PluginTask {
 
-    private final Server server;
+    private final ViewerRegistry viewers;
     private final BooleanSupplier masterSwitch;
     private final AnnouncementChannel channel;
     private final ScheduledMessageRepository repository;
@@ -25,14 +22,14 @@ public final class MessageDispatcherTask implements PluginTask {
     private final DispatchTiming timing;
 
     public MessageDispatcherTask(
-            Server server,
+            ViewerRegistry viewers,
             BooleanSupplier masterSwitch,
             AnnouncementChannel channel,
             ScheduledMessageRepository repository,
             MessageDispatcher messageDispatcher,
             DispatchTiming timing
     ) {
-        this.server = server;
+        this.viewers = viewers;
         this.masterSwitch = masterSwitch;
         this.channel = channel;
         this.repository = repository;
@@ -48,8 +45,8 @@ public final class MessageDispatcherTask implements PluginTask {
             return;
         }
 
-        final Collection<? extends Player> onlinePlayers = server.getOnlinePlayers();
-        if (onlinePlayers.isEmpty()) {
+        final Collection<Viewer> online = viewers.online();
+        if (online.isEmpty()) {
             return;
         }
 
@@ -58,11 +55,7 @@ public final class MessageDispatcherTask implements PluginTask {
             return;
         }
 
-        messageDispatcher.dispatchNext(messages, DispatchTarget.players(onlinePlayers));
-    }
-
-    public AnnouncementChannel channel() {
-        return channel;
+        messageDispatcher.dispatchNext(messages, DispatchTarget.viewers(online));
     }
 
     @Override

@@ -2,72 +2,52 @@ package com.github.imdmk.automessage.scheduled.dispatcher;
 
 import com.github.imdmk.automessage.config.ConfigReloadListener;
 import com.github.imdmk.automessage.platform.logger.PluginLogger;
+import com.github.imdmk.automessage.platform.scheduler.TaskHandle;
 import com.github.imdmk.automessage.platform.scheduler.TaskScheduler;
-import com.github.imdmk.automessage.platform.time.DurationFormatter;
+import com.github.imdmk.automessage.notice.time.DurationFormatter;
 import com.github.imdmk.automessage.scheduled.ScheduledMessageRepository;
 import com.github.imdmk.automessage.scheduled.channel.AnnouncementChannel;
 import com.github.imdmk.automessage.scheduled.selector.MessageSelectorProvider;
-import org.bukkit.Server;
-import org.bukkit.scheduler.BukkitTask;
+import com.github.imdmk.automessage.platform.viewer.ViewerRegistry;
 
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
-/**
- * Owns one repeating task per announcement channel.
- *
- * <p>
- * Bukkit captures the delay and the period when a task is scheduled, so a changed interval cannot
- * take effect while the task is running. Reloading the configuration therefore cancels every task
- * and schedules a fresh set with the timing that was just read.
- * </p>
- *
- * <p>
- * Each channel keeps its own selector across reloads, so re-reading the configuration does not
- * send every channel back to the top of its rotation.
- * </p>
- *
- * <p>
- * The ticks run on the main thread: they read the online player collection and evaluate the
- * audience rules, and neither is safe to touch asynchronously. Only the delivery of each notice is
- * handed off, so a tick costs one pass over the online players and nothing else.
- * </p>
- */
 public final class MessageDispatcherService implements ConfigReloadListener {
 
     private final PluginLogger logger;
-    private final Server server;
+    private final ViewerRegistry viewers;
     private final TaskScheduler taskScheduler;
     private final MessageDispatcherConfig dispatcherConfig;
     private final ScheduledMessageRepository repository;
     private final ScheduledMessageDispatcherFactory dispatcherFactory;
 
-    private final List<BukkitTask> tasks = new ArrayList<>();
+    private final List<TaskHandle> tasks = new ArrayList<>();
 
-    /**
-     * Selectors are stateful — SEQUENTIAL and SHUFFLE remember where they stopped — so they are
-     * kept per channel across restarts of the tasks rather than rebuilt with them.
-     */
+    // Selectors are stateful - SEQUENTIAL and SHUFFLE remember where they stopped - so they
+    // outlive the tasks and a reload does not send every channel back to the top of its rotation.
     private final Map<String, MessageSelectorProvider> selectorsByChannel = new HashMap<>();
 
     public MessageDispatcherService(
             PluginLogger logger,
-            Server server,
+            ViewerRegistry viewers,
             TaskScheduler taskScheduler,
             MessageDispatcherConfig dispatcherConfig,
             ScheduledMessageRepository repository,
             ScheduledMessageDispatcherFactory dispatcherFactory
     ) {
         this.logger = logger;
-        this.server = server;
+        this.viewers = viewers;
         this.taskScheduler = taskScheduler;
         this.dispatcherConfig = dispatcherConfig;
         this.repository = repository;
         this.dispatcherFactory = dispatcherFactory;
     }
 
+    // Schedulers capture the delay and period when a task is created, so a changed interval
+    // cannot take effect while the task runs - a reload cancels every task and schedules afresh.
     public synchronized void start() {
         if (!tasks.isEmpty()) {
             return;
@@ -88,27 +68,14 @@ public final class MessageDispatcherService implements ConfigReloadListener {
         warnAboutOrphanedMessages();
     }
 
-    /**
-     * Drops the rotation state of channels that no longer exist.
-     *
-     * <p>
-     * Selectors are deliberately kept across reloads so a channel does not restart its rotation
-     * every time the configuration is read. A channel that has been renamed or deleted, however,
-     * is never asked for again - and a SHUFFLE selector holds a deck of the messages it was
-     * dealing, so leaving the entry behind pins those objects for the life of the server.
-     * </p>
-     */
+    // A SHUFFLE selector holds a deck of the messages it was dealing, so an entry for a channel
+    // that no longer exists pins those objects for the life of the server.
     private void forgetSelectorsOfRemovedChannels(List<AnnouncementChannel> channels) {
         selectorsByChannel.keySet().removeIf(
                 name -> channels.stream().noneMatch(channel -> channel.matches(name))
         );
     }
 
-    /**
-     * A message pointing at a channel nobody declared is never sent, and nothing about the running
-     * server says why. A typo in one line of YAML is otherwise invisible until somebody notices an
-     * announcement has been missing for a week.
-     */
     private void warnAboutOrphanedMessages() {
         final List<AnnouncementChannel> channels = dispatcherConfig.channels();
 
@@ -135,7 +102,7 @@ public final class MessageDispatcherService implements ConfigReloadListener {
         );
 
         final MessageDispatcherTask task = new MessageDispatcherTask(
-                server,
+                viewers,
                 dispatcherConfig::isEnabled,
                 channel,
                 repository,
@@ -154,10 +121,6 @@ public final class MessageDispatcherService implements ConfigReloadListener {
         );
     }
 
-    /**
-     * Read through the configuration rather than captured, so a reload that changes a channel's
-     * rotation is picked up without discarding the position that channel had reached.
-     */
     private com.github.imdmk.automessage.scheduled.selector.MessageSelectorType currentSelectorOf(String channelName) {
         for (final AnnouncementChannel channel : dispatcherConfig.channels()) {
             if (channel.matches(channelName)) {
@@ -169,7 +132,7 @@ public final class MessageDispatcherService implements ConfigReloadListener {
     }
 
     public synchronized void stop() {
-        for (final BukkitTask task : tasks) {
+        for (final TaskHandle task : tasks) {
             task.cancel();
         }
 

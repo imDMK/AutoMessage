@@ -9,20 +9,11 @@ import java.net.http.HttpResponse;
 import java.time.Duration;
 import java.util.concurrent.atomic.AtomicLong;
 
-/**
- * Posts a message body to a Discord webhook.
- *
- * <p>
- * Every request is asynchronous. The main thread must never wait on a network round trip, and even
- * the plugin's async pool should not sit blocked on a Discord outage.
- * </p>
- */
 public final class DiscordWebhookClient {
 
     private static final Duration CONNECT_TIMEOUT = Duration.ofSeconds(5);
     private static final Duration REQUEST_TIMEOUT = Duration.ofSeconds(10);
 
-    /** How long to stay quiet after Discord asks us to slow down, when it gives no figure. */
     private static final long DEFAULT_BACKOFF_MILLIS = 60_000L;
 
     private static final int TOO_MANY_REQUESTS = 429;
@@ -31,14 +22,6 @@ public final class DiscordWebhookClient {
     private final HttpClient httpClient;
     private final URI endpoint;
 
-    /**
-     * Wall-clock time before which no request is attempted.
-     *
-     * <p>
-     * Discord answers a flood with 429 and a retry hint. Ignoring it earns a longer ban for the
-     * webhook, so a rejected request silences the rest until the window passes.
-     * </p>
-     */
     private final AtomicLong retryAfter = new AtomicLong(0L);
 
     public DiscordWebhookClient(PluginLogger logger, URI endpoint) {
@@ -77,7 +60,9 @@ public final class DiscordWebhookClient {
                     .map(DiscordWebhookClient::parseSeconds)
                     .orElse(DEFAULT_BACKOFF_MILLIS);
 
-            retryAfter.set(now + backoff);
+            // Never backwards: two responses can land out of order, and the later-expiring
+            // window is the one Discord actually asked for.
+            retryAfter.accumulateAndGet(now + backoff, Math::max);
 
             logger.warn(
                     "Discord asked AutoMessage to slow down; mirroring is paused for %d seconds.",
@@ -92,18 +77,8 @@ public final class DiscordWebhookClient {
         }
     }
 
-    /**
-     * Releases the client's selector thread and executor.
-     *
-     * <p>
-     * HttpClient is AutoCloseable and keeps threads of its own. They outlive a plugin disable
-     * otherwise, and because they were created under the plugin's class loader they keep it - and
-     * everything it loaded - from ever being collected. That is the classic leak behind a server
-     * that runs out of memory after a few /reload cycles.
-     * </p>
-     */
     public void close() {
-        httpClient.close();
+        httpClient.shutdownNow();
     }
 
     private static long parseSeconds(String value) {

@@ -8,30 +8,12 @@ import java.util.List;
 import java.util.Optional;
 import java.util.concurrent.ThreadLocalRandom;
 
-/**
- * Random order, but every message is shown once before any is repeated.
- *
- * <p>
- * {@code RANDOM} draws independently each time, so it can show the same announcement three times
- * running while another waits ten rounds for its turn. Players read that as a broken plugin. This
- * selector deals the messages out like a shuffled deck instead: unpredictable order, no repeats
- * until the deck is exhausted, then a fresh shuffle.
- * </p>
- */
 final class ShuffleMessageSelector implements MessageSelector {
 
-    /** Remaining messages of the current deck, consumed from the end. */
     private final List<ScheduledMessage> deck = new ArrayList<>();
 
-    /**
-     * The message list the current deck was dealt from.
-     *
-     * <p>
-     * A reload can add, remove or reorder messages. Carrying on with a deck built from the old
-     * list would keep announcing entries the administrator has just deleted, so the deck is
-     * re-dealt whenever the source no longer matches.
-     * </p>
-     */
+    // A reload can add, remove or reorder messages; carrying on with a deck dealt from the old
+    // list would keep announcing entries the administrator has just deleted.
     private List<ScheduledMessage> dealtFrom = List.of();
 
     @Override
