@@ -87,6 +87,9 @@ public final class AutoMessage {
                 viewers, logger, messageService, languages, placeholders
         );
 
+        // The scan it keeps is only valid for the text currently on disk.
+        configReloadService.register(messageSender);
+
         final DiscordWebhookConfig discordConfig = configManager.create(DiscordWebhookConfig.class);
 
         // One observer shared by every channel: mirroring is a property of the announcement, not

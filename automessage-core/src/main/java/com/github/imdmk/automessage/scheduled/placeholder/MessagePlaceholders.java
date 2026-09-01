@@ -46,6 +46,21 @@ public final class MessagePlaceholders {
         return new MessagePlaceholders(builtins, externalTokens, externalResolver);
     }
 
+    // Whether the rendered text can differ between two players. A PlaceholderAPI token is
+    // assumed to, since only the expansion behind it knows, and guessing wrong would send one
+    // player another player's text.
+    public boolean viewerScoped() {
+        if (!externalTokens.isEmpty()) {
+            return true;
+        }
+        for (final BuiltinPlaceholder builtin : builtins) {
+            if (builtin.requiresViewer()) {
+                return true;
+            }
+        }
+        return false;
+    }
+
     public boolean isEmpty() {
         return builtins.isEmpty() && externalTokens.isEmpty();
     }

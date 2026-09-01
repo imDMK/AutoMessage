@@ -51,20 +51,6 @@ public final class MessageBroadcast {
             return;
         }
 
-        service.render(viewer, notice, this::substitute);
-    }
-
-    private String substitute(String text) {
-        if (placeholders.isEmpty()) {
-            return text;
-        }
-
-        String substituted = text;
-
-        for (final Map.Entry<String, String> placeholder : placeholders.entrySet()) {
-            substituted = substituted.replace(placeholder.getKey(), placeholder.getValue());
-        }
-
-        return substituted;
+        service.render(viewer, notice, TextSubstitution.of(placeholders));
     }
 }

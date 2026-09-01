@@ -8,6 +8,7 @@ import com.github.imdmk.automessage.scheduled.selector.MessageSelector;
 import com.github.imdmk.automessage.platform.viewer.Viewer;
 import com.github.imdmk.automessage.scheduled.audience.rule.AudienceContext;
 
+import java.util.ArrayList;
 import java.util.List;
 import java.util.function.Supplier;
 
@@ -58,12 +59,17 @@ public final class MessageDispatcher {
         // Which placeholders the message contains is a property of the message, not of who is
         // reading it, so the scan happens once here rather than once per recipient.
         final MessagePlaceholders placeholders = sender.placeholdersOf(message);
+        final List<Viewer> recipients = new ArrayList<>();
 
         for (final Viewer viewer : target.recipients()) {
             if (filter.allows(viewer, message, audienceContext)) {
-                sender.send(viewer, message, placeholders);
+                recipients.add(viewer);
             }
         }
+
+        // Handed over as one audience rather than one at a time, so a message that reads the
+        // same for everybody is built once instead of once per player.
+        sender.sendAll(recipients, message, placeholders);
 
         // Once per announcement, not once per recipient - and after the players have been served,
         // so nothing an observer does can delay what happens on the server.

@@ -145,7 +145,14 @@ public final class LanguageRegistry implements ConfigReloadListener {
 
     @Nullable
     public List<Notice> announcement(String messageName, String rawCode) {
-        final List<Notice> translated = provide(rawCode).announcement(messageName);
+        return announcement(messageName, provide(rawCode));
+    }
+
+    // Takes the language already resolved, so a caller serving many players at once resolves it
+    // once for the whole group rather than once per player.
+    @Nullable
+    public List<Notice> announcement(String messageName, LanguageConfig language) {
+        final List<Notice> translated = language.announcement(messageName);
 
         if (translated != null) {
             return translated;

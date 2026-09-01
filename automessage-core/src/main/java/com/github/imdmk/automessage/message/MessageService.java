@@ -1,5 +1,7 @@
 package com.github.imdmk.automessage.message;
 
+import java.util.Collection;
+import net.kyori.adventure.audience.Audience;
 import com.github.imdmk.automessage.language.LanguageConfig;
 import com.github.imdmk.automessage.language.LanguageRegistry;
 import com.github.imdmk.automessage.notice.Notice;
@@ -30,6 +32,15 @@ public final class MessageService {
 
     void render(Viewer viewer, Notice notice, UnaryOperator<String> placeholders) {
         renderer.render(notice, viewer.audience(), placeholders);
+    }
+
+    // One parse for however many players are listening, rather than one parse per player.
+    public void render(Collection<Audience> audiences, Notice notice, UnaryOperator<String> placeholders) {
+        if (audiences.isEmpty()) {
+            return;
+        }
+
+        renderer.render(notice, AudienceGroup.of(audiences), placeholders);
     }
 
     LanguageConfig languageOf(Viewer viewer) {
