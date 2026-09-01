@@ -1,0 +1,97 @@
+<svg width="1320" height="500" viewBox="0 0 1320 500" fill="none" xmlns="http://www.w3.org/2000/svg" role="img" aria-labelledby="cfgTitle cfgDesc">
+  <title id="cfgTitle">The same plugin writes a different file on each platform</title>
+  <desc id="cfgDesc">Two generated configuration files side by side. On Paper every option is written. On a Velocity proxy the world rule, the playtime rule, the first-join trigger, the world placeholder, the PlaceholderAPI note and the playtime example are absent, because the runtime cannot honour them.</desc>
+  <defs>
+    <pattern id="cfgGrid" width="30" height="30" patternUnits="userSpaceOnUse"><path d="M30 0H0V30" stroke="#A8B2D1" stroke-opacity="0.04"/></pattern>
+    <clipPath id="cfgClip"><rect width="1320" height="500" rx="16"/></clipPath>
+  </defs>
+  <g clip-path="url(#cfgClip)" font-family="system-ui,-apple-system,'Segoe UI',Roboto,sans-serif">
+    <rect width="1320" height="500" fill="#0A0F1E"/>
+    <rect width="1320" height="500" fill="url(#cfgGrid)"/>
+    <text x="48" y="48" fill="#8593B4" font-size="14" letter-spacing="1.6">ONE PLUGIN · TWO PLATFORMS · TWO DIFFERENT FILES</text>
+
+    <rect x="48" y="112" width="596" height="336" rx="18" fill="#0E1729" stroke="#2E3A5C" stroke-width="1.5"/>
+    <text x="72" y="82" fill="#E8ECFB" font-size="17" font-weight="600">scheduledMessages.yml on Paper</text>
+    <text x="72" y="103" fill="#5D6884" font-size="13.5">everything the server can honour</text>
+    <text x="620" y="103" fill="#45D7E8" font-size="15" font-weight="700" text-anchor="end">119 lines</text>
+    <rect x="72" y="152" width="248" height="32" rx="9" fill="#16223C"/>
+    <circle cx="89" cy="168" r="4" fill="#45D7E8"/>
+    <text x="106" y="173" fill="#C6CEE6" font-size="14" font-family="'DejaVu Sans Mono',Menlo,monospace">type: PERMISSION</text>
+    <rect x="340" y="152" width="248" height="32" rx="9" fill="#16223C"/>
+    <circle cx="357" cy="168" r="4" fill="#45D7E8"/>
+    <text x="374" y="173" fill="#C6CEE6" font-size="14" font-family="'DejaVu Sans Mono',Menlo,monospace">type: GROUP</text>
+    <rect x="72" y="198" width="248" height="32" rx="9" fill="#16223C"/>
+    <circle cx="89" cy="214" r="4" fill="#45D7E8"/>
+    <text x="106" y="219" fill="#C6CEE6" font-size="14" font-family="'DejaVu Sans Mono',Menlo,monospace">type: PLAYER_COUNT</text>
+    <rect x="340" y="198" width="248" height="32" rx="9" fill="#16223C"/>
+    <circle cx="357" cy="214" r="4" fill="#45D7E8"/>
+    <text x="374" y="219" fill="#C6CEE6" font-size="14" font-family="'DejaVu Sans Mono',Menlo,monospace">trigger: JOIN</text>
+    <rect x="72" y="244" width="248" height="32" rx="9" fill="#16223C"/>
+    <circle cx="89" cy="260" r="4" fill="#45D7E8"/>
+    <text x="106" y="265" fill="#C6CEE6" font-size="14" font-family="'DejaVu Sans Mono',Menlo,monospace">trigger: PLAYER_COUNT</text>
+    <rect x="340" y="244" width="248" height="32" rx="9" fill="#16223C"/>
+    <circle cx="357" cy="260" r="4" fill="#45D7E8"/>
+    <text x="374" y="265" fill="#C6CEE6" font-size="14" font-family="'DejaVu Sans Mono',Menlo,monospace">{PLAYER} {ONLINE}</text>
+    <rect x="72" y="290" width="248" height="32" rx="9" fill="#16223C"/>
+    <circle cx="89" cy="306" r="4" fill="#45D7E8"/>
+    <text x="106" y="311" fill="#C6CEE6" font-size="14" font-family="'DejaVu Sans Mono',Menlo,monospace">type: WORLD</text>
+    <rect x="340" y="290" width="248" height="32" rx="9" fill="#16223C"/>
+    <circle cx="357" cy="306" r="4" fill="#45D7E8"/>
+    <text x="374" y="311" fill="#C6CEE6" font-size="14" font-family="'DejaVu Sans Mono',Menlo,monospace">type: PLAYTIME</text>
+    <rect x="72" y="336" width="248" height="32" rx="9" fill="#16223C"/>
+    <circle cx="89" cy="352" r="4" fill="#45D7E8"/>
+    <text x="106" y="357" fill="#C6CEE6" font-size="14" font-family="'DejaVu Sans Mono',Menlo,monospace">trigger: FIRST_JOIN</text>
+    <rect x="340" y="336" width="248" height="32" rx="9" fill="#16223C"/>
+    <circle cx="357" cy="352" r="4" fill="#45D7E8"/>
+    <text x="374" y="357" fill="#C6CEE6" font-size="14" font-family="'DejaVu Sans Mono',Menlo,monospace">{WORLD}</text>
+    <rect x="72" y="382" width="248" height="32" rx="9" fill="#16223C"/>
+    <circle cx="89" cy="398" r="4" fill="#45D7E8"/>
+    <text x="106" y="403" fill="#C6CEE6" font-size="14" font-family="'DejaVu Sans Mono',Menlo,monospace">%placeholderapi%</text>
+    <rect x="340" y="382" width="248" height="32" rx="9" fill="#16223C"/>
+    <circle cx="357" cy="398" r="4" fill="#45D7E8"/>
+    <text x="374" y="403" fill="#C6CEE6" font-size="14" font-family="'DejaVu Sans Mono',Menlo,monospace">newcomer-tip</text>
+    <rect x="676" y="112" width="596" height="336" rx="18" fill="#0E1729" stroke="#2E3A5C" stroke-width="1.5"/>
+    <text x="700" y="82" fill="#E8ECFB" font-size="17" font-weight="600">the same file on a Velocity proxy</text>
+    <text x="700" y="103" fill="#5D6884" font-size="13.5">a proxy has no worlds and keeps no playtime</text>
+    <text x="1248" y="103" fill="#45D7E8" font-size="15" font-weight="700" text-anchor="end">99 lines</text>
+    <rect x="700" y="152" width="248" height="32" rx="9" fill="#16223C"/>
+    <circle cx="717" cy="168" r="4" fill="#45D7E8"/>
+    <text x="734" y="173" fill="#C6CEE6" font-size="14" font-family="'DejaVu Sans Mono',Menlo,monospace">type: PERMISSION</text>
+    <rect x="968" y="152" width="248" height="32" rx="9" fill="#16223C"/>
+    <circle cx="985" cy="168" r="4" fill="#45D7E8"/>
+    <text x="1002" y="173" fill="#C6CEE6" font-size="14" font-family="'DejaVu Sans Mono',Menlo,monospace">type: GROUP</text>
+    <rect x="700" y="198" width="248" height="32" rx="9" fill="#16223C"/>
+    <circle cx="717" cy="214" r="4" fill="#45D7E8"/>
+    <text x="734" y="219" fill="#C6CEE6" font-size="14" font-family="'DejaVu Sans Mono',Menlo,monospace">type: PLAYER_COUNT</text>
+    <rect x="968" y="198" width="248" height="32" rx="9" fill="#16223C"/>
+    <circle cx="985" cy="214" r="4" fill="#45D7E8"/>
+    <text x="1002" y="219" fill="#C6CEE6" font-size="14" font-family="'DejaVu Sans Mono',Menlo,monospace">trigger: JOIN</text>
+    <rect x="700" y="244" width="248" height="32" rx="9" fill="#16223C"/>
+    <circle cx="717" cy="260" r="4" fill="#45D7E8"/>
+    <text x="734" y="265" fill="#C6CEE6" font-size="14" font-family="'DejaVu Sans Mono',Menlo,monospace">trigger: PLAYER_COUNT</text>
+    <rect x="968" y="244" width="248" height="32" rx="9" fill="#16223C"/>
+    <circle cx="985" cy="260" r="4" fill="#45D7E8"/>
+    <text x="1002" y="265" fill="#C6CEE6" font-size="14" font-family="'DejaVu Sans Mono',Menlo,monospace">{PLAYER} {ONLINE}</text>
+    <rect x="700" y="290" width="248" height="32" rx="9" fill="none" stroke="#26314C" stroke-width="1.5" stroke-dasharray="5 5"/>
+    <path d="M713 306 h8" stroke="#414D6B" stroke-width="2" stroke-linecap="round"/>
+    <text x="734" y="311" fill="#414D6B" font-size="14" font-family="'DejaVu Sans Mono',Menlo,monospace" text-decoration="line-through">type: WORLD</text>
+    <rect x="968" y="290" width="248" height="32" rx="9" fill="none" stroke="#26314C" stroke-width="1.5" stroke-dasharray="5 5"/>
+    <path d="M981 306 h8" stroke="#414D6B" stroke-width="2" stroke-linecap="round"/>
+    <text x="1002" y="311" fill="#414D6B" font-size="14" font-family="'DejaVu Sans Mono',Menlo,monospace" text-decoration="line-through">type: PLAYTIME</text>
+    <rect x="700" y="336" width="248" height="32" rx="9" fill="none" stroke="#26314C" stroke-width="1.5" stroke-dasharray="5 5"/>
+    <path d="M713 352 h8" stroke="#414D6B" stroke-width="2" stroke-linecap="round"/>
+    <text x="734" y="357" fill="#414D6B" font-size="14" font-family="'DejaVu Sans Mono',Menlo,monospace" text-decoration="line-through">trigger: FIRST_JOIN</text>
+    <rect x="968" y="336" width="248" height="32" rx="9" fill="none" stroke="#26314C" stroke-width="1.5" stroke-dasharray="5 5"/>
+    <path d="M981 352 h8" stroke="#414D6B" stroke-width="2" stroke-linecap="round"/>
+    <text x="1002" y="357" fill="#414D6B" font-size="14" font-family="'DejaVu Sans Mono',Menlo,monospace" text-decoration="line-through">{WORLD}</text>
+    <rect x="700" y="382" width="248" height="32" rx="9" fill="none" stroke="#26314C" stroke-width="1.5" stroke-dasharray="5 5"/>
+    <path d="M713 398 h8" stroke="#414D6B" stroke-width="2" stroke-linecap="round"/>
+    <text x="734" y="403" fill="#414D6B" font-size="14" font-family="'DejaVu Sans Mono',Menlo,monospace" text-decoration="line-through">%placeholderapi%</text>
+    <rect x="968" y="382" width="248" height="32" rx="9" fill="none" stroke="#26314C" stroke-width="1.5" stroke-dasharray="5 5"/>
+    <path d="M981 398 h8" stroke="#414D6B" stroke-width="2" stroke-linecap="round"/>
+    <text x="1002" y="403" fill="#414D6B" font-size="14" font-family="'DejaVu Sans Mono',Menlo,monospace" text-decoration="line-through">newcomer-tip</text>
+
+    <text x="48" y="476" fill="#8593B4" font-size="13.5">An option a platform cannot honour is worse than a missing one: it is set, nothing happens, and nothing says why.</text>
+    <rect x="0.75" y="0.75" width="1318.5" height="498.5" rx="15.5" fill="none" stroke="#A8B2D1" stroke-opacity="0.11"/>
+  </g>
+</svg>

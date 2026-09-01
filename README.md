@@ -22,6 +22,10 @@
 </p>
 
 <p align="center">
+  <sub><strong>6</strong> runtimes &nbsp;·&nbsp; <strong>8</strong> notice surfaces &nbsp;·&nbsp; <strong>8</strong> audience rules &nbsp;·&nbsp; <strong>3</strong> event triggers &nbsp;·&nbsp; <strong>3</strong> languages shipped &nbsp;·&nbsp; <strong>no database</strong></sub>
+</p>
+
+<p align="center">
   <a href="#get-automessage"><strong>Get AutoMessage</strong></a>
   ·
   <a href="#quick-start"><strong>Quick start</strong></a>
@@ -101,6 +105,30 @@ the answer to everyone, in one language, on one clock.
 | **↗ Beyond the server**<br><br>Mirror chat content to a Discord webhook, with player-only placeholders stripped and automatic mentions disabled. | **♻ Reload, do not restart**<br><br>`/automessage reload` applies schedules, messages and languages in place — including a translation file added while the server was running. | **🪶 Lean dispatch path**<br><br>No database. An empty server short-circuits, and each announcement is scanned for placeholders once rather than once per player. |
 
 
+## 🎯 Reach exactly who should hear it
+
+Rules compose. Every top-level rule must pass, and `ANY_OF`, `NONE_OF` and `NOT` nest inside them
+when the audience needs more than an AND.
+
+<p align="center">
+  <img src="assets/readme/audience.svg" alt="Twelve players online; a rule requiring the rank.vip permission and at least ten hours of playtime selects five of them, the rest stay dark" width="100%">
+</p>
+
+The same rules apply to a message sent by an event, so a join greeting restricted to a permission
+never reaches somebody who lacks it just because they walked through the door.
+
+## ⚡ Fire on an event, not a clock
+
+A message with a trigger leaves its channel rotation entirely and waits for something to happen.
+
+<p align="center">
+  <img src="assets/readme/triggers.svg" alt="Three lanes: a channel firing on a five-minute period, a join trigger firing three seconds after a player connects, and a player-count milestone firing once at one hundred online and re-arming only after the count falls below" width="100%">
+</p>
+
+`PLAYER_COUNT` is the one worth reading twice: it fires **once** on the way up and re-arms only
+after the server drops back below the threshold, so a population hovering on the boundary does not
+announce the same milestone every time somebody logs in.
+
 ## 🌐 One engine. Six runtimes
 
 AutoMessage uses a shared platform-neutral core and a small runtime adapter for each server type.
@@ -129,6 +157,10 @@ remain native to the platform underneath.
 
 Each artifact writes a platform-aware configuration. Options the runtime cannot honor are left out
 instead of being generated and silently ignored.
+
+<p align="center">
+  <img src="assets/readme/platform-config.svg" alt="The same generated file on Paper and on a Velocity proxy: the world rule, playtime rule, first-join trigger, world placeholder, PlaceholderAPI note and playtime example are absent from the proxy file" width="100%">
+</p>
 
 <details>
 <summary><strong>What about Quilt?</strong></summary>
