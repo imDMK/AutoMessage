@@ -11,12 +11,55 @@ import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 
 import java.time.Duration;
+import java.util.ArrayDeque;
 import java.util.ArrayList;
+import java.util.Deque;
 import java.util.List;
 
 import static org.assertj.core.api.Assertions.assertThat;
 
 class NoticeRendererTest {
+
+    // A clock the test winds by hand. immediate() cannot show a countdown: it runs every step
+    // before the assertion, so the bar is always already empty.
+    private static final class SteppingDelayer implements NoticeDelayer {
+
+        private final Deque<Runnable> queue = new ArrayDeque<>();
+        private final List<Duration> delays = new ArrayList<>();
+
+        @Override
+        public void runLater(Duration delay, Runnable action) {
+            delays.add(delay);
+            queue.add(action);
+        }
+
+        int pending() {
+            return queue.size();
+        }
+
+        boolean step() {
+            Runnable next = queue.poll();
+            if (next == null) {
+                return false;
+            }
+
+            next.run();
+            return true;
+        }
+
+        int runAll() {
+            int ran = 0;
+            while (step()) {
+                ran++;
+            }
+
+            return ran;
+        }
+
+        Duration scheduled() {
+            return delays.stream().reduce(Duration.ZERO, Duration::plus);
+        }
+    }
 
     private static final class RecordingAudience implements Audience {
 
@@ -149,14 +192,65 @@ class NoticeRendererTest {
     }
 
     @Test
-    @DisplayName("a boss bar with no progress configured is full")
-    void bossBarDefaultsToFull() {
-        renderer.render(
-                Notice.bossBar(BossBar.Color.BLUE, BossBar.Overlay.NOTCHED_10, Duration.ofSeconds(3), "<green>bar"),
+    @DisplayName("a boss bar with no progress of its own drains over its duration")
+    void bossBarWithoutProgressDrains() {
+        SteppingDelayer clock = new SteppingDelayer();
+        NoticeRenderer timed = NoticeRenderer.miniMessage(clock);
+
+        timed.render(
+                Notice.bossBar(BossBar.Color.BLUE, BossBar.Overlay.NOTCHED_10, Duration.ofSeconds(4), "<green>bar"),
                 audience
         );
 
-        assertThat(audience.shownBars.getFirst().progress()).isEqualTo(BossBar.MAX_PROGRESS);
+        BossBar bar = audience.shownBars.getFirst();
+        assertThat(bar.progress()).isEqualTo(BossBar.MAX_PROGRESS);
+
+        clock.step();
+        assertThat(bar.progress()).isLessThan(BossBar.MAX_PROGRESS);
+
+        clock.runAll();
+
+        // Empty and gone, and the steps between them add up to exactly the configured duration.
+        assertThat(bar.progress()).isEqualTo(BossBar.MIN_PROGRESS);
+        assertThat(audience.hiddenBars).containsExactly(bar);
+        assertThat(clock.scheduled()).isEqualTo(Duration.ofSeconds(4));
+    }
+
+    @Test
+    @DisplayName("a boss bar that names a progress keeps it and simply disappears")
+    void bossBarWithProgressStaysPut() {
+        SteppingDelayer clock = new SteppingDelayer();
+        NoticeRenderer timed = NoticeRenderer.miniMessage(clock);
+
+        timed.render(
+                Notice.bossBar(BossBar.Color.RED, BossBar.Overlay.PROGRESS, Duration.ofSeconds(4), 0.25D, "<green>bar"),
+                audience
+        );
+
+        // One action, not a countdown: an administrator who wrote a progress asked for that fill.
+        assertThat(clock.pending()).isEqualTo(1);
+
+        clock.runAll();
+
+        assertThat(audience.shownBars.getFirst().progress()).isEqualTo(0.25F);
+        assertThat(audience.hiddenBars).hasSize(1);
+    }
+
+    @Test
+    @DisplayName("a long boss bar is not redrawn once per tick")
+    void longBossBarIsRateLimited() {
+        SteppingDelayer clock = new SteppingDelayer();
+        NoticeRenderer timed = NoticeRenderer.miniMessage(clock);
+
+        timed.render(
+                Notice.bossBar(BossBar.Color.RED, BossBar.Overlay.PROGRESS, Duration.ofMinutes(10), "<green>bar"),
+                audience
+        );
+
+        // Every step is a packet to one player, so ten minutes must not mean twelve thousand of
+        // them. The cap is what keeps a long countdown affordable on a full server.
+        assertThat(clock.runAll()).isLessThanOrEqualTo(41);
+        assertThat(audience.hiddenBars).hasSize(1);
     }
 
     @Test
