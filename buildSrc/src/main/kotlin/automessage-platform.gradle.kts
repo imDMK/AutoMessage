@@ -25,6 +25,14 @@ open class PlatformExtension(private val project: Project) {
     // intermediate that should not be mistaken for it in `build/libs`.
     var shadowIsIntermediate: Boolean = false
 
+    /**
+     * Port the module's runServer listens on, or zero where the platform is configured elsewhere.
+     *
+     * One per platform, so several can run at once and none of them lands on 25565 - which on a
+     * developer's own machine is usually already taken by the server they are actually playing on.
+     */
+    var runPort: Int = 0
+
     // Bundled third-party packages, moved out of the way so two plugins shading different
     // versions of the same library cannot collide inside one server.
     val relocated: MutableList<String> = mutableListOf(
@@ -71,6 +79,34 @@ val platformJar: Configuration by configurations.creating {
 
 tasks.named("build") {
     dependsOn(tasks.named("shadowJar"))
+}
+
+// Minecraft rewrites server.properties on every start, filling in every default it knows - which
+// silently puts the port back to 25565. Re-applying the two settings that matter before each run
+// is what keeps the task usable a second time, and it leaves every other line the developer or the
+// server wrote alone.
+afterEvaluate {
+    if (platform.runPort != 0 && tasks.names.contains("runServer")) {
+        tasks.named("runServer") {
+            doFirst {
+                val runDirectory = layout.projectDirectory.dir("run").asFile
+                runDirectory.mkdirs()
+
+                val properties = runDirectory.resolve("server.properties")
+                val settings = mapOf(
+                    "server-port" to platform.runPort.toString(),
+                    "online-mode" to "false",
+                )
+
+                val kept = properties.takeIf { it.isFile }
+                    ?.readLines()
+                    ?.filterNot { line -> settings.keys.any { line.startsWith("$it=") } }
+                    ?: emptyList()
+
+                properties.writeText((kept + settings.map { (k, v) -> "$k=$v" }).joinToString("\n") + "\n")
+            }
+        }
+    }
 }
 
 afterEvaluate {

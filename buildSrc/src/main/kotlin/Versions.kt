@@ -20,6 +20,9 @@ object Versions {
      * force this module's bytecode above the level Folia servers on 1.21 can load. The scheduler
      * interfaces have not changed since, so the older API produces a jar that runs on both.
      */
+    /** Folia build the runFolia task downloads; Folia publishes releases per Minecraft line. */
+    const val FOLIA_RUN_MINECRAFT = "26.2"
+
     const val FOLIA_API = "1.21.11-R0.1-SNAPSHOT"
 
     /**

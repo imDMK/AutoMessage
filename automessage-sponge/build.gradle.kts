@@ -57,6 +57,7 @@ sponge {
 }
 
 automessagePlatform {
+    runPort = 25596
     platformName = "Sponge"
 
     // One API version is one Minecraft version here, so the jar says which rather than inheriting

@@ -63,8 +63,12 @@ sourceSets.main {
     java.srcDir(generateBuildConstants)
 }
 
-// A proxy is Velocity's own software, so unlike the Minecraft servers this one needs no agreement
-// from anybody to start.
-tasks.runVelocity {
+// run-velocity calls its task runVelocity; this adds the runServer every other module answers to.
+// Both are configured together so it does not matter which one gets started.
+tasks.register<xyz.jpenilla.runvelocity.task.RunVelocity>("runServer") {
+    description = "Run a Velocity proxy for plugin testing."
+}
+
+tasks.withType<xyz.jpenilla.runvelocity.task.RunVelocity>().configureEach {
     velocityVersion(Versions.VELOCITY_API)
 }

@@ -74,3 +74,36 @@ automessagePlatform {
 
     providedByPlatform("net.kyori", "org.slf4j")
 }
+
+// A source set of its own, not main and not test: the launcher must not ship inside the library
+// jar, and it is not a test either - it is a server somebody starts and watches.
+val dev: SourceSet by sourceSets.creating {
+    compileClasspath += sourceSets.main.get().output
+    runtimeClasspath += sourceSets.main.get().output
+}
+
+configurations["devImplementation"].extendsFrom(configurations["implementation"], configurations["api"])
+configurations["devRuntimeOnly"].extendsFrom(configurations["runtimeOnly"])
+
+dependencies {
+    "devImplementation"("net.minestom:minestom:${Versions.MINESTOM}")
+    "devRuntimeOnly"("org.slf4j:slf4j-simple:${Versions.SLF4J}")
+}
+
+tasks.register<JavaExec>("runServer") {
+    group = "run"
+    description = "Run a Minestom server for plugin testing."
+
+    mainClass.set("com.github.imdmk.automessage.minestom.dev.MinestomDevServer")
+    classpath = dev.runtimeClasspath
+
+    // Minestom itself is Java 25, so this cannot borrow the launcher a Java 21 target would use.
+    javaLauncher.set(javaToolchains.launcherFor {
+        languageVersion.set(JavaLanguageVersion.of(Versions.MINESTOM_JAVA_RELEASE))
+    })
+
+    workingDir = layout.projectDirectory.dir("run").asFile
+    standardInput = System.`in`
+
+    doFirst { workingDir.mkdirs() }
+}

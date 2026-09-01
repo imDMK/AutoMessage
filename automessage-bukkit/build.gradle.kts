@@ -13,6 +13,7 @@ dependencies {
 }
 
 automessagePlatform {
+    runPort = 25599
     platformName = "Bukkit"
 }
 

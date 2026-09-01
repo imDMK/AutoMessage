@@ -65,6 +65,7 @@ tasks.processResources {
 }
 
 automessagePlatform {
+    runPort = 25597
     platformName = "Fabric"
     supportedVersions = Versions.FABRIC_MINECRAFT
 
