@@ -33,7 +33,7 @@
   <a href="#reference"><strong>Reference</strong></a>
 </p>
 
-## Broadcasts should earn attention
+## 📣 Broadcasts should earn attention
 
 Players learn to ignore announcements when every message reaches everyone. AutoMessage makes
 server communication intentional: give each stream its own schedule, select exactly who should
@@ -79,7 +79,7 @@ announcements:
 That is the whole feature set in miniature: an event instead of a clock, an audience instead of
 everyone, and text that lives beside every other translation.
 
-## More than a rotating list
+## ⚖️ More than a rotating list
 
 The tagline is not marketing. A rotator answers one question — *what do I say next?* — and sends
 the answer to everyone, in one language, on one clock.
@@ -101,11 +101,15 @@ the answer to everyone, in one language, on one clock.
 | **↗ Beyond the server**<br><br>Mirror chat content to a Discord webhook, with player-only placeholders stripped and automatic mentions disabled. | **♻ Reload, do not restart**<br><br>`/automessage reload` applies schedules, messages and languages in place — including a translation file added while the server was running. | **🪶 Lean dispatch path**<br><br>No database. An empty server short-circuits, and each announcement is scanned for placeholders once rather than once per player. |
 
 
-## One engine. Six runtimes
+## 🌐 One engine. Six runtimes
 
 AutoMessage uses a shared platform-neutral core and a small runtime adapter for each server type.
 That means the behavior stays familiar while scheduling, viewers, permissions and lifecycle hooks
 remain native to the platform underneath.
+
+<p align="center">
+  <img src="assets/readme/platforms.svg" alt="One platform-neutral core connected to six artifacts: Bukkit, Folia, Sponge, Velocity, Fabric and Minestom" width="100%">
+</p>
 
 <a id="platform-support"></a>
 
@@ -135,7 +139,9 @@ Fabric API yourself.
 
 </details>
 
-## Configuration model
+<a id="configuration-model"></a>
+
+## 🗂 Configuration model
 
 AutoMessage separates **when**, **who** and **what**. Adding a language never requires copying
 scheduling rules, and changing a channel interval never touches the message text.
@@ -164,7 +170,9 @@ flowchart LR
 | `lang/<code>.yml` | Localized command replies and the actual MiniMessage announcement payloads |
 | `discordWebhook.yml` | Opt-in Discord webhook, display name and avatar |
 
-## Get AutoMessage
+<a id="get-automessage"></a>
+
+## 📥 Get AutoMessage
 
 | What you need | Where to get it |
 |:--|:--|
@@ -177,7 +185,9 @@ flowchart LR
 > listings still represent the earlier Bukkit-focused release line. Until a new GitHub release
 > publishes all six artifacts, build the multiplatform jars with `./gradlew dist`.
 
-## Quick start
+<a id="quick-start"></a>
+
+## 🚀 Quick start
 
 1. Get the artifact built for your runtime. Platform jars are intentionally separate.
 2. Put it in your platform's `plugins/` or `mods/` directory. For Minestom, add the jar to the
@@ -191,7 +201,7 @@ flowchart LR
 > Start with the generated files. They are not empty templates: every available field is explained
 > next to a working example, and the contents adapt to the platform that created them.
 
-## Build your first announcement
+## 🛠 Build your first announcement
 
 The example below creates an independent event stream, adds one announcement to it, and renders
 multiple notice types from a single localized payload.
@@ -248,10 +258,16 @@ announcements:
       sound: "block.note_block.pling MASTER 1.0 1.0"
 ```
 
+<p align="center">
+  <img src="assets/readme/announcement.svg" alt="The same announcement on four surfaces at once: a boss bar countdown, a gradient title and subtitle, two chat lines and an action bar above the hotbar" width="100%">
+</p>
+
 Use only the parts that fit the message. A simple chat announcement can be a single string; a
 showcase announcement can combine every surface above.
 
-## Reference
+<a id="reference"></a>
+
+## 📖 Reference
 
 <details>
 <summary><strong>Announcement channels and selectors</strong></summary>
@@ -479,7 +495,9 @@ accurately.
 
 </details>
 
-## Building from source
+<a id="building-from-source"></a>
+
+## 🔨 Building from source
 
 Building every runtime requires **JDK 25**. From the repository root, run:
 
@@ -500,7 +518,7 @@ artifacts into `build/dist`:
 If any verification fails, the distribution is not produced. A normal `./gradlew build` performs
 the same project checks but leaves artifacts inside their individual modules.
 
-## Support the project
+## 💛 Support the project
 
 AutoMessage is free, open source and maintained independently.
 

@@ -1,0 +1,71 @@
+<svg width="1200" height="640" viewBox="0 0 1200 640" fill="none" xmlns="http://www.w3.org/2000/svg" role="img" aria-labelledby="annTitle annDesc">
+  <title id="annTitle">One announcement, as a player receives it</title>
+  <desc id="annDesc">A game view showing the same announcement on four surfaces at once: a boss bar countdown at the top, a gradient title and subtitle in the centre, two chat lines at the bottom left, and an action bar above the hotbar.</desc>
+
+  <defs>
+    <linearGradient id="sky" x1="0" y1="0" x2="0" y2="640" gradientUnits="userSpaceOnUse">
+      <stop stop-color="#101A33"/>
+      <stop offset="0.55" stop-color="#0B1224"/>
+      <stop offset="1" stop-color="#070B16"/>
+    </linearGradient>
+    <linearGradient id="eventText" x1="380" y1="0" x2="820" y2="0" gradientUnits="userSpaceOnUse">
+      <stop stop-color="#FFD166"/>
+      <stop offset="1" stop-color="#FF6B6B"/>
+    </linearGradient>
+    <linearGradient id="bossFill" x1="360" y1="0" x2="840" y2="0" gradientUnits="userSpaceOnUse">
+      <stop stop-color="#A78BFA"/>
+      <stop offset="1" stop-color="#7C5CFF"/>
+    </linearGradient>
+    <radialGradient id="vignette" cx="0" cy="0" r="1" gradientTransform="translate(600 300) scale(720 420)" gradientUnits="userSpaceOnUse">
+      <stop stop-color="#000000" stop-opacity="0"/>
+      <stop offset="1" stop-color="#000000" stop-opacity="0.55"/>
+    </radialGradient>
+    <clipPath id="frame"><rect width="1200" height="640" rx="18"/></clipPath>
+  </defs>
+
+  <g clip-path="url(#frame)" font-family="'DejaVu Sans Mono','SF Mono',Menlo,Consolas,monospace">
+    <rect width="1200" height="640" fill="url(#sky)"/>
+
+    <!-- A horizon, suggested rather than drawn. -->
+    <g fill="#8FA3C8" fill-opacity="0.30">
+      <circle cx="150" cy="128" r="1.7"/><circle cx="322" cy="96" r="1.4"/><circle cx="470" cy="150" r="1.6"/>
+      <circle cx="742" cy="112" r="1.5"/><circle cx="902" cy="160" r="1.7"/><circle cx="1058" cy="104" r="1.4"/>
+      <circle cx="248" cy="196" r="1.3"/><circle cx="978" cy="212" r="1.3"/>
+    </g>
+    <path d="M0 392 H150 V366 H300 V400 H430 V352 H560 V384 H700 V358 H840 V396 H980 V370 H1200 V640 H0 Z" fill="#16233F"/>
+    <path d="M0 430 H210 V408 H400 V438 H600 V414 H820 V442 H1020 V418 H1200 V640 H0 Z" fill="#0D1729"/>
+    <rect width="1200" height="640" fill="url(#vignette)"/>
+
+    <!-- Boss bar -->
+    <text x="600" y="52" fill="#E6C6FF" font-size="19" text-anchor="middle">Event countdown</text>
+    <rect x="360" y="66" width="480" height="12" rx="6" fill="#1A2340"/>
+    <rect x="360" y="66" width="360" height="12" rx="6" fill="url(#bossFill)"/>
+
+    <!-- Title and subtitle -->
+    <text x="600" y="286" fill="url(#eventText)" font-size="70" font-weight="700" text-anchor="middle" letter-spacing="3">EVENT NIGHT</text>
+    <text x="600" y="332" fill="#B9C0D8" font-size="25" text-anchor="middle">The arena opens in 05:00</text>
+
+    <!-- Chat -->
+    <rect x="44" y="424" width="580" height="72" rx="8" fill="#050810" fill-opacity="0.62"/>
+    <text x="66" y="452" font-size="19">
+      <tspan fill="#5A6480">[</tspan><tspan fill="#F7C65B">EVENT</tspan><tspan fill="#5A6480">] </tspan><tspan fill="#A8B2D1">The arena opens in </tspan><tspan fill="#F7C65B">5 minutes</tspan><tspan fill="#A8B2D1">.</tspan>
+    </text>
+    <text x="66" y="480" font-size="19">
+      <tspan fill="#A8B2D1">Click </tspan><tspan fill="#45D7E8" text-decoration="underline">here</tspan><tspan fill="#A8B2D1"> to join.</tspan>
+    </text>
+
+    <!-- Action bar -->
+    <text x="600" y="534" fill="#F5D97A" font-size="21" text-anchor="middle">Prepare your loadout — the event starts soon</text>
+
+    <!-- Hotbar -->
+    <g transform="translate(316 556)">
+      <rect width="568" height="60" rx="8" fill="#0A1020" fill-opacity="0.9" stroke="#2A3452" stroke-width="2"/>
+      <g fill="none" stroke="#2A3452" stroke-width="2">
+        <path d="M63 6 V54 M126 6 V54 M189 6 V54 M252 6 V54 M315 6 V54 M378 6 V54 M441 6 V54 M504 6 V54"/>
+      </g>
+      <rect x="2" y="2" width="60" height="56" rx="6" fill="none" stroke="#C9CCE0" stroke-width="3"/>
+    </g>
+
+    <rect x="1" y="1" width="1198" height="638" rx="17" fill="none" stroke="#A8B2D1" stroke-opacity="0.12"/>
+  </g>
+</svg>
