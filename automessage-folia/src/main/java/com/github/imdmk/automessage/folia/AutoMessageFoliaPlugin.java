@@ -11,7 +11,7 @@ public final class AutoMessageFoliaPlugin extends JavaPlugin {
 
     @Override
     public void onEnable() {
-        this.plugin = new AutoMessagePlugin(
+        this.plugin = StaleFoliaWarning.silenced(getLogger(), () -> new AutoMessagePlugin(
                 this,
                 "Folia",
                 new FoliaTaskScheduler(
@@ -23,11 +23,9 @@ public final class AutoMessageFoliaPlugin extends JavaPlugin {
                 // scheduler, which Folia removed. The console never hits it - LiteCommands runs
                 // inline when it is already on the primary thread - but a player would.
                 //
-                // The startup warning about this extension is emitted by BukkitScheduler's own
-                // constructor, which the factory builds before any extension can be added, so it
-                // is stale by the time it is printed rather than a sign this did not take.
+                // See StaleFoliaWarning for why its startup warning is dropped rather than fixed.
                 builder -> builder.extension(new FoliaExtension(this))
-        );
+        ));
     }
 
     @Override
