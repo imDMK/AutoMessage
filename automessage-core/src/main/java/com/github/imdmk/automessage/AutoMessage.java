@@ -16,6 +16,7 @@ import com.github.imdmk.automessage.scheduled.ScheduledMessageSender;
 import com.github.imdmk.automessage.scheduled.ScheduledMessagesConfig;
 import com.github.imdmk.automessage.scheduled.audience.filter.AudienceFilter;
 import com.github.imdmk.automessage.scheduled.audience.rule.AudienceContext;
+import com.github.imdmk.automessage.scheduled.dispatcher.DispatchStatistics;
 import com.github.imdmk.automessage.scheduled.dispatcher.DispatchObserver;
 import com.github.imdmk.automessage.scheduled.dispatcher.MessageDispatcher;
 import com.github.imdmk.automessage.scheduled.dispatcher.MessageDispatcherConfig;
@@ -46,6 +47,7 @@ public final class AutoMessage {
     private final MessageDispatcherService dispatcherService;
     private final MessageTriggerService triggerService;
     private final DispatchObserver dispatchObserver;
+    private final DispatchStatistics statistics;
 
     public AutoMessage(
             Platform platform,
@@ -94,7 +96,11 @@ public final class AutoMessage {
 
         // One observer shared by every channel: mirroring is a property of the announcement, not
         // of the stream it happened to travel on.
-        this.dispatchObserver = DiscordWebhookService.create(viewers, languages, logger, discordConfig);
+        this.statistics = new DispatchStatistics();
+        this.dispatchObserver = DispatchObserver.of(
+                statistics,
+                DiscordWebhookService.create(viewers, languages, logger, discordConfig)
+        );
 
         final ScheduledMessageDispatcherFactory dispatcherFactory =
                 selector -> new MessageDispatcher(
@@ -181,6 +187,14 @@ public final class AutoMessage {
 
     public MessageTriggerService triggerService() {
         return triggerService;
+    }
+
+    public MessageDispatcherService dispatcherService() {
+        return dispatcherService;
+    }
+
+    public DispatchStatistics statistics() {
+        return statistics;
     }
 
     public TaskScheduler scheduler() {

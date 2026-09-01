@@ -1,6 +1,8 @@
 package com.github.imdmk.automessage.command;
 
 import com.github.imdmk.automessage.AutoMessage;
+import com.github.imdmk.automessage.command.next.NextCommand;
+import com.github.imdmk.automessage.command.stats.StatsCommand;
 import com.github.imdmk.automessage.command.argument.ScheduledMessageArgument;
 import com.github.imdmk.automessage.command.argument.UnknownScheduledMessage;
 import com.github.imdmk.automessage.command.dispatcher.DisableCommand;
@@ -48,7 +50,9 @@ public final class CommandRegistrar {
                                 automessage.scheduler(),
                                 automessage.messageService()
                         ),
-                        new ViewCommand(automessage.messageSender(), automessage.messageService())
+                        new ViewCommand(automessage.messageSender(), automessage.messageService()),
+                        new NextCommand(automessage.dispatcherService(), automessage.messageService()),
+                        new StatsCommand(automessage.statistics(), automessage.messageService())
                 );
     }
 }

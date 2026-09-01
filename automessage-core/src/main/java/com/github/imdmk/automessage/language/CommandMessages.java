@@ -62,4 +62,28 @@ public class CommandMessages extends OkaeriConfig {
     public Notice viewPlayerOnly = Notice.chat(
             "<dark_gray>• <red>Only players can preview scheduled messages.<dark_gray>"
     );
+
+    @Comment({"#", "# /automessage next. {CHANNEL} - the channel, {MESSAGE} - the message name.", "#"})
+    public Notice nextHeader = Notice.chat("<dark_gray>• <gray>Next announcement on each channel:");
+
+    public Notice nextEntry = Notice.chat("<dark_gray>  • <gold>{CHANNEL}<dark_gray>: <gray>{MESSAGE}");
+
+    public Notice nextUnpredictable = Notice.chat(
+            "<dark_gray>  • <gold>{CHANNEL}<dark_gray>: <gray>drawn at random when it fires"
+    );
+
+    public Notice nextDisabled = Notice.chat("<dark_gray>  • <gold>{CHANNEL}<dark_gray>: <red>disabled");
+
+    public Notice nextEmpty = Notice.chat("<dark_gray>  • <gold>{CHANNEL}<dark_gray>: <red>no messages");
+
+    @Comment({"#", "# /automessage stats. {TOTAL}, {MESSAGE}, {COUNT} and {AGO}.", "#"})
+    public Notice statsHeader = Notice.chat(
+            "<dark_gray>• <gray>Announcements sent since startup: <green>{TOTAL}<gray>."
+    );
+
+    public Notice statsEntry = Notice.chat(
+            "<dark_gray>  • <gold>{MESSAGE}<dark_gray>: <green>{COUNT}<gray>, last one <green>{AGO} <gray>ago"
+    );
+
+    public Notice statsEmpty = Notice.chat("<dark_gray>• <gray>Nothing has been announced yet.");
 }

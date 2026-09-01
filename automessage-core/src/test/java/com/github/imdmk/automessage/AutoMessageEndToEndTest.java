@@ -86,6 +86,20 @@ class AutoMessageEndToEndTest {
     }
 
     @Test
+    @DisplayName("should count what it announced, so /automessage stats has something to report")
+    void shouldCountWhatItAnnounced() {
+        start(TestPlatform.fullServer().join(RecordingViewer.english("Steve")));
+
+        platform.scheduler().tick();
+        platform.scheduler().tick();
+
+        // The counter rides along with the Discord mirror on one observer; wiring it in behind
+        // something that throws, or not at all, leaves the command permanently empty.
+        assertThat(automessage.statistics().total()).isEqualTo(2);
+        assertThat(automessage.statistics().snapshot()).hasSize(2);
+    }
+
+    @Test
     @DisplayName("should substitute placeholders with values from this server")
     void shouldSubstitutePlaceholders() {
         final RecordingViewer steve = RecordingViewer.english("Steve");

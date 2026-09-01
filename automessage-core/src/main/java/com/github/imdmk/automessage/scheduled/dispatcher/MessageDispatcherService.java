@@ -96,10 +96,7 @@ public final class MessageDispatcherService implements ConfigReloadListener {
     private void schedule(AnnouncementChannel channel) {
         final DispatchTiming timing = DispatchTiming.from(channel, logger);
 
-        final MessageSelectorProvider selectors = selectorsByChannel.computeIfAbsent(
-                AnnouncementChannel.normalize(channel.name()),
-                key -> new MessageSelectorProvider(() -> currentSelectorOf(key))
-        );
+        final MessageSelectorProvider selectors = selectorsFor(channel);
 
         final MessageDispatcherTask task = new MessageDispatcherTask(
                 viewers,
@@ -129,6 +126,50 @@ public final class MessageDispatcherService implements ConfigReloadListener {
         }
 
         return com.github.imdmk.automessage.scheduled.selector.MessageSelectorType.SEQUENTIAL;
+    }
+
+    private MessageSelectorProvider selectorsFor(AnnouncementChannel channel) {
+        return selectorsByChannel.computeIfAbsent(
+                AnnouncementChannel.normalize(channel.name()),
+                key -> new MessageSelectorProvider(() -> currentSelectorOf(key))
+        );
+    }
+
+    /**
+     * What each configured channel would announce next, asked without disturbing the rotation.
+     */
+    public synchronized List<ChannelPreview> upcoming() {
+        final List<ChannelPreview> previews = new ArrayList<>();
+
+        for (final AnnouncementChannel channel : dispatcherConfig.channels()) {
+            previews.add(preview(channel));
+        }
+
+        return List.copyOf(previews);
+    }
+
+    private ChannelPreview preview(AnnouncementChannel channel) {
+        if (!channel.enabled()) {
+            return ChannelPreview.disabled(channel.name());
+        }
+
+        final List<com.github.imdmk.automessage.scheduled.ScheduledMessage> messages =
+                repository.findByChannel(channel);
+
+        if (messages.isEmpty()) {
+            return ChannelPreview.empty(channel.name());
+        }
+
+        if (channel.selector() == com.github.imdmk.automessage.scheduled.selector.MessageSelectorType.RANDOM) {
+            return ChannelPreview.unpredictable(channel.name());
+        }
+
+        // Asked not to advance, so looking is not the same as sending - the deck a SHUFFLE
+        // channel is part way through stays exactly where it was.
+        return selectorsFor(channel).get()
+                .selectNext(messages, false)
+                .map(message -> ChannelPreview.next(channel.name(), message.name()))
+                .orElseGet(() -> ChannelPreview.empty(channel.name()));
     }
 
     public synchronized void stop() {

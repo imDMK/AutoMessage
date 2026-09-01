@@ -52,6 +52,14 @@ final class ShippedLanguages {
         config.commands.messagePreviewed = Notice.chat(commands.messagePreviewed());
         config.commands.messageNotFound = Notice.chat(commands.messageNotFound());
         config.commands.viewPlayerOnly = Notice.chat(commands.viewPlayerOnly());
+        config.commands.nextHeader = Notice.chat(commands.nextHeader());
+        config.commands.nextEntry = Notice.chat(commands.nextEntry());
+        config.commands.nextUnpredictable = Notice.chat(commands.nextUnpredictable());
+        config.commands.nextDisabled = Notice.chat(commands.nextDisabled());
+        config.commands.nextEmpty = Notice.chat(commands.nextEmpty());
+        config.commands.statsHeader = Notice.chat(commands.statsHeader());
+        config.commands.statsEntry = Notice.chat(commands.statsEntry());
+        config.commands.statsEmpty = Notice.chat(commands.statsEmpty());
 
         config.announcements = announcements(announcements);
     }
@@ -115,7 +123,15 @@ final class ShippedLanguages {
             String configReloadFailed,
             String messagePreviewed,
             String messageNotFound,
-            String viewPlayerOnly
+            String viewPlayerOnly,
+            String nextHeader,
+            String nextEntry,
+            String nextUnpredictable,
+            String nextDisabled,
+            String nextEmpty,
+            String statsHeader,
+            String statsEntry,
+            String statsEmpty
     ) {
     }
 
@@ -157,7 +173,15 @@ final class ShippedLanguages {
             "<dark_gray>• <red>Nie udało się przeładować plików konfiguracyjnych AutoMessage. <red>Wyłącz plugin i sprawdź swoją konfigurację.",
             "<dark_gray>• <green>Podgląd zaplanowanej wiadomości <gray>{MESSAGE}<green>.<dark_gray>",
             "<dark_gray>• <red>Wiadomość o nazwie <gray>{MESSAGE} <red>nie istnieje w scheduledMessages.yml.",
-            "<dark_gray>• <red>Tylko gracze mogą oglądać podgląd zaplanowanych wiadomości.<dark_gray>"
+            "<dark_gray>• <red>Tylko gracze mogą oglądać podgląd zaplanowanych wiadomości.<dark_gray>",
+            "<dark_gray>• <gray>Następna wiadomość na każdym kanale:",
+            "<dark_gray>  • <gold>{CHANNEL}<dark_gray>: <gray>{MESSAGE}",
+            "<dark_gray>  • <gold>{CHANNEL}<dark_gray>: <gray>losowana w chwili wysłania",
+            "<dark_gray>  • <gold>{CHANNEL}<dark_gray>: <red>wyłączony",
+            "<dark_gray>  • <gold>{CHANNEL}<dark_gray>: <red>brak wiadomości",
+            "<dark_gray>• <gray>Wysłanych ogłoszeń od uruchomienia: <green>{TOTAL}<gray>.",
+            "<dark_gray>  • <gold>{MESSAGE}<dark_gray>: <green>{COUNT}<gray>, ostatnio <green>{AGO} <gray>temu",
+            "<dark_gray>• <gray>Nic jeszcze nie zostało ogłoszone."
     );
 
     private static final Announcements POLISH_ANNOUNCEMENTS = new Announcements(
@@ -185,7 +209,15 @@ final class ShippedLanguages {
             "<dark_gray>• <red>Die AutoMessage-Konfigurationsdateien konnten nicht neu geladen werden. <red>Deaktiviere das Plugin und prüfe deine Konfiguration.",
             "<dark_gray>• <green>Vorschau der geplanten Nachricht <gray>{MESSAGE}<green>.<dark_gray>",
             "<dark_gray>• <red>Es gibt keine geplante Nachricht namens <gray>{MESSAGE} <red>in scheduledMessages.yml.",
-            "<dark_gray>• <red>Nur Spieler können geplante Nachrichten in der Vorschau ansehen.<dark_gray>"
+            "<dark_gray>• <red>Nur Spieler können geplante Nachrichten in der Vorschau ansehen.<dark_gray>",
+            "<dark_gray>• <gray>Nächste Nachricht pro Kanal:",
+            "<dark_gray>  • <gold>{CHANNEL}<dark_gray>: <gray>{MESSAGE}",
+            "<dark_gray>  • <gold>{CHANNEL}<dark_gray>: <gray>wird beim Senden zufällig gezogen",
+            "<dark_gray>  • <gold>{CHANNEL}<dark_gray>: <red>deaktiviert",
+            "<dark_gray>  • <gold>{CHANNEL}<dark_gray>: <red>keine Nachrichten",
+            "<dark_gray>• <gray>Gesendete Ankündigungen seit dem Start: <green>{TOTAL}<gray>.",
+            "<dark_gray>  • <gold>{MESSAGE}<dark_gray>: <green>{COUNT}<gray>, zuletzt vor <green>{AGO}",
+            "<dark_gray>• <gray>Es wurde noch nichts angekündigt."
     );
 
     private static final Announcements GERMAN_ANNOUNCEMENTS = new Announcements(

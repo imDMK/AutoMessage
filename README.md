@@ -102,7 +102,7 @@ the answer to everyone, in one language, on one clock.
 |  |  |  |
 |:--|:--|:--|
 | **🔀 Four rotation strategies**<br><br>`SHUFFLE`, `SEQUENTIAL`, `RANDOM` or weighted, chosen per channel. Shuffle deals a whole deck before anything repeats. | **🧩 Configuration that fits the runtime**<br><br>A proxy never sees a world rule or a first-join trigger. Options the platform cannot honor are left out of the file, not written and ignored. | **👁 Preview before publishing**<br><br>`/automessage view <name>` renders the real localized message to you alone, ignoring its audience rules. |
-| **↗ Beyond the server**<br><br>Mirror chat content to a Discord webhook, with player-only placeholders stripped and automatic mentions disabled. | **♻ Reload, do not restart**<br><br>`/automessage reload` applies schedules, messages and languages in place — including a translation file added while the server was running. | **🪶 Lean dispatch path**<br><br>No database. An empty server short-circuits, and each announcement is scanned for placeholders once rather than once per player. |
+| **↗ Beyond the server**<br><br>Mirror chat content to a Discord webhook, with player-only placeholders stripped and automatic mentions disabled. | **♻ Reload, do not restart**<br><br>`/automessage reload` applies schedules, messages and languages in place — including a translation file added while the server was running. | **🪶 Lean dispatch path**<br><br>No database. An empty server short-circuits, placeholders are scanned once per message rather than once per announcement, and everyone reading the same text in the same language is served from a single render. |
 
 
 ## 🎯 Reach exactly who should hear it
@@ -502,6 +502,8 @@ AutoMessage after changing the webhook's enabled state or URL so the connection 
 | `/automessage disable` | `command.automessage.disable` | Pause scheduled announcement channels |
 | `/automessage reload` | `command.automessage.reload` | Reload schedules, message definitions and languages |
 | `/automessage view <name>` | `command.automessage.view` | Preview one localized message; player-only, with tab completion |
+| `/automessage next` | `command.automessage.next` | Show what each channel will announce next, without using it up |
+| `/automessage stats` | `command.automessage.stats` | Show how often each message has been announced, and how long ago |
 
 <details>
 <summary><strong>Embedding AutoMessage in Minestom</strong></summary>
