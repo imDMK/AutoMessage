@@ -125,24 +125,7 @@ class LanguageRegistryTest {
                 .isEqualTo(registry.announcement("vote-reminder", "en"));
     }
 
-    @Test
-    @DisplayName("every shipped announcement has text in every shipped language")
-    void shippedLanguagesAreComplete() {
-        LanguageRegistry registry = load();
-
-        List<String> names = List.copyOf(registry.fallback().announcements.keySet());
-        assertThat(names).isNotEmpty();
-
-        for (LanguageConfig language : registry.all()) {
-            for (String name : names) {
-                assertThat(language.announcement(name))
-                        .withFailMessage("'%s' has no text in lang/%s.yml", name, language.code())
-                        .isNotNull();
-            }
-        }
-    }
-
-    @Test
+@Test
     @DisplayName("writes out the languages the build ships, without being told to")
     void shipsItsOwnLanguages() {
         LanguageRegistry registry = load();

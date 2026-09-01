@@ -27,6 +27,8 @@ class ShippedDefaultsConsistencyTest {
         ScheduledMessagesConfig messages = configManager.create(ScheduledMessagesConfig.class);
         LanguageRegistry languages = LanguageRegistry.load(configManager, mock(PluginLogger.class), () -> "en");
 
+        assertThat(messages.messages).isNotEmpty();
+
         for (ScheduledMessage message : messages.messages) {
             for (LanguageConfig language : languages.all()) {
                 assertThat(language.announcement(message.name()))

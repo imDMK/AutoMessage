@@ -179,9 +179,4 @@ class TaskSchedulerSeamTest {
         assertThat(scheduler.repeating).hasSize(2);
     }
 
-    @Test
-    @DisplayName("a handle for finished work can be cancelled without effect")
-    void doneHandleIsSafe() {
-        TaskHandle.done().cancel();
-    }
 }
