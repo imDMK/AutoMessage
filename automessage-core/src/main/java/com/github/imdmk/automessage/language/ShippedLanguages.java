@@ -196,23 +196,23 @@ final class ShippedLanguages {
             "<dark_gray>• <green>Podgląd zaplanowanej wiadomości <gray>{MESSAGE}<green>.<dark_gray>",
             "<dark_gray>• <red>Wiadomość o nazwie <gray>{MESSAGE} <red>nie istnieje w scheduledMessages.yml.",
             "<dark_gray>• <red>Tylko gracze mogą oglądać podgląd zaplanowanych wiadomości.<dark_gray>",
-            "<dark_gray>• <gray>Następna wiadomość na każdym kanale:",
-            "<dark_gray>  • <gold>{CHANNEL} <dark_gray>- <gray>{MESSAGE}<gray>, za <green>{DELAY}",
-            "<dark_gray>  • <gold>{CHANNEL} <dark_gray>- <gray>losowana, za <green>{DELAY}",
-            "<dark_gray>  • <gold>{CHANNEL} <dark_gray>- <red>wyłączony w config.yml",
-            "<dark_gray>  • <gold>{CHANNEL} <dark_gray>- <red>brak przypisanych wiadomości",
-            "<dark_gray>• <gray>Ogłoszeń od uruchomienia: <green>{TOTAL}",
-            "<dark_gray>• <gray>Nic jeszcze nie ogłoszono.",
-            "<dark_gray>• <gold><b>Kanały",
-            "<dark_gray>  • <gold>{CHANNEL} <dark_gray>- <green>{COUNT}x<gray>, następna za <green>{DELAY}",
-            "<dark_gray>  • <gold>{CHANNEL} <dark_gray>- <gray>jeszcze nic, następna za <green>{DELAY}",
-            "<dark_gray>  • <gold>{CHANNEL} <dark_gray>- <green>{COUNT}x<gray>, "
+            "<dark_gray>» <gradient:#4FC3F7:#0288D1><b>Następna na każdym kanale</b></gradient>",
+            "<dark_gray>  • <aqua>{CHANNEL} <dark_gray>· <gray>{MESSAGE} <dark_gray>· <gray>za <green>{DELAY}",
+            "<dark_gray>  • <aqua>{CHANNEL} <dark_gray>· <gray>losowana <dark_gray>· <gray>za <green>{DELAY}",
+            "<dark_gray>  • <aqua>{CHANNEL} <dark_gray>· <red>wyłączony w config.yml",
+            "<dark_gray>  • <aqua>{CHANNEL} <dark_gray>· <red>brak przypisanych wiadomości",
+            "<dark_gray>» <gradient:#A78BFA:#45D7E8><b>AutoMessage</b></gradient> <dark_gray>· <gray>ogłoszeń: <white><b>{TOTAL}</b> <gray>od uruchomienia",
+            "<dark_gray>» <gradient:#A78BFA:#45D7E8><b>AutoMessage</b></gradient> <dark_gray>· <gray>nic jeszcze nie ogłoszono",
+            "<dark_gray>» <gradient:#4FC3F7:#0288D1><b>Kanały</b></gradient>",
+            "<dark_gray>  • <aqua>{CHANNEL} <dark_gray>· <white><b>{COUNT}x</b> <dark_gray>· <gray>następna za <green>{DELAY}",
+            "<dark_gray>  • <aqua>{CHANNEL} <dark_gray>· <gray>jeszcze nic <dark_gray>· <gray>następna za <green>{DELAY}",
+            "<dark_gray>  • <aqua>{CHANNEL} <dark_gray>· <white><b>{COUNT}x</b> <dark_gray>· <gray>"
                     + "<red>wyłączony w config.yml",
-            "<dark_gray>  • <gold>{CHANNEL} <dark_gray>- <green>{COUNT}x<gray>, "
+            "<dark_gray>  • <aqua>{CHANNEL} <dark_gray>· <white><b>{COUNT}x</b> <dark_gray>· <gray>"
                     + "<red>brak przypisanych wiadomości",
-            "<dark_gray>• <gold><b>Wiadomości",
-            "<dark_gray>  • <yellow>{MESSAGE} <dark_gray>(<gold>{CHANNEL}<dark_gray>) - "
-                    + "<green>{COUNT}x<gray>, <green>{AGO} <gray>temu",
+            "<dark_gray>» <gradient:#FFD54F:#FFA000><b>Wiadomości</b></gradient>",
+            "<dark_gray>  • <yellow>{MESSAGE} <dark_gray>(<aqua>{CHANNEL}<dark_gray>) · "
+                    + "<white><b>{COUNT}x</b> <dark_gray>· <green>{AGO} <gray>temu",
             "<dark_gray>• <green>Wysłano <gray>{MESSAGE} <green>na kanale <gray>{CHANNEL}<green>. "
                     + "Następna za <gray>{DELAY}<green>.<dark_gray>",
             "<dark_gray>• <yellow>Nikt nie jest online, więc nic nie wysłano na kanale <gray>{CHANNEL}<yellow>. "
@@ -248,23 +248,23 @@ final class ShippedLanguages {
             "<dark_gray>• <green>Vorschau der geplanten Nachricht <gray>{MESSAGE}<green>.<dark_gray>",
             "<dark_gray>• <red>Es gibt keine geplante Nachricht namens <gray>{MESSAGE} <red>in scheduledMessages.yml.",
             "<dark_gray>• <red>Nur Spieler können geplante Nachrichten in der Vorschau ansehen.<dark_gray>",
-            "<dark_gray>• <gray>Nächste Nachricht pro Kanal:",
-            "<dark_gray>  • <gold>{CHANNEL} <dark_gray>- <gray>{MESSAGE}<gray>, in <green>{DELAY}",
-            "<dark_gray>  • <gold>{CHANNEL} <dark_gray>- <gray>zufällig gezogen, in <green>{DELAY}",
-            "<dark_gray>  • <gold>{CHANNEL} <dark_gray>- <red>in config.yml deaktiviert",
-            "<dark_gray>  • <gold>{CHANNEL} <dark_gray>- <red>keine Nachrichten zugewiesen",
-            "<dark_gray>• <gray>Ankündigungen seit dem Start: <green>{TOTAL}",
-            "<dark_gray>• <gray>Noch nichts angekündigt.",
-            "<dark_gray>• <gold><b>Kanäle",
-            "<dark_gray>  • <gold>{CHANNEL} <dark_gray>- <green>{COUNT}x<gray>, nächste in <green>{DELAY}",
-            "<dark_gray>  • <gold>{CHANNEL} <dark_gray>- <gray>noch nichts, nächste in <green>{DELAY}",
-            "<dark_gray>  • <gold>{CHANNEL} <dark_gray>- <green>{COUNT}x<gray>, "
+            "<dark_gray>» <gradient:#4FC3F7:#0288D1><b>Nächste pro Kanal</b></gradient>",
+            "<dark_gray>  • <aqua>{CHANNEL} <dark_gray>· <gray>{MESSAGE} <dark_gray>· <gray>in <green>{DELAY}",
+            "<dark_gray>  • <aqua>{CHANNEL} <dark_gray>· <gray>zufällig gezogen <dark_gray>· <gray>in <green>{DELAY}",
+            "<dark_gray>  • <aqua>{CHANNEL} <dark_gray>· <red>in config.yml deaktiviert",
+            "<dark_gray>  • <aqua>{CHANNEL} <dark_gray>· <red>keine Nachrichten zugewiesen",
+            "<dark_gray>» <gradient:#A78BFA:#45D7E8><b>AutoMessage</b></gradient> <dark_gray>· <gray>Ankündigungen: <white><b>{TOTAL}</b> <gray>seit dem Start",
+            "<dark_gray>» <gradient:#A78BFA:#45D7E8><b>AutoMessage</b></gradient> <dark_gray>· <gray>noch nichts angekündigt",
+            "<dark_gray>» <gradient:#4FC3F7:#0288D1><b>Kanäle</b></gradient>",
+            "<dark_gray>  • <aqua>{CHANNEL} <dark_gray>· <white><b>{COUNT}x</b> <dark_gray>· <gray>nächste in <green>{DELAY}",
+            "<dark_gray>  • <aqua>{CHANNEL} <dark_gray>· <gray>noch nichts <dark_gray>· <gray>nächste in <green>{DELAY}",
+            "<dark_gray>  • <aqua>{CHANNEL} <dark_gray>· <white><b>{COUNT}x</b> <dark_gray>· <gray>"
                     + "<red>in config.yml deaktiviert",
-            "<dark_gray>  • <gold>{CHANNEL} <dark_gray>- <green>{COUNT}x<gray>, "
+            "<dark_gray>  • <aqua>{CHANNEL} <dark_gray>· <white><b>{COUNT}x</b> <dark_gray>· <gray>"
                     + "<red>keine Nachrichten zugewiesen",
-            "<dark_gray>• <gold><b>Nachrichten",
-            "<dark_gray>  • <yellow>{MESSAGE} <dark_gray>(<gold>{CHANNEL}<dark_gray>) - "
-                    + "<green>{COUNT}x<gray>, vor <green>{AGO}",
+            "<dark_gray>» <gradient:#FFD54F:#FFA000><b>Nachrichten</b></gradient>",
+            "<dark_gray>  • <yellow>{MESSAGE} <dark_gray>(<aqua>{CHANNEL}<dark_gray>) · "
+                    + "<white><b>{COUNT}x</b> <dark_gray>· <gray>vor <green>{AGO}",
             "<dark_gray>• <green>Hat <gray>{MESSAGE} <green>auf <gray>{CHANNEL} <green>gesendet. "
                     + "Die nächste in <gray>{DELAY}<green>.<dark_gray>",
             "<dark_gray>• <yellow>Niemand ist online, daher wurde auf <gray>{CHANNEL} <yellow>nichts gesendet. "

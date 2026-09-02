@@ -65,22 +65,22 @@ public class CommandMessages extends OkaeriConfig {
 
     @Comment({"#", "# /automessage next. {CHANNEL} - the channel, {MESSAGE} - the message name.", "#"})
     @Comment({"#", "# /automessage next. {CHANNEL}, {MESSAGE} and {DELAY} until it fires.", "#"})
-    public Notice nextHeader = Notice.chat("<dark_gray>• <gray>Next announcement on each channel:");
+    public Notice nextHeader = Notice.chat("<dark_gray>» <gradient:#4FC3F7:#0288D1><b>Next up on each channel</b></gradient>");
 
     public Notice nextEntry = Notice.chat(
-            "<dark_gray>  • <gold>{CHANNEL} <dark_gray>- <gray>{MESSAGE}<gray>, in <green>{DELAY}"
+            "<dark_gray>  • <aqua>{CHANNEL} <dark_gray>· <gray>{MESSAGE} <dark_gray>· <gray>in <green>{DELAY}"
     );
 
     public Notice nextUnpredictable = Notice.chat(
-            "<dark_gray>  • <gold>{CHANNEL} <dark_gray>- <gray>drawn at random, in <green>{DELAY}"
+            "<dark_gray>  • <aqua>{CHANNEL} <dark_gray>· <gray>drawn at random <dark_gray>· <gray>in <green>{DELAY}"
     );
 
     public Notice nextDisabled = Notice.chat(
-            "<dark_gray>  • <gold>{CHANNEL} <dark_gray>- <red>disabled in config.yml"
+            "<dark_gray>  • <aqua>{CHANNEL} <dark_gray>· <red>disabled in config.yml"
     );
 
     public Notice nextEmpty = Notice.chat(
-            "<dark_gray>  • <gold>{CHANNEL} <dark_gray>- <red>no messages assigned"
+            "<dark_gray>  • <aqua>{CHANNEL} <dark_gray>· <red>no messages assigned"
     );
 
     @Comment({
@@ -91,36 +91,36 @@ public class CommandMessages extends OkaeriConfig {
             "#"
     })
     public Notice statsHeader = Notice.chat(
-            "<dark_gray>• <gray>Announcements since startup: <green>{TOTAL}"
+            "<dark_gray>» <gradient:#A78BFA:#45D7E8><b>AutoMessage</b></gradient> <dark_gray>· <gray>sent <white><b>{TOTAL}</b> <gray>since startup"
     );
 
-    public Notice statsEmpty = Notice.chat("<dark_gray>• <gray>Nothing announced yet.");
+    public Notice statsEmpty = Notice.chat("<dark_gray>» <gradient:#A78BFA:#45D7E8><b>AutoMessage</b></gradient> <dark_gray>· <gray>nothing announced yet");
 
-    public Notice statsChannelsHeader = Notice.chat("<dark_gray>• <gold><b>Channels");
+    public Notice statsChannelsHeader = Notice.chat("<dark_gray>» <gradient:#4FC3F7:#0288D1><b>Channels</b></gradient>");
 
     public Notice statsChannel = Notice.chat(
-            "<dark_gray>  • <gold>{CHANNEL} <dark_gray>- <green>{COUNT}x<gray>, next in <green>{DELAY}"
+            "<dark_gray>  • <aqua>{CHANNEL} <dark_gray>· <white><b>{COUNT}x</b> <dark_gray>· <gray>next in <green>{DELAY}"
     );
 
     public Notice statsChannelPending = Notice.chat(
-            "<dark_gray>  • <gold>{CHANNEL} <dark_gray>- <gray>nothing yet, next in <green>{DELAY}"
+            "<dark_gray>  • <aqua>{CHANNEL} <dark_gray>· <gray>nothing yet <dark_gray>· <gray>next in <green>{DELAY}"
     );
 
     public Notice statsChannelDisabled = Notice.chat(
-            "<dark_gray>  • <gold>{CHANNEL} <dark_gray>- <green>{COUNT}x<gray>, "
+            "<dark_gray>  • <aqua>{CHANNEL} <dark_gray>· <white><b>{COUNT}x</b> <dark_gray>· <gray>"
                     + "<red>disabled in config.yml"
     );
 
     public Notice statsChannelEmpty = Notice.chat(
-            "<dark_gray>  • <gold>{CHANNEL} <dark_gray>- <green>{COUNT}x<gray>, "
+            "<dark_gray>  • <aqua>{CHANNEL} <dark_gray>· <white><b>{COUNT}x</b> <dark_gray>· <gray>"
                     + "<red>no messages assigned"
     );
 
-    public Notice statsMessagesHeader = Notice.chat("<dark_gray>• <gold><b>Messages");
+    public Notice statsMessagesHeader = Notice.chat("<dark_gray>» <gradient:#FFD54F:#FFA000><b>Messages</b></gradient>");
 
     public Notice statsEntry = Notice.chat(
-            "<dark_gray>  • <yellow>{MESSAGE} <dark_gray>(<gold>{CHANNEL}<dark_gray>) - "
-                    + "<green>{COUNT}x<gray>, <green>{AGO} <gray>ago"
+            "<dark_gray>  • <yellow>{MESSAGE} <dark_gray>(<aqua>{CHANNEL}<dark_gray>) · "
+                    + "<white><b>{COUNT}x</b> <dark_gray>· <green>{AGO} <gray>ago"
     );
 
     @Comment({"#", "# /automessage send. {CHANNEL}, {MESSAGE} and {DELAY} until the next one.", "#"})
