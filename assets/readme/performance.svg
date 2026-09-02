@@ -1,0 +1,285 @@
+<svg width="1320" height="440" viewBox="0 0 1320 440" fill="none" xmlns="http://www.w3.org/2000/svg" role="img" aria-labelledby="perfTitle perfDesc">
+  <title id="perfTitle">One render for everyone reading the same text</title>
+  <desc id="perfDesc">Two lanes comparing how one announcement reaches 500 players. Formatting once per player means 500 parses of the same text and costs 5.16 milliseconds, about a tenth of a server tick. AutoMessage formats once per language and hands the finished result to everyone, costing 0.34 milliseconds.</desc>
+  <defs>
+    <linearGradient id="fast" x1="0" y1="0" x2="1" y2="0">
+      <stop stop-color="#45D7E8"/><stop offset="1" stop-color="#A78BFA"/>
+    </linearGradient>
+    <pattern id="perfGrid" width="30" height="30" patternUnits="userSpaceOnUse">
+      <path d="M30 0H0V30" stroke="#A8B2D1" stroke-opacity="0.04"/>
+    </pattern>
+    <clipPath id="perfClip"><rect width="1320" height="440" rx="16"/></clipPath>
+  </defs>
+  <g clip-path="url(#perfClip)" font-family="system-ui,-apple-system,'Segoe UI',Roboto,sans-serif">
+    <rect width="1320" height="440" fill="#0A0F1E"/>
+    <rect width="1320" height="440" fill="url(#perfGrid)"/>
+    <text x="48" y="48" fill="#8593B4" font-size="14" letter-spacing="1.6">ONE ANNOUNCEMENT, 500 PLAYERS ONLINE</text>
+    <rect x="32" y="70" width="1256" height="150" rx="14" fill="#16223C" stroke="#2E3A5C" stroke-opacity="1"/>
+    <text x="60" y="100" fill="#8593B4" font-size="13" letter-spacing="1.5">THE USUAL WAY - FORMAT ONCE PER PLAYER</text>
+    <rect x="60" y="118" width="116" height="58" rx="10" fill="#0A0F1E" stroke="#2E3A5C"/>
+    <text x="118" y="144" fill="#C6CEE6" font-size="14" text-anchor="middle">1 message</text>
+    <text x="118" y="163" fill="#5D6884" font-size="12" text-anchor="middle">to announce</text>
+    <path d="M186 147h34" stroke="#414D6B" stroke-width="1.5"/><path d="M216 143l6 4-6 4z" fill="#414D6B"/>
+    <rect x="232" y="118" width="270" height="58" rx="10" fill="#0A0F1E" stroke="#2E3A5C"/>
+    <rect x="246" y="128" width="4" height="21" rx="2" fill="#414D6B"/>
+    <rect x="256" y="128" width="4" height="21" rx="2" fill="#414D6B"/>
+    <rect x="266" y="128" width="4" height="21" rx="2" fill="#414D6B"/>
+    <rect x="276" y="128" width="4" height="21" rx="2" fill="#414D6B"/>
+    <rect x="286" y="128" width="4" height="21" rx="2" fill="#414D6B"/>
+    <rect x="296" y="128" width="4" height="21" rx="2" fill="#414D6B"/>
+    <rect x="306" y="128" width="4" height="21" rx="2" fill="#414D6B"/>
+    <rect x="316" y="128" width="4" height="21" rx="2" fill="#414D6B"/>
+    <rect x="326" y="128" width="4" height="21" rx="2" fill="#414D6B"/>
+    <rect x="336" y="128" width="4" height="21" rx="2" fill="#414D6B"/>
+    <rect x="346" y="128" width="4" height="21" rx="2" fill="#414D6B"/>
+    <rect x="356" y="128" width="4" height="21" rx="2" fill="#414D6B"/>
+    <rect x="366" y="128" width="4" height="21" rx="2" fill="#414D6B"/>
+    <rect x="376" y="128" width="4" height="21" rx="2" fill="#414D6B"/>
+    <rect x="386" y="128" width="4" height="21" rx="2" fill="#414D6B"/>
+    <rect x="396" y="128" width="4" height="21" rx="2" fill="#414D6B"/>
+    <rect x="406" y="128" width="4" height="21" rx="2" fill="#414D6B"/>
+    <rect x="416" y="128" width="4" height="21" rx="2" fill="#414D6B"/>
+    <rect x="426" y="128" width="4" height="21" rx="2" fill="#414D6B"/>
+    <rect x="436" y="128" width="4" height="21" rx="2" fill="#414D6B"/>
+    <rect x="446" y="128" width="4" height="21" rx="2" fill="#414D6B"/>
+    <rect x="456" y="128" width="4" height="21" rx="2" fill="#414D6B"/>
+    <rect x="466" y="128" width="4" height="21" rx="2" fill="#414D6B"/>
+    <rect x="476" y="128" width="4" height="21" rx="2" fill="#414D6B"/>
+    <text x="367" y="167" fill="#7C89A8" font-size="13" text-anchor="middle">500 parses of the same text</text>
+    <path d="M512 147h34" stroke="#414D6B" stroke-width="1.5"/><path d="M542 143l6 4-6 4z" fill="#414D6B"/>
+    <rect x="558" y="118" width="286" height="58" rx="10" fill="#0A0F1E" stroke="#2E3A5C"/>
+    <circle cx="574" cy="132" r="2.1" fill="#45D7E8" fill-opacity="0.42"/>
+    <circle cx="584" cy="132" r="2.1" fill="#45D7E8" fill-opacity="0.42"/>
+    <circle cx="594" cy="132" r="2.1" fill="#45D7E8" fill-opacity="0.42"/>
+    <circle cx="604" cy="132" r="2.1" fill="#45D7E8" fill-opacity="0.42"/>
+    <circle cx="614" cy="132" r="2.1" fill="#45D7E8" fill-opacity="0.42"/>
+    <circle cx="624" cy="132" r="2.1" fill="#45D7E8" fill-opacity="0.42"/>
+    <circle cx="634" cy="132" r="2.1" fill="#45D7E8" fill-opacity="0.42"/>
+    <circle cx="644" cy="132" r="2.1" fill="#45D7E8" fill-opacity="0.42"/>
+    <circle cx="654" cy="132" r="2.1" fill="#45D7E8" fill-opacity="0.42"/>
+    <circle cx="664" cy="132" r="2.1" fill="#45D7E8" fill-opacity="0.42"/>
+    <circle cx="674" cy="132" r="2.1" fill="#45D7E8" fill-opacity="0.42"/>
+    <circle cx="684" cy="132" r="2.1" fill="#45D7E8" fill-opacity="0.42"/>
+    <circle cx="694" cy="132" r="2.1" fill="#45D7E8" fill-opacity="0.42"/>
+    <circle cx="704" cy="132" r="2.1" fill="#45D7E8" fill-opacity="0.42"/>
+    <circle cx="714" cy="132" r="2.1" fill="#45D7E8" fill-opacity="0.42"/>
+    <circle cx="724" cy="132" r="2.1" fill="#45D7E8" fill-opacity="0.42"/>
+    <circle cx="734" cy="132" r="2.1" fill="#45D7E8" fill-opacity="0.42"/>
+    <circle cx="744" cy="132" r="2.1" fill="#45D7E8" fill-opacity="0.42"/>
+    <circle cx="754" cy="132" r="2.1" fill="#45D7E8" fill-opacity="0.42"/>
+    <circle cx="764" cy="132" r="2.1" fill="#45D7E8" fill-opacity="0.42"/>
+    <circle cx="774" cy="132" r="2.1" fill="#45D7E8" fill-opacity="0.42"/>
+    <circle cx="784" cy="132" r="2.1" fill="#45D7E8" fill-opacity="0.42"/>
+    <circle cx="794" cy="132" r="2.1" fill="#45D7E8" fill-opacity="0.42"/>
+    <circle cx="804" cy="132" r="2.1" fill="#45D7E8" fill-opacity="0.42"/>
+    <circle cx="814" cy="132" r="2.1" fill="#45D7E8" fill-opacity="0.42"/>
+    <circle cx="824" cy="132" r="2.1" fill="#45D7E8" fill-opacity="0.42"/>
+    <circle cx="574" cy="142" r="2.1" fill="#45D7E8" fill-opacity="0.42"/>
+    <circle cx="584" cy="142" r="2.1" fill="#45D7E8" fill-opacity="0.42"/>
+    <circle cx="594" cy="142" r="2.1" fill="#45D7E8" fill-opacity="0.42"/>
+    <circle cx="604" cy="142" r="2.1" fill="#45D7E8" fill-opacity="0.42"/>
+    <circle cx="614" cy="142" r="2.1" fill="#45D7E8" fill-opacity="0.42"/>
+    <circle cx="624" cy="142" r="2.1" fill="#45D7E8" fill-opacity="0.42"/>
+    <circle cx="634" cy="142" r="2.1" fill="#45D7E8" fill-opacity="0.42"/>
+    <circle cx="644" cy="142" r="2.1" fill="#45D7E8" fill-opacity="0.42"/>
+    <circle cx="654" cy="142" r="2.1" fill="#45D7E8" fill-opacity="0.42"/>
+    <circle cx="664" cy="142" r="2.1" fill="#45D7E8" fill-opacity="0.42"/>
+    <circle cx="674" cy="142" r="2.1" fill="#45D7E8" fill-opacity="0.42"/>
+    <circle cx="684" cy="142" r="2.1" fill="#45D7E8" fill-opacity="0.42"/>
+    <circle cx="694" cy="142" r="2.1" fill="#45D7E8" fill-opacity="0.42"/>
+    <circle cx="704" cy="142" r="2.1" fill="#45D7E8" fill-opacity="0.42"/>
+    <circle cx="714" cy="142" r="2.1" fill="#45D7E8" fill-opacity="0.42"/>
+    <circle cx="724" cy="142" r="2.1" fill="#45D7E8" fill-opacity="0.42"/>
+    <circle cx="734" cy="142" r="2.1" fill="#45D7E8" fill-opacity="0.42"/>
+    <circle cx="744" cy="142" r="2.1" fill="#45D7E8" fill-opacity="0.42"/>
+    <circle cx="754" cy="142" r="2.1" fill="#45D7E8" fill-opacity="0.42"/>
+    <circle cx="764" cy="142" r="2.1" fill="#45D7E8" fill-opacity="0.42"/>
+    <circle cx="774" cy="142" r="2.1" fill="#45D7E8" fill-opacity="0.42"/>
+    <circle cx="784" cy="142" r="2.1" fill="#45D7E8" fill-opacity="0.42"/>
+    <circle cx="794" cy="142" r="2.1" fill="#45D7E8" fill-opacity="0.42"/>
+    <circle cx="804" cy="142" r="2.1" fill="#45D7E8" fill-opacity="0.42"/>
+    <circle cx="814" cy="142" r="2.1" fill="#45D7E8" fill-opacity="0.42"/>
+    <circle cx="824" cy="142" r="2.1" fill="#45D7E8" fill-opacity="0.42"/>
+    <circle cx="574" cy="152" r="2.1" fill="#45D7E8" fill-opacity="0.42"/>
+    <circle cx="584" cy="152" r="2.1" fill="#45D7E8" fill-opacity="0.42"/>
+    <circle cx="594" cy="152" r="2.1" fill="#45D7E8" fill-opacity="0.42"/>
+    <circle cx="604" cy="152" r="2.1" fill="#45D7E8" fill-opacity="0.42"/>
+    <circle cx="614" cy="152" r="2.1" fill="#45D7E8" fill-opacity="0.42"/>
+    <circle cx="624" cy="152" r="2.1" fill="#45D7E8" fill-opacity="0.42"/>
+    <circle cx="634" cy="152" r="2.1" fill="#45D7E8" fill-opacity="0.42"/>
+    <circle cx="644" cy="152" r="2.1" fill="#45D7E8" fill-opacity="0.42"/>
+    <circle cx="654" cy="152" r="2.1" fill="#45D7E8" fill-opacity="0.42"/>
+    <circle cx="664" cy="152" r="2.1" fill="#45D7E8" fill-opacity="0.42"/>
+    <circle cx="674" cy="152" r="2.1" fill="#45D7E8" fill-opacity="0.42"/>
+    <circle cx="684" cy="152" r="2.1" fill="#45D7E8" fill-opacity="0.42"/>
+    <circle cx="694" cy="152" r="2.1" fill="#45D7E8" fill-opacity="0.42"/>
+    <circle cx="704" cy="152" r="2.1" fill="#45D7E8" fill-opacity="0.42"/>
+    <circle cx="714" cy="152" r="2.1" fill="#45D7E8" fill-opacity="0.42"/>
+    <circle cx="724" cy="152" r="2.1" fill="#45D7E8" fill-opacity="0.42"/>
+    <circle cx="734" cy="152" r="2.1" fill="#45D7E8" fill-opacity="0.42"/>
+    <circle cx="744" cy="152" r="2.1" fill="#45D7E8" fill-opacity="0.42"/>
+    <circle cx="754" cy="152" r="2.1" fill="#45D7E8" fill-opacity="0.42"/>
+    <circle cx="764" cy="152" r="2.1" fill="#45D7E8" fill-opacity="0.42"/>
+    <circle cx="774" cy="152" r="2.1" fill="#45D7E8" fill-opacity="0.42"/>
+    <circle cx="784" cy="152" r="2.1" fill="#45D7E8" fill-opacity="0.42"/>
+    <circle cx="794" cy="152" r="2.1" fill="#45D7E8" fill-opacity="0.42"/>
+    <circle cx="804" cy="152" r="2.1" fill="#45D7E8" fill-opacity="0.42"/>
+    <circle cx="814" cy="152" r="2.1" fill="#45D7E8" fill-opacity="0.42"/>
+    <circle cx="824" cy="152" r="2.1" fill="#45D7E8" fill-opacity="0.42"/>
+    <circle cx="574" cy="162" r="2.1" fill="#45D7E8" fill-opacity="0.42"/>
+    <circle cx="584" cy="162" r="2.1" fill="#45D7E8" fill-opacity="0.42"/>
+    <circle cx="594" cy="162" r="2.1" fill="#45D7E8" fill-opacity="0.42"/>
+    <circle cx="604" cy="162" r="2.1" fill="#45D7E8" fill-opacity="0.42"/>
+    <circle cx="614" cy="162" r="2.1" fill="#45D7E8" fill-opacity="0.42"/>
+    <circle cx="624" cy="162" r="2.1" fill="#45D7E8" fill-opacity="0.42"/>
+    <circle cx="634" cy="162" r="2.1" fill="#45D7E8" fill-opacity="0.42"/>
+    <circle cx="644" cy="162" r="2.1" fill="#45D7E8" fill-opacity="0.42"/>
+    <circle cx="654" cy="162" r="2.1" fill="#45D7E8" fill-opacity="0.42"/>
+    <circle cx="664" cy="162" r="2.1" fill="#45D7E8" fill-opacity="0.42"/>
+    <circle cx="674" cy="162" r="2.1" fill="#45D7E8" fill-opacity="0.42"/>
+    <circle cx="684" cy="162" r="2.1" fill="#45D7E8" fill-opacity="0.42"/>
+    <circle cx="694" cy="162" r="2.1" fill="#45D7E8" fill-opacity="0.42"/>
+    <circle cx="704" cy="162" r="2.1" fill="#45D7E8" fill-opacity="0.42"/>
+    <circle cx="714" cy="162" r="2.1" fill="#45D7E8" fill-opacity="0.42"/>
+    <circle cx="724" cy="162" r="2.1" fill="#45D7E8" fill-opacity="0.42"/>
+    <circle cx="734" cy="162" r="2.1" fill="#45D7E8" fill-opacity="0.42"/>
+    <circle cx="744" cy="162" r="2.1" fill="#45D7E8" fill-opacity="0.42"/>
+    <circle cx="754" cy="162" r="2.1" fill="#45D7E8" fill-opacity="0.42"/>
+    <circle cx="764" cy="162" r="2.1" fill="#45D7E8" fill-opacity="0.42"/>
+    <circle cx="774" cy="162" r="2.1" fill="#45D7E8" fill-opacity="0.42"/>
+    <circle cx="784" cy="162" r="2.1" fill="#45D7E8" fill-opacity="0.42"/>
+    <circle cx="794" cy="162" r="2.1" fill="#45D7E8" fill-opacity="0.42"/>
+    <circle cx="804" cy="162" r="2.1" fill="#45D7E8" fill-opacity="0.42"/>
+    <circle cx="814" cy="162" r="2.1" fill="#45D7E8" fill-opacity="0.42"/>
+    <circle cx="824" cy="162" r="2.1" fill="#45D7E8" fill-opacity="0.42"/>
+    <text x="864" y="152" fill="#8593B4" font-size="13">500 players</text>
+    <text x="964" y="118" fill="#7C89A8" font-size="23" font-weight="600">5.16 ms</text>
+    <rect x="964" y="132" width="300" height="18" rx="9" fill="#0A0F1E" stroke="#2E3A5C"/>
+    <rect x="964" y="132" width="300" height="18" rx="9" fill="#414D6B"/>
+    <text x="964" y="170" fill="#5D6884" font-size="12">a tenth of a 50 ms tick, every time</text>
+    <text x="60" y="202" fill="#5D6884" font-size="12">The same gradient and the same tags, built again from scratch for every single recipient.</text>
+    <rect x="32" y="244" width="1256" height="150" rx="14" fill="#16223C" stroke="#45D7E8" stroke-opacity="0.40"/>
+    <text x="60" y="274" fill="#8593B4" font-size="13" letter-spacing="1.5">AUTOMESSAGE - FORMAT ONCE PER LANGUAGE</text>
+    <rect x="60" y="292" width="116" height="58" rx="10" fill="#0A0F1E" stroke="#2E3A5C"/>
+    <text x="118" y="318" fill="#C6CEE6" font-size="14" text-anchor="middle">1 message</text>
+    <text x="118" y="337" fill="#5D6884" font-size="12" text-anchor="middle">to announce</text>
+    <path d="M186 321h34" stroke="#414D6B" stroke-width="1.5"/><path d="M216 317l6 4-6 4z" fill="#414D6B"/>
+    <rect x="232" y="292" width="270" height="58" rx="10" fill="#0A0F1E" stroke="#2E3A5C"/>
+    <rect x="246" y="302" width="46" height="21" rx="6" fill="#0F2233" stroke="#45D7E8" stroke-opacity="0.5"/>
+    <text x="269" y="317" fill="#45D7E8" font-size="12" text-anchor="middle">EN</text>
+    <text x="367" y="341" fill="#45D7E8" font-size="13" text-anchor="middle">1 parse, reused by all of them</text>
+    <path d="M512 321h34" stroke="#414D6B" stroke-width="1.5"/><path d="M542 317l6 4-6 4z" fill="#414D6B"/>
+    <rect x="558" y="292" width="286" height="58" rx="10" fill="#0A0F1E" stroke="#2E3A5C"/>
+    <circle cx="574" cy="306" r="2.1" fill="#45D7E8" fill-opacity="0.42"/>
+    <circle cx="584" cy="306" r="2.1" fill="#45D7E8" fill-opacity="0.42"/>
+    <circle cx="594" cy="306" r="2.1" fill="#45D7E8" fill-opacity="0.42"/>
+    <circle cx="604" cy="306" r="2.1" fill="#45D7E8" fill-opacity="0.42"/>
+    <circle cx="614" cy="306" r="2.1" fill="#45D7E8" fill-opacity="0.42"/>
+    <circle cx="624" cy="306" r="2.1" fill="#45D7E8" fill-opacity="0.42"/>
+    <circle cx="634" cy="306" r="2.1" fill="#45D7E8" fill-opacity="0.42"/>
+    <circle cx="644" cy="306" r="2.1" fill="#45D7E8" fill-opacity="0.42"/>
+    <circle cx="654" cy="306" r="2.1" fill="#45D7E8" fill-opacity="0.42"/>
+    <circle cx="664" cy="306" r="2.1" fill="#45D7E8" fill-opacity="0.42"/>
+    <circle cx="674" cy="306" r="2.1" fill="#45D7E8" fill-opacity="0.42"/>
+    <circle cx="684" cy="306" r="2.1" fill="#45D7E8" fill-opacity="0.42"/>
+    <circle cx="694" cy="306" r="2.1" fill="#45D7E8" fill-opacity="0.42"/>
+    <circle cx="704" cy="306" r="2.1" fill="#45D7E8" fill-opacity="0.42"/>
+    <circle cx="714" cy="306" r="2.1" fill="#45D7E8" fill-opacity="0.42"/>
+    <circle cx="724" cy="306" r="2.1" fill="#45D7E8" fill-opacity="0.42"/>
+    <circle cx="734" cy="306" r="2.1" fill="#45D7E8" fill-opacity="0.42"/>
+    <circle cx="744" cy="306" r="2.1" fill="#45D7E8" fill-opacity="0.42"/>
+    <circle cx="754" cy="306" r="2.1" fill="#45D7E8" fill-opacity="0.42"/>
+    <circle cx="764" cy="306" r="2.1" fill="#45D7E8" fill-opacity="0.42"/>
+    <circle cx="774" cy="306" r="2.1" fill="#45D7E8" fill-opacity="0.42"/>
+    <circle cx="784" cy="306" r="2.1" fill="#45D7E8" fill-opacity="0.42"/>
+    <circle cx="794" cy="306" r="2.1" fill="#45D7E8" fill-opacity="0.42"/>
+    <circle cx="804" cy="306" r="2.1" fill="#45D7E8" fill-opacity="0.42"/>
+    <circle cx="814" cy="306" r="2.1" fill="#45D7E8" fill-opacity="0.42"/>
+    <circle cx="824" cy="306" r="2.1" fill="#45D7E8" fill-opacity="0.42"/>
+    <circle cx="574" cy="316" r="2.1" fill="#45D7E8" fill-opacity="0.42"/>
+    <circle cx="584" cy="316" r="2.1" fill="#45D7E8" fill-opacity="0.42"/>
+    <circle cx="594" cy="316" r="2.1" fill="#45D7E8" fill-opacity="0.42"/>
+    <circle cx="604" cy="316" r="2.1" fill="#45D7E8" fill-opacity="0.42"/>
+    <circle cx="614" cy="316" r="2.1" fill="#45D7E8" fill-opacity="0.42"/>
+    <circle cx="624" cy="316" r="2.1" fill="#45D7E8" fill-opacity="0.42"/>
+    <circle cx="634" cy="316" r="2.1" fill="#45D7E8" fill-opacity="0.42"/>
+    <circle cx="644" cy="316" r="2.1" fill="#45D7E8" fill-opacity="0.42"/>
+    <circle cx="654" cy="316" r="2.1" fill="#45D7E8" fill-opacity="0.42"/>
+    <circle cx="664" cy="316" r="2.1" fill="#45D7E8" fill-opacity="0.42"/>
+    <circle cx="674" cy="316" r="2.1" fill="#45D7E8" fill-opacity="0.42"/>
+    <circle cx="684" cy="316" r="2.1" fill="#45D7E8" fill-opacity="0.42"/>
+    <circle cx="694" cy="316" r="2.1" fill="#45D7E8" fill-opacity="0.42"/>
+    <circle cx="704" cy="316" r="2.1" fill="#45D7E8" fill-opacity="0.42"/>
+    <circle cx="714" cy="316" r="2.1" fill="#45D7E8" fill-opacity="0.42"/>
+    <circle cx="724" cy="316" r="2.1" fill="#45D7E8" fill-opacity="0.42"/>
+    <circle cx="734" cy="316" r="2.1" fill="#45D7E8" fill-opacity="0.42"/>
+    <circle cx="744" cy="316" r="2.1" fill="#45D7E8" fill-opacity="0.42"/>
+    <circle cx="754" cy="316" r="2.1" fill="#45D7E8" fill-opacity="0.42"/>
+    <circle cx="764" cy="316" r="2.1" fill="#45D7E8" fill-opacity="0.42"/>
+    <circle cx="774" cy="316" r="2.1" fill="#45D7E8" fill-opacity="0.42"/>
+    <circle cx="784" cy="316" r="2.1" fill="#45D7E8" fill-opacity="0.42"/>
+    <circle cx="794" cy="316" r="2.1" fill="#45D7E8" fill-opacity="0.42"/>
+    <circle cx="804" cy="316" r="2.1" fill="#45D7E8" fill-opacity="0.42"/>
+    <circle cx="814" cy="316" r="2.1" fill="#45D7E8" fill-opacity="0.42"/>
+    <circle cx="824" cy="316" r="2.1" fill="#45D7E8" fill-opacity="0.42"/>
+    <circle cx="574" cy="326" r="2.1" fill="#45D7E8" fill-opacity="0.42"/>
+    <circle cx="584" cy="326" r="2.1" fill="#45D7E8" fill-opacity="0.42"/>
+    <circle cx="594" cy="326" r="2.1" fill="#45D7E8" fill-opacity="0.42"/>
+    <circle cx="604" cy="326" r="2.1" fill="#45D7E8" fill-opacity="0.42"/>
+    <circle cx="614" cy="326" r="2.1" fill="#45D7E8" fill-opacity="0.42"/>
+    <circle cx="624" cy="326" r="2.1" fill="#45D7E8" fill-opacity="0.42"/>
+    <circle cx="634" cy="326" r="2.1" fill="#45D7E8" fill-opacity="0.42"/>
+    <circle cx="644" cy="326" r="2.1" fill="#45D7E8" fill-opacity="0.42"/>
+    <circle cx="654" cy="326" r="2.1" fill="#45D7E8" fill-opacity="0.42"/>
+    <circle cx="664" cy="326" r="2.1" fill="#45D7E8" fill-opacity="0.42"/>
+    <circle cx="674" cy="326" r="2.1" fill="#45D7E8" fill-opacity="0.42"/>
+    <circle cx="684" cy="326" r="2.1" fill="#45D7E8" fill-opacity="0.42"/>
+    <circle cx="694" cy="326" r="2.1" fill="#45D7E8" fill-opacity="0.42"/>
+    <circle cx="704" cy="326" r="2.1" fill="#45D7E8" fill-opacity="0.42"/>
+    <circle cx="714" cy="326" r="2.1" fill="#45D7E8" fill-opacity="0.42"/>
+    <circle cx="724" cy="326" r="2.1" fill="#45D7E8" fill-opacity="0.42"/>
+    <circle cx="734" cy="326" r="2.1" fill="#45D7E8" fill-opacity="0.42"/>
+    <circle cx="744" cy="326" r="2.1" fill="#45D7E8" fill-opacity="0.42"/>
+    <circle cx="754" cy="326" r="2.1" fill="#45D7E8" fill-opacity="0.42"/>
+    <circle cx="764" cy="326" r="2.1" fill="#45D7E8" fill-opacity="0.42"/>
+    <circle cx="774" cy="326" r="2.1" fill="#45D7E8" fill-opacity="0.42"/>
+    <circle cx="784" cy="326" r="2.1" fill="#45D7E8" fill-opacity="0.42"/>
+    <circle cx="794" cy="326" r="2.1" fill="#45D7E8" fill-opacity="0.42"/>
+    <circle cx="804" cy="326" r="2.1" fill="#45D7E8" fill-opacity="0.42"/>
+    <circle cx="814" cy="326" r="2.1" fill="#45D7E8" fill-opacity="0.42"/>
+    <circle cx="824" cy="326" r="2.1" fill="#45D7E8" fill-opacity="0.42"/>
+    <circle cx="574" cy="336" r="2.1" fill="#45D7E8" fill-opacity="0.42"/>
+    <circle cx="584" cy="336" r="2.1" fill="#45D7E8" fill-opacity="0.42"/>
+    <circle cx="594" cy="336" r="2.1" fill="#45D7E8" fill-opacity="0.42"/>
+    <circle cx="604" cy="336" r="2.1" fill="#45D7E8" fill-opacity="0.42"/>
+    <circle cx="614" cy="336" r="2.1" fill="#45D7E8" fill-opacity="0.42"/>
+    <circle cx="624" cy="336" r="2.1" fill="#45D7E8" fill-opacity="0.42"/>
+    <circle cx="634" cy="336" r="2.1" fill="#45D7E8" fill-opacity="0.42"/>
+    <circle cx="644" cy="336" r="2.1" fill="#45D7E8" fill-opacity="0.42"/>
+    <circle cx="654" cy="336" r="2.1" fill="#45D7E8" fill-opacity="0.42"/>
+    <circle cx="664" cy="336" r="2.1" fill="#45D7E8" fill-opacity="0.42"/>
+    <circle cx="674" cy="336" r="2.1" fill="#45D7E8" fill-opacity="0.42"/>
+    <circle cx="684" cy="336" r="2.1" fill="#45D7E8" fill-opacity="0.42"/>
+    <circle cx="694" cy="336" r="2.1" fill="#45D7E8" fill-opacity="0.42"/>
+    <circle cx="704" cy="336" r="2.1" fill="#45D7E8" fill-opacity="0.42"/>
+    <circle cx="714" cy="336" r="2.1" fill="#45D7E8" fill-opacity="0.42"/>
+    <circle cx="724" cy="336" r="2.1" fill="#45D7E8" fill-opacity="0.42"/>
+    <circle cx="734" cy="336" r="2.1" fill="#45D7E8" fill-opacity="0.42"/>
+    <circle cx="744" cy="336" r="2.1" fill="#45D7E8" fill-opacity="0.42"/>
+    <circle cx="754" cy="336" r="2.1" fill="#45D7E8" fill-opacity="0.42"/>
+    <circle cx="764" cy="336" r="2.1" fill="#45D7E8" fill-opacity="0.42"/>
+    <circle cx="774" cy="336" r="2.1" fill="#45D7E8" fill-opacity="0.42"/>
+    <circle cx="784" cy="336" r="2.1" fill="#45D7E8" fill-opacity="0.42"/>
+    <circle cx="794" cy="336" r="2.1" fill="#45D7E8" fill-opacity="0.42"/>
+    <circle cx="804" cy="336" r="2.1" fill="#45D7E8" fill-opacity="0.42"/>
+    <circle cx="814" cy="336" r="2.1" fill="#45D7E8" fill-opacity="0.42"/>
+    <circle cx="824" cy="336" r="2.1" fill="#45D7E8" fill-opacity="0.42"/>
+    <text x="864" y="326" fill="#8593B4" font-size="13">500 players</text>
+    <text x="964" y="292" fill="#45D7E8" font-size="23" font-weight="600">0.34 ms</text>
+    <rect x="964" y="306" width="300" height="18" rx="9" fill="#0A0F1E" stroke="#2E3A5C"/>
+    <rect x="964" y="306" width="19" height="18" rx="9" fill="url(#fast)"/>
+    <text x="964" y="344" fill="#5D6884" font-size="12">0.7% of a 50 ms tick</text>
+    <text x="60" y="376" fill="#5D6884" font-size="12">One extra parse only when somebody reads another language. Text that names the player is still built per player.</text>
+    <text x="48" y="424" fill="#5D6884" font-size="12">Measured on the real send path with 500 viewers online. What is left is handing the finished text to each connection, which nothing can avoid.</text>
+  </g>
+</svg>

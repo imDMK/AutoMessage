@@ -1,7 +1,7 @@
 package com.github.imdmk.automessage.scheduled.trigger;
 
-import com.github.imdmk.automessage.platform.time.DurationFormatter;
-import com.github.imdmk.automessage.platform.time.DurationParser;
+import com.github.imdmk.automessage.notice.time.DurationFormatter;
+import com.github.imdmk.automessage.notice.time.DurationParser;
 import eu.okaeri.configs.schema.GenericsDeclaration;
 import eu.okaeri.configs.serdes.DeserializationData;
 import eu.okaeri.configs.serdes.ObjectSerializer;
@@ -51,7 +51,6 @@ public final class MessageTriggerSerializer implements ObjectSerializer<MessageT
         };
     }
 
-    /** Only the join triggers carry a delay; on any other type the key is not read. */
     private static Duration delayOf(DeserializationData data) {
         return data.containsKey("delay")
                 ? DurationParser.parse(data.get("delay", String.class))

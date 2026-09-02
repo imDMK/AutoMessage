@@ -1,18 +1,10 @@
 package com.github.imdmk.automessage.scheduled.audience.rule;
 
-import org.bukkit.entity.Player;
+import com.github.imdmk.automessage.platform.viewer.Viewer;
 import org.jetbrains.annotations.Unmodifiable;
 
 import java.util.List;
 
-/**
- * Passes when at least one nested rule passes.
- *
- * <p>
- * The rules listed on a message are combined with AND, which cannot express "VIP or moderator".
- * Splitting that into two near-identical messages is the workaround this removes.
- * </p>
- */
 public record AudienceAnyOfRule(@Unmodifiable List<AudienceRule> rules) implements AudienceRule {
 
     public AudienceAnyOfRule {
@@ -28,9 +20,9 @@ public record AudienceAnyOfRule(@Unmodifiable List<AudienceRule> rules) implemen
     }
 
     @Override
-    public boolean test(Player player) {
+    public boolean test(Viewer viewer, AudienceContext context) {
         for (int i = 0; i < rules.size(); i++) {
-            if (rules.get(i).test(player)) {
+            if (rules.get(i).test(viewer, context)) {
                 return true;
             }
         }

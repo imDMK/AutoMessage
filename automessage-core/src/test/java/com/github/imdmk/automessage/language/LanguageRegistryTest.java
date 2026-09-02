@@ -28,7 +28,19 @@ class LanguageRegistryTest {
     }
 
     private LanguageRegistry load() {
-        return LanguageRegistry.load(configManager, mock(PluginLogger.class), "en");
+        return load(() -> "en");
+    }
+
+    private LanguageRegistry load(java.util.function.Supplier<String> fallback) {
+        return LanguageRegistry.load(configManager, mock(PluginLogger.class), fallback);
+    }
+
+    private void writeLanguage(String code, String announcement) throws java.io.IOException {
+        Files.writeString(dataFolder.resolve("lang/" + code + ".yml"), """
+                announcements:
+                  greeting:
+                    - "%s"
+                """.formatted(announcement));
     }
 
     @Test
@@ -113,24 +125,7 @@ class LanguageRegistryTest {
                 .isEqualTo(registry.announcement("vote-reminder", "en"));
     }
 
-    @Test
-    @DisplayName("every shipped announcement has text in every shipped language")
-    void shippedLanguagesAreComplete() {
-        LanguageRegistry registry = load();
-
-        List<String> names = List.copyOf(registry.fallback().announcements.keySet());
-        assertThat(names).isNotEmpty();
-
-        for (LanguageConfig language : registry.all()) {
-            for (String name : names) {
-                assertThat(language.announcement(name))
-                        .withFailMessage("'%s' has no text in lang/%s.yml", name, language.code())
-                        .isNotNull();
-            }
-        }
-    }
-
-    @Test
+@Test
     @DisplayName("writes out the languages the build ships, without being told to")
     void shipsItsOwnLanguages() {
         LanguageRegistry registry = load();
@@ -142,5 +137,51 @@ class LanguageRegistryTest {
         assertThat(dataFolder.resolve("lang/en.yml")).exists();
         assertThat(dataFolder.resolve("lang/pl.yml")).exists();
         assertThat(dataFolder.resolve("lang/de.yml")).exists();
+    }
+
+    @Test
+    @DisplayName("should pick up a language added since startup, on reload")
+    void shouldPickUpALanguageAddedSinceStartup() throws java.io.IOException {
+        LanguageRegistry registry = load();
+
+        // The language file tells an administrator to copy it and reload. Before this, reload
+        // only re-read the files already open, so the instruction printed in the file was wrong
+        // and the new language stayed invisible until the server restarted.
+        assertThat(registry.provide("fr").code()).isEqualTo("en");
+
+        writeLanguage("fr", "<gray>Bonjour");
+        registry.onConfigReload();
+
+        assertThat(registry.provide("fr").code()).isEqualTo("fr");
+        assertThat(registry.announcement("greeting", "fr")).isNotNull();
+    }
+
+    @Test
+    @DisplayName("should apply a changed fallback language on reload")
+    void shouldApplyAChangedFallbackOnReload() {
+        String[] configured = {"en"};
+        LanguageRegistry registry = load(() -> configured[0]);
+
+        assertThat(registry.fallback().code()).isEqualTo("en");
+
+        // Read through the configuration rather than captured at startup, so this setting behaves
+        // like every other one in the file.
+        configured[0] = "pl";
+        registry.onConfigReload();
+
+        assertThat(registry.fallback().code()).isEqualTo("pl");
+    }
+
+    @Test
+    @DisplayName("should not reopen a language it already had")
+    void shouldNotReopenAnExistingLanguage() {
+        LanguageRegistry registry = load();
+        LanguageConfig before = registry.provide("en");
+
+        registry.onConfigReload();
+
+        // Reopening would register a second config bound to the same file, and okaeri has just
+        // reloaded this one from disk anyway.
+        assertThat(registry.provide("en")).isSameAs(before);
     }
 }

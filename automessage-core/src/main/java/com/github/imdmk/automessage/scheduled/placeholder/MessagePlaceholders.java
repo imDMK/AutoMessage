@@ -1,9 +1,9 @@
 package com.github.imdmk.automessage.scheduled.placeholder;
 
 import com.github.imdmk.automessage.platform.placeholder.ExternalPlaceholderResolver;
-import com.eternalcode.multification.notice.Notice;
-import org.bukkit.Server;
-import org.bukkit.entity.Player;
+import com.github.imdmk.automessage.notice.Notice;
+import com.github.imdmk.automessage.platform.viewer.Viewer;
+import com.github.imdmk.automessage.platform.viewer.ViewerRegistry;
 import org.jetbrains.annotations.Unmodifiable;
 
 import java.util.LinkedHashMap;
@@ -11,22 +11,6 @@ import java.util.List;
 import java.util.Map;
 import java.util.Set;
 
-/**
- * The placeholder tokens one message needs, resolved per viewer.
- *
- * <p>
- * A message is scanned once per broadcast rather than once per player — the tokens it contains do
- * not change between viewers, only their values do. On a message that uses no placeholders at all,
- * which is most of them, {@link #resolveFor} does no work and allocates nothing.
- * </p>
- *
- * <p>
- * Values are resolved on the thread that dispatches, which is the main thread. That matters for
- * PlaceholderAPI: expansions routinely read world and entity state, and resolving them on the
- * async delivery thread would be exactly the kind of off-thread API access this plugin avoids
- * elsewhere.
- * </p>
- */
 public final class MessagePlaceholders {
 
     private static final MessagePlaceholders NONE =
@@ -62,22 +46,27 @@ public final class MessagePlaceholders {
         return new MessagePlaceholders(builtins, externalTokens, externalResolver);
     }
 
+    // Whether the rendered text can differ between two players. A PlaceholderAPI token is
+    // assumed to, since only the expansion behind it knows, and guessing wrong would send one
+    // player another player's text.
+    public boolean viewerScoped() {
+        if (!externalTokens.isEmpty()) {
+            return true;
+        }
+        for (final BuiltinPlaceholder builtin : builtins) {
+            if (builtin.requiresViewer()) {
+                return true;
+            }
+        }
+        return false;
+    }
+
     public boolean isEmpty() {
         return builtins.isEmpty() && externalTokens.isEmpty();
     }
 
-    /**
-     * Resolves what can be resolved for a destination with no single reader.
-     *
-     * <p>
-     * A Discord channel has no client language and no player behind it, so the placeholders that
-     * describe the server answer normally while the ones describing a viewer resolve to nothing.
-     * Dropping them beats leaving the raw token: a reader seeing "Welcome {PLAYER}" learns only
-     * that something is broken.
-     * </p>
-     */
     @Unmodifiable
-    public Map<String, String> resolveWithoutViewer(Server server) {
+    public Map<String, String> resolveWithoutViewer(ViewerRegistry viewers) {
         if (isEmpty()) {
             return Map.of();
         }
@@ -87,7 +76,7 @@ public final class MessagePlaceholders {
         for (final BuiltinPlaceholder builtin : builtins) {
             resolved.put(
                     builtin.token(),
-                    builtin.requiresViewer() ? "" : builtin.resolveForServer(server)
+                    builtin.requiresViewer() ? "" : builtin.resolveForServer(viewers)
             );
         }
 
@@ -103,7 +92,7 @@ public final class MessagePlaceholders {
     }
 
     @Unmodifiable
-    public Map<String, String> resolveFor(Server server, Player viewer) {
+    public Map<String, String> resolveFor(ViewerRegistry viewers, Viewer viewer) {
         if (isEmpty()) {
             return Map.of();
         }
@@ -111,7 +100,7 @@ public final class MessagePlaceholders {
         final Map<String, String> resolved = new LinkedHashMap<>();
 
         for (final BuiltinPlaceholder builtin : builtins) {
-            resolved.put(builtin.token(), builtin.resolve(server, viewer));
+            resolved.put(builtin.token(), builtin.resolve(viewers, viewer));
         }
 
         for (final String token : externalTokens) {

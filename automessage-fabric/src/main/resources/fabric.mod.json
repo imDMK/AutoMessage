@@ -1,0 +1,26 @@
+{
+  "schemaVersion": 1,
+  "id": "automessage",
+  "version": "${version}",
+  "name": "AutoMessage",
+  "description": "High-performance mod for fully customizable automatic server-wide broadcasts.",
+  "authors": ["imDMK"],
+  "contact": {
+    "homepage": "https://github.com/imDMK/AutoMessage",
+    "sources": "https://github.com/imDMK/AutoMessage",
+    "issues": "https://github.com/imDMK/AutoMessage/issues"
+  },
+  "license": "MIT",
+  "environment": "server",
+  "entrypoints": {
+    "server": ["com.github.imdmk.automessage.fabric.AutoMessageFabricMod"]
+  },
+  "depends": {
+    "fabricloader": ">=${loader_version}",
+    "minecraft": "${minecraft_version}",
+    "java": ">=${java_version}",
+    "fabric-api": "*",
+    "adventure-platform-fabric": "*",
+    "litecommands": "*"
+  }
+}

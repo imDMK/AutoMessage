@@ -14,10 +14,6 @@ import java.util.List;
 import static org.assertj.core.api.Assertions.assertThat;
 import static org.mockito.Mockito.mock;
 
-/**
- * The schedule and the text now live in different files, so nothing but a test stops them from
- * disagreeing. A shipped message with no text would reach a player as silence.
- */
 class ShippedDefaultsConsistencyTest {
 
     @TempDir
@@ -29,7 +25,9 @@ class ShippedDefaultsConsistencyTest {
         ConfigManager configManager = new ConfigManager(mock(PluginLogger.class), dataFolder.toFile());
 
         ScheduledMessagesConfig messages = configManager.create(ScheduledMessagesConfig.class);
-        LanguageRegistry languages = LanguageRegistry.load(configManager, mock(PluginLogger.class), "en");
+        LanguageRegistry languages = LanguageRegistry.load(configManager, mock(PluginLogger.class), () -> "en");
+
+        assertThat(messages.messages).isNotEmpty();
 
         for (ScheduledMessage message : messages.messages) {
             for (LanguageConfig language : languages.all()) {
@@ -49,7 +47,7 @@ class ShippedDefaultsConsistencyTest {
         ConfigManager configManager = new ConfigManager(mock(PluginLogger.class), dataFolder.toFile());
 
         ScheduledMessagesConfig messages = configManager.create(ScheduledMessagesConfig.class);
-        LanguageRegistry languages = LanguageRegistry.load(configManager, mock(PluginLogger.class), "en");
+        LanguageRegistry languages = LanguageRegistry.load(configManager, mock(PluginLogger.class), () -> "en");
 
         List<String> known = messages.messages.stream().map(ScheduledMessage::name).toList();
 

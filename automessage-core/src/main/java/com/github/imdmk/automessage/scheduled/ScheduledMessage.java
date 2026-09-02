@@ -16,14 +16,6 @@ public record ScheduledMessage(
         String channel,
         @Nullable MessageTrigger trigger) {
 
-    /**
-     * Relative weight of a message that does not configure one.
-     *
-     * <p>
-     * Every message sharing the default is what makes {@code WEIGHTED} behave exactly like
-     * {@code RANDOM} until somebody actually tunes a weight.
-     * </p>
-     */
     public static final int DEFAULT_WEIGHT = 1;
 
     public ScheduledMessage {
@@ -40,10 +32,6 @@ public record ScheduledMessage(
         rules = List.copyOf(rules);
     }
 
-    /**
-     * A message that configures nothing weighs the default, joins the default channel and takes
-     * part in the timed rotation.
-     */
     public ScheduledMessage(String name, List<AudienceRule> rules) {
         this(name, rules, DEFAULT_WEIGHT, AnnouncementChannel.DEFAULT_NAME, null);
     }
@@ -52,10 +40,6 @@ public record ScheduledMessage(
         return announcementChannel.matches(channel);
     }
 
-    /**
-     * A triggered message fires on its event and never through the rotation; leaving it in both
-     * would announce it at random moments as well as the one it was written for.
-     */
     public boolean isScheduled() {
         return trigger == null;
     }

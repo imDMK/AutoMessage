@@ -1,18 +1,10 @@
 package com.github.imdmk.automessage.scheduled.audience.rule;
 
-import org.bukkit.entity.Player;
+import com.github.imdmk.automessage.platform.viewer.Viewer;
 import org.jetbrains.annotations.Unmodifiable;
 
 import java.util.List;
 
-/**
- * Passes only when none of the nested rules pass.
- *
- * <p>
- * Typically used to exclude a group from an otherwise public announcement — hiding the "buy a
- * rank" advert from the players who already bought one.
- * </p>
- */
 public record AudienceNoneOfRule(@Unmodifiable List<AudienceRule> rules) implements AudienceRule {
 
     public AudienceNoneOfRule {
@@ -28,9 +20,9 @@ public record AudienceNoneOfRule(@Unmodifiable List<AudienceRule> rules) impleme
     }
 
     @Override
-    public boolean test(Player player) {
+    public boolean test(Viewer viewer, AudienceContext context) {
         for (int i = 0; i < rules.size(); i++) {
-            if (rules.get(i).test(player)) {
+            if (rules.get(i).test(viewer, context)) {
                 return false;
             }
         }

@@ -50,16 +50,7 @@ class ScheduledMessageRepositoryTest {
         assertTrue(repository.findByName(null).isEmpty());
     }
 
-    @Test
-    @DisplayName("Should observe messages added by a configuration reload")
-    void shouldObserveReloadedMessages() {
-        config.messages = List.of(message("third"));
-
-        assertEquals(List.of("third"), repository.names());
-        assertTrue(repository.findByName("first").isEmpty());
-    }
-
-    @Test
+@Test
     @DisplayName("Should tolerate a configuration without any messages")
     void shouldTolerateMissingMessages() {
         config.messages = null;

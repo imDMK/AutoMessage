@@ -10,17 +10,15 @@ plugins {
     `java-library`
 }
 
-/**
- * Keeps the plugin usable on the whole advertised server range.
- *
- * The shipped artifact is built against the newest Spigot API, so two things can
- * silently break on the oldest supported server: sources may reference API that did
- * not exist yet, and call sites may be emitted against a type whose shape changed
- * (`org.bukkit.Sound`, for instance, was an enum in 1.21 and is an interface today).
- *
- * `compileJavaSpigotMin` catches the first case, `checkSpigotBinaryCompatibility` the
- * second. Both run as part of `check`.
- */
+// Keeps the plugin usable on the whole advertised server range.
+//
+// The shipped artifact is built against the newest Spigot API, so two things can
+// silently break on the oldest supported server: sources may reference API that did
+// not exist yet, and call sites may be emitted against a type whose shape changed
+// (`org.bukkit.Sound`, for instance, was an enum in 1.21 and is an interface today).
+//
+// `compileJavaSpigotMin` catches the first case, `checkSpigotBinaryCompatibility` the
+// second. Both run as part of `check`.
 val spigotMinApi: Configuration = configurations.create("spigotMinApi") {
     isCanBeConsumed = false
     isCanBeResolved = true
@@ -30,7 +28,7 @@ dependencies {
     spigotMinApi("org.spigotmc:spigot-api:${Versions.SPIGOT_API_MIN}")
 }
 
-/** A single method/field reference emitted into one of our own classes. */
+// A single method/field reference emitted into one of our own classes.
 data class MemberReference(
     val owner: String,
     val name: String,
@@ -39,7 +37,7 @@ data class MemberReference(
     val viaInterface: Boolean
 )
 
-/** Everything relevant we know about one class of the reference API. */
+// Everything relevant we know about one class of the reference API.
 data class ApiClass(
     val name: String,
     val isInterface: Boolean,
@@ -269,11 +267,9 @@ abstract class CheckSpigotBinaryCompatibilityTask : DefaultTask() {
         return parents.any { hasMember(api, it, reference) }
     }
 
-    /**
-     * Bukkit types inherit from the JDK — `java.lang.Object` and, for the enums the
-     * older API still used, `java.lang.Enum`. Those supertypes are not in the Spigot
-     * jar, so resolve them against the running JVM instead of reporting them missing.
-     */
+    // Bukkit types inherit from the JDK — `java.lang.Object` and, for the enums the
+    // older API still used, `java.lang.Enum`. Those supertypes are not in the Spigot
+    // jar, so resolve them against the running JVM instead of reporting them missing.
     private fun hasJdkMember(owner: String, reference: MemberReference): Boolean {
 
         if (!owner.startsWith("java/")) return false
