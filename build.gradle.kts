@@ -1,5 +1,5 @@
 group = "com.github.imdmk.automessage"
-version = "2.0.1"
+version = "3.0.0"
 
 subprojects {
     version = rootProject.version
