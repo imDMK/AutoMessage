@@ -5,7 +5,6 @@ import com.github.imdmk.automessage.scheduled.ScheduledMessageBuilder;
 import com.github.imdmk.automessage.config.ConfigReloadService;
 import com.github.imdmk.automessage.scheduled.ScheduledMessageRepository;
 import com.github.imdmk.automessage.scheduled.ScheduledMessagesConfig;
-import org.bukkit.entity.Player;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 
@@ -14,8 +13,6 @@ import java.util.List;
 
 import static org.assertj.core.api.Assertions.assertThat;
 import static org.assertj.core.api.Assertions.assertThatThrownBy;
-import static org.mockito.Mockito.mock;
-import static org.mockito.Mockito.when;
 
 class MessageTriggerTest {
 
@@ -24,12 +21,6 @@ class MessageTriggerTest {
                 .name(name)
                 .trigger(trigger)
                 .build();
-    }
-
-    private static Player player(boolean playedBefore) {
-        Player player = mock(Player.class);
-        when(player.hasPlayedBefore()).thenReturn(playedBefore);
-        return player;
     }
 
     @Test
@@ -57,8 +48,8 @@ class MessageTriggerTest {
     void firstJoinExcludesReturningPlayers() {
         JoinTrigger firstJoin = MessageTrigger.firstJoin(Duration.ZERO);
 
-        assertThat(firstJoin.appliesTo(player(false))).isTrue();
-        assertThat(firstJoin.appliesTo(player(true))).isFalse();
+        assertThat(firstJoin.appliesTo(true)).isTrue();
+        assertThat(firstJoin.appliesTo(false)).isFalse();
         assertThat(firstJoin.type()).isEqualTo(MessageTrigger.Type.FIRST_JOIN);
     }
 
@@ -67,8 +58,8 @@ class MessageTriggerTest {
     void plainJoinAppliesToEveryone() {
         JoinTrigger join = MessageTrigger.join(Duration.ofSeconds(3));
 
-        assertThat(join.appliesTo(player(true))).isTrue();
-        assertThat(join.appliesTo(player(false))).isTrue();
+        assertThat(join.appliesTo(false)).isTrue();
+        assertThat(join.appliesTo(true)).isTrue();
         assertThat(join.type()).isEqualTo(MessageTrigger.Type.JOIN);
     }
 

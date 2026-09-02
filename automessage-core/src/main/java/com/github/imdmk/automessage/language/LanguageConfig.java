@@ -1,8 +1,7 @@
 package com.github.imdmk.automessage.language;
 
-import com.eternalcode.multification.notice.Notice;
-import com.eternalcode.multification.notice.resolver.NoticeResolverDefaults;
-import com.eternalcode.multification.okaeri.MultificationSerdesPack;
+import com.github.imdmk.automessage.notice.Notice;
+import com.github.imdmk.automessage.notice.NoticeSerializer;
 import com.github.imdmk.automessage.config.ConfigSection;
 import eu.okaeri.configs.annotation.Comment;
 import eu.okaeri.configs.annotation.Header;
@@ -13,15 +12,6 @@ import java.util.LinkedHashMap;
 import java.util.List;
 import java.util.Map;
 
-/**
- * One language: every piece of text the plugin can show, in that language.
- *
- * <p>
- * All languages share this one class and differ only in the file they are bound to, which is what
- * makes adding a language a matter of copying a file rather than writing code. The file name is
- * therefore a property of the instance, not of the class.
- * </p>
- */
 @Header({
         "# ============================================================================",
         "#                            AutoMessage - language file",
@@ -72,24 +62,20 @@ public final class LanguageConfig extends ConfigSection {
             "#   announcements:",
             "#     vote-reminder:",
             "#       - \"<gray>Vote for the server!\"",
+            "@requires SOUND_NOTICE",
             "#       - sound: \"entity.experience_orb.pickup MASTER 1.0 1.0\"",
+            "@end",
+            "@requires TITLE_NOTICE",
             "#     event-announcement:",
             "#       - title: \"<gold>EVENT\"",
             "#         subtitle: \"<gray>Starting soon!\"",
+            "@end",
             "#"
     })
     public Map<String, List<Notice>> announcements = new LinkedHashMap<>();
 
-    /**
-     * File this instance is bound to, relative to the plugin folder.
-     *
-     * <p>
-     * Transient so okaeri does not try to write it into the file it names.
-     * </p>
-     */
     private transient String fileName = "lang/en.yml";
 
-    /** Language code this file provides, lower case, e.g. {@code pl} or {@code pt_br}. */
     private transient String code = "en";
 
     public LanguageConfig() {
@@ -108,10 +94,6 @@ public final class LanguageConfig extends ConfigSection {
         return code;
     }
 
-    /**
-     * @param name message name from scheduledMessages.yml
-     * @return the text for that announcement, or null when this language does not translate it
-     */
     @Nullable
     public List<Notice> announcement(String name) {
         final List<Notice> notices = announcements.get(name);
@@ -122,9 +104,7 @@ public final class LanguageConfig extends ConfigSection {
 
     @Override
     public OkaeriSerdesPack getSerdesPack() {
-        return registry -> registry.register(
-                new MultificationSerdesPack(NoticeResolverDefaults.createRegistry())
-        );
+        return registry -> registry.register(new NoticeSerializer());
     }
 
     @Override

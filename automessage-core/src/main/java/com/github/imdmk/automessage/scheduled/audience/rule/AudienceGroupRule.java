@@ -1,15 +1,15 @@
 package com.github.imdmk.automessage.scheduled.audience.rule;
 
-import org.bukkit.entity.Player;
+import com.github.imdmk.automessage.platform.viewer.Viewer;
 
 public record AudienceGroupRule(String group) implements AudienceRule {
 
     private static final String GROUP_PREFIX = "group.";
 
     @Override
-    public boolean test(Player player) {
+    public boolean test(Viewer viewer, AudienceContext context) {
         final String permission = GROUP_PREFIX + group;
-        return player.hasPermission(permission);
+        return viewer.hasPermission(permission);
     }
 
     @Override

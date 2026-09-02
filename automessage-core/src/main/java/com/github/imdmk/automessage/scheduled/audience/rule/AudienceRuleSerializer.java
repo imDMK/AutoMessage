@@ -1,7 +1,7 @@
 package com.github.imdmk.automessage.scheduled.audience.rule;
 
-import com.github.imdmk.automessage.platform.time.DurationFormatter;
-import com.github.imdmk.automessage.platform.time.DurationParser;
+import com.github.imdmk.automessage.notice.time.DurationFormatter;
+import com.github.imdmk.automessage.notice.time.DurationParser;
 import eu.okaeri.configs.schema.GenericsDeclaration;
 import eu.okaeri.configs.serdes.DeserializationData;
 import eu.okaeri.configs.serdes.ObjectSerializer;
@@ -12,14 +12,6 @@ import java.time.Duration;
 import java.util.List;
 import java.util.Set;
 
-/**
- * Reads and writes audience rules, including the ones that nest other rules.
- *
- * <p>
- * The combinators recurse through this same serializer, so a rule tree of any depth round-trips
- * without a second format to maintain.
- * </p>
- */
 public final class AudienceRuleSerializer implements ObjectSerializer<AudienceRule> {
 
     @Override

@@ -1,7 +1,7 @@
 package com.github.imdmk.automessage.scheduled.channel;
 
-import com.github.imdmk.automessage.platform.time.DurationFormatter;
-import com.github.imdmk.automessage.platform.time.DurationParser;
+import com.github.imdmk.automessage.notice.time.DurationFormatter;
+import com.github.imdmk.automessage.notice.time.DurationParser;
 import com.github.imdmk.automessage.scheduled.selector.MessageSelectorType;
 import eu.okaeri.configs.schema.GenericsDeclaration;
 import eu.okaeri.configs.serdes.DeserializationData;

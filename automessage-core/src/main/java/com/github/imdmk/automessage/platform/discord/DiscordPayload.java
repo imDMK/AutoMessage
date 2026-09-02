@@ -1,17 +1,7 @@
 package com.github.imdmk.automessage.platform.discord;
 
-/**
- * Builds the JSON body of a webhook request.
- *
- * <p>
- * Written by hand rather than with a JSON library: the payload has three string fields, and the
- * plugin would otherwise shade a dependency for them. Escaping is the part that matters, since the
- * content is arbitrary text taken from a configuration file.
- * </p>
- */
 public final class DiscordPayload {
 
-    /** Discord rejects a message body longer than this. */
     public static final int CONTENT_LIMIT = 2000;
 
     private DiscordPayload() {

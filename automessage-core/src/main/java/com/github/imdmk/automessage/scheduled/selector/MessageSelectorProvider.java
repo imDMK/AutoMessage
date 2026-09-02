@@ -3,16 +3,6 @@ package com.github.imdmk.automessage.scheduled.selector;
 import java.util.Objects;
 import java.util.function.Supplier;
 
-/**
- * Supplies the {@link MessageSelector} matching the currently configured
- * {@link MessageSelectorType}.
- *
- * <p>
- * Selectors are stateful — {@link SequentialMessageSelector} remembers the position it stopped at.
- * The instance is therefore cached and only rebuilt when the configured strategy actually changes,
- * so reloading the configuration does not reset the rotation.
- * </p>
- */
 public final class MessageSelectorProvider implements Supplier<MessageSelector> {
 
     private final Supplier<MessageSelectorType> typeSupplier;

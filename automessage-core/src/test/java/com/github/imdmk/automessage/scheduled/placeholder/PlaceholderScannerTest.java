@@ -1,8 +1,9 @@
 package com.github.imdmk.automessage.scheduled.placeholder;
 
-import com.eternalcode.multification.notice.Notice;
+import com.github.imdmk.automessage.notice.Notice;
 import com.github.imdmk.automessage.platform.placeholder.ExternalPlaceholderResolver;
-import org.bukkit.Server;
+import com.github.imdmk.automessage.platform.viewer.Viewer;
+import com.github.imdmk.automessage.platform.viewer.ViewerRegistry;
 import net.kyori.adventure.bossbar.BossBar;
 import net.kyori.adventure.key.Key;
 import net.kyori.adventure.sound.Sound;
@@ -15,12 +16,10 @@ import java.util.Map;
 
 import static org.assertj.core.api.Assertions.assertThat;
 import static org.assertj.core.api.Assertions.assertThatThrownBy;
-import static org.mockito.Mockito.mock;
 import static org.mockito.Mockito.when;
 
 class PlaceholderScannerTest {
 
-    /** The scanner now works on the notice lists of every language, not on the message. */
     private static List<List<Notice>> message(Notice... notices) {
         return List.of(List.of(notices));
     }
@@ -42,7 +41,7 @@ class PlaceholderScannerTest {
     @DisplayName("looks inside titles, actionbars and bossbars, not just chat")
     void scansEveryTextCarryingNoticeType() {
         List<List<Notice>> message = message(
-                Notice.actionbar("{WORLD}"),
+                Notice.actionBar("{WORLD}"),
                 Notice.title("{DATE}", "{TIME}"),
                 Notice.bossBar(BossBar.Color.RED, BossBar.Overlay.PROGRESS, Duration.ofSeconds(1), "{MAX_PLAYERS}")
         );
@@ -71,7 +70,7 @@ class PlaceholderScannerTest {
     void findsExternalTokens() {
         List<List<Notice>> message = message(
                 Notice.chat("%vault_eco_balance% and %server_tps%"),
-                Notice.actionbar("%server_tps% again")
+                Notice.actionBar("%server_tps% again")
         );
 
         assertThat(PlaceholderScanner.externalTokensIn(message))
@@ -114,15 +113,29 @@ class PlaceholderScannerTest {
     @Test
     @DisplayName("without a viewer, server values resolve and viewer values drop out")
     void resolvesWhatItCanWithoutAViewer() {
-        Server server = mock(Server.class);
-        when(server.getOnlinePlayers()).thenAnswer(invocation -> List.of());
-        when(server.getMaxPlayers()).thenReturn(100);
+        ViewerRegistry viewers = new ViewerRegistry() {
+
+            @Override
+            public java.util.Collection<Viewer> online() {
+                return List.of();
+            }
+
+            @Override
+            public int onlineCount() {
+                return 0;
+            }
+
+            @Override
+            public int maxPlayers() {
+                return 100;
+            }
+        };
 
         List<List<Notice>> message = message(Notice.chat("{ONLINE}/{MAX_PLAYERS} - hi {PLAYER} in {WORLD}"));
 
         Map<String, String> resolved = MessagePlaceholders
                 .scan(message, ExternalPlaceholderResolver.disabled())
-                .resolveWithoutViewer(server);
+                .resolveWithoutViewer(viewers);
 
         assertThat(resolved).containsEntry("{ONLINE}", "0").containsEntry("{MAX_PLAYERS}", "100");
 
@@ -148,7 +161,7 @@ class PlaceholderScannerTest {
     @Test
     @DisplayName("asking a viewer-scoped placeholder to resolve without one is a programming error")
     void viewerScopedRefusesToResolveWithoutAViewer() {
-        assertThatThrownBy(() -> BuiltinPlaceholder.PLAYER.resolveForServer(mock(Server.class)))
+        assertThatThrownBy(() -> BuiltinPlaceholder.PLAYER.resolveForServer(null))
                 .isInstanceOf(IllegalStateException.class);
     }
 

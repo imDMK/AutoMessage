@@ -6,16 +6,6 @@ import java.util.List;
 import java.util.Optional;
 import java.util.concurrent.ThreadLocalRandom;
 
-/**
- * Random selection biased by each message's {@code weight}.
- *
- * <p>
- * A message of weight 5 comes up five times as often as one of weight 1, which is how a server
- * promotes the vote reminder over the tips without letting it crowd them out entirely. Weight 0
- * excludes a message from the rotation without deleting it — useful for parking a seasonal
- * announcement until it is wanted again.
- * </p>
- */
 final class WeightedMessageSelector implements MessageSelector {
 
     @Override

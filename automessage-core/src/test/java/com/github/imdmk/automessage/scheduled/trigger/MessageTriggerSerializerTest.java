@@ -18,7 +18,6 @@ import static org.assertj.core.api.Assertions.assertThat;
 import static org.assertj.core.api.Assertions.assertThatThrownBy;
 import static org.mockito.Mockito.mock;
 
-/** Round-trips every trigger shape through the real configuration machinery. */
 class MessageTriggerSerializerTest {
 
     @TempDir
@@ -40,7 +39,6 @@ class MessageTriggerSerializerTest {
                 .messages;
     }
 
-    /** @return the file below its comment header, so assertions cannot match the documentation */
     private String dataSection() throws Exception {
         String content = Files.readString(dataFolder.resolve("scheduledMessages.yml"));
 

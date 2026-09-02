@@ -4,11 +4,11 @@ import com.github.imdmk.automessage.config.ConfigReloadService;
 import com.github.imdmk.automessage.message.MessageService;
 import com.github.imdmk.automessage.platform.logger.PluginLogger;
 import com.github.imdmk.automessage.platform.scheduler.TaskScheduler;
+import com.github.imdmk.automessage.platform.viewer.Viewer;
 import dev.rollczi.litecommands.annotations.command.Command;
 import dev.rollczi.litecommands.annotations.context.Context;
 import dev.rollczi.litecommands.annotations.execute.Execute;
 import dev.rollczi.litecommands.annotations.permission.Permission;
-import org.bukkit.command.CommandSender;
 
 @Command(name = "automessage reload")
 @Permission("command.automessage.reload")
@@ -32,14 +32,14 @@ public final class ReloadCommand {
     }
 
     @Execute
-    void reload(@Context CommandSender sender) {
+    void reload(@Context Viewer viewer) {
         taskScheduler.runAsync(() -> {
             try {
                 configReloadService.reload();
-                messageService.send(sender, n -> n.commands.configReloadedSuccess);
+                messageService.send(viewer, n -> n.commands.configReloadedSuccess);
             } catch (Exception e) {
                 logger.error(e, "Failed to reload plugin config");
-                messageService.send(sender, n -> n.commands.configReloadFailed);
+                messageService.send(viewer, n -> n.commands.configReloadFailed);
             }
         });
     }

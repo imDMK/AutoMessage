@@ -1,7 +1,8 @@
 package com.github.imdmk.automessage.language;
 
-import com.eternalcode.multification.notice.Notice;
+import com.github.imdmk.automessage.notice.Notice;
 import com.github.imdmk.automessage.config.ConfigManager;
+import com.github.imdmk.automessage.config.ConfigReloadListener;
 import com.github.imdmk.automessage.platform.logger.PluginLogger;
 import org.jetbrains.annotations.Nullable;
 import org.jetbrains.annotations.Unmodifiable;
@@ -12,77 +13,82 @@ import java.util.LinkedHashMap;
 import java.util.List;
 import java.util.Locale;
 import java.util.Map;
+import java.util.function.Supplier;
 
-/**
- * Every language the server has, and the rules for choosing between them.
- *
- * <p>
- * Languages are found by looking in the {@code lang/} folder, not by being listed in code. An
- * administrator adds French by dropping in {@code lang/fr.yml}; nothing is compiled and nothing
- * else has to be told about it.
- * </p>
- */
-public final class LanguageRegistry {
+public final class LanguageRegistry implements ConfigReloadListener {
 
     private static final String FOLDER = "lang";
     private static final String EXTENSION = ".yml";
 
     private final PluginLogger logger;
+    private final ConfigManager configManager;
+    private final Supplier<String> fallbackCode;
 
-    /** Keyed by normalised code: {@code en}, {@code pl}, {@code pt_br}. */
-    private final Map<String, LanguageConfig> byCode = new LinkedHashMap<>();
+    private volatile Languages languages;
 
-    private LanguageConfig fallback;
-
-    private LanguageRegistry(PluginLogger logger) {
+    private LanguageRegistry(PluginLogger logger, ConfigManager configManager, Supplier<String> fallbackCode) {
         this.logger = logger;
+        this.configManager = configManager;
+        this.fallbackCode = fallbackCode;
     }
 
-    /**
-     * @param fallbackCode language served to players whose own has no file
-     */
     public static LanguageRegistry load(
             ConfigManager configManager,
             PluginLogger logger,
-            String fallbackCode
+            Supplier<String> fallbackCode
     ) {
-        final LanguageRegistry registry = new LanguageRegistry(logger);
+        final LanguageRegistry registry = new LanguageRegistry(logger, configManager, fallbackCode);
+        registry.languages = registry.read(Map.of());
+
+        return registry;
+    }
+
+    @Override
+    public void onConfigReload() {
+        this.languages = read(languages.byCode());
+    }
+
+    private Languages read(Map<String, LanguageConfig> existing) {
+        final Map<String, LanguageConfig> byCode = new LinkedHashMap<>(existing);
 
         // Written out first so a fresh install is not an empty folder; discovery below cannot
         // create a file that does not exist yet.
         for (final String code : ShippedLanguages.CODES) {
-            registry.open(configManager, code);
+            open(byCode, code);
         }
 
         // Anything the administrator added themselves. Loading these after the shipped ones means
         // a hand-written lang/en.yml is already open and is not opened twice.
-        for (final String code : registry.discover(configManager.dataFolder())) {
-            registry.open(configManager, code);
+        for (final String code : discover(configManager.dataFolder())) {
+            open(byCode, code);
         }
 
-        if (registry.byCode.isEmpty()) {
+        if (byCode.isEmpty()) {
             throw new IllegalStateException(
                     "No language files could be loaded from lang/ - AutoMessage has nothing to say."
             );
         }
 
-        registry.fallback = registry.byCode.get(LanguageCode.normalize(fallbackCode));
+        final String wanted = fallbackCode.get();
+        LanguageConfig fallback = byCode.get(LanguageCode.normalize(wanted));
 
-        if (registry.fallback == null) {
-            registry.fallback = registry.byCode.values().iterator().next();
+        if (fallback == null) {
+            fallback = byCode.values().iterator().next();
             logger.warn(
                     "Fallback language '%s' has no file in lang/, using '%s' instead.",
-                    fallbackCode,
-                    registry.fallback.code()
+                    wanted,
+                    fallback.code()
             );
         }
 
-        logger.info("Loaded %d language(s): %s.", registry.byCode.size(), String.join(", ", registry.byCode.keySet()));
+        if (byCode.size() != existing.size()) {
+            logger.info("Loaded %d language(s): %s.", byCode.size(), String.join(", ", byCode.keySet()));
+        }
 
-        return registry;
+        return new Languages(Map.copyOf(byCode), fallback);
     }
 
-    private void open(ConfigManager configManager, String code) {
+    private void open(Map<String, LanguageConfig> byCode, String code) {
         final String normalized = LanguageCode.normalize(code);
 
         if (normalized.isEmpty() || byCode.containsKey(normalized)) {
@@ -98,7 +104,6 @@ public final class LanguageRegistry {
         byCode.put(normalized, configManager.create(config));
     }
 
-    /** @return the codes of every {@code lang/*.yml} already on disk */
     private List<String> discover(File dataFolder) {
         final File folder = new File(dataFolder, FOLDER);
         final File[] files = folder.listFiles();
@@ -120,52 +125,51 @@ public final class LanguageRegistry {
         return codes;
     }
 
-    /**
-     * Picks the file for a viewer.
-     *
-     * <p>
-     * A full code wins over a bare language, so a server that adds {@code pt_br} serves it to
-     * Brazilian clients while Portuguese ones still get {@code pt}.
-     * </p>
-     */
     public LanguageConfig provide(Locale locale) {
         return provide(LanguageCode.of(locale));
     }
 
     public LanguageConfig provide(String rawCode) {
+        final Languages current = languages;
         final String code = LanguageCode.normalize(rawCode);
 
-        final LanguageConfig exact = byCode.get(code);
+        final LanguageConfig exact = current.byCode().get(code);
         if (exact != null) {
             return exact;
         }
 
-        final LanguageConfig language = byCode.get(LanguageCode.language(code));
+        final LanguageConfig language = current.byCode().get(LanguageCode.language(code));
 
-        return language != null ? language : fallback;
+        return language != null ? language : current.fallback();
     }
 
-    /**
-     * @return the announcement text for this viewer, falling back to the fallback language and
-     *         then to null when nobody translates it
-     */
     @Nullable
     public List<Notice> announcement(String messageName, String rawCode) {
-        final List<Notice> translated = provide(rawCode).announcement(messageName);
+        return announcement(messageName, provide(rawCode));
+    }
+
+    // Takes the language already resolved, so a caller serving many players at once resolves it
+    // once for the whole group rather than once per player.
+    @Nullable
+    public List<Notice> announcement(String messageName, LanguageConfig language) {
+        final List<Notice> translated = language.announcement(messageName);
 
         if (translated != null) {
             return translated;
         }
 
-        return fallback.announcement(messageName);
+        return languages.fallback().announcement(messageName);
     }
 
     public LanguageConfig fallback() {
-        return fallback;
+        return languages.fallback();
     }
 
     @Unmodifiable
     public List<LanguageConfig> all() {
-        return List.copyOf(byCode.values());
+        return List.copyOf(languages.byCode().values());
+    }
+
+    private record Languages(Map<String, LanguageConfig> byCode, LanguageConfig fallback) {
     }
 }

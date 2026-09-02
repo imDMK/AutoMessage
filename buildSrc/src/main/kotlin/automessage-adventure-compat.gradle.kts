@@ -2,15 +2,13 @@ plugins {
     `java-library`
 }
 
-/**
- * `adventure-platform-bukkit` is still published against the Adventure 4.x API and links
- * against types 5.x removed — `net.kyori.adventure.audience.MessageType` among them. Nothing
- * in the build fails when a 5.x module is pulled in: the jar shades cleanly and only dies on
- * the first message sent, with a NoClassDefFoundError.
- *
- * A bump of any single Adventure module drags the rest of the line along with it, so this
- * check asserts the whole shaded stack stays on the major line the platform expects.
- */
+// `adventure-platform-bukkit` is still published against the Adventure 4.x API and links
+// against types 5.x removed — `net.kyori.adventure.audience.MessageType` among them. Nothing
+// in the build fails when a 5.x module is pulled in: the jar shades cleanly and only dies on
+// the first message sent, with a NoClassDefFoundError.
+//
+// A bump of any single Adventure module drags the rest of the line along with it, so this
+// check asserts the whole shaded stack stays on the major line the platform expects.
 abstract class CheckAdventureAlignmentTask : DefaultTask() {
 
     @get:Input

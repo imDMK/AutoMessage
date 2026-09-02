@@ -1,64 +1,49 @@
 package com.github.imdmk.automessage.message;
 
-import com.eternalcode.multification.adventure.AudienceConverter;
-import com.eternalcode.multification.bukkit.BukkitMultification;
-import com.eternalcode.multification.notice.provider.NoticeProvider;
-import com.eternalcode.multification.translation.TranslationProvider;
+import java.util.Collection;
+import net.kyori.adventure.audience.Audience;
 import com.github.imdmk.automessage.language.LanguageConfig;
 import com.github.imdmk.automessage.language.LanguageRegistry;
-import net.kyori.adventure.platform.AudienceProvider;
-import net.kyori.adventure.platform.bukkit.BukkitAudiences;
-import net.kyori.adventure.text.Component;
-import net.kyori.adventure.text.minimessage.MiniMessage;
-import net.kyori.adventure.text.serializer.ComponentSerializer;
-import org.bukkit.command.CommandSender;
-import org.bukkit.entity.Player;
-import org.bukkit.plugin.Plugin;
+import com.github.imdmk.automessage.notice.Notice;
+import com.github.imdmk.automessage.notice.NoticeDelayer;
+import com.github.imdmk.automessage.notice.NoticeRenderer;
+import com.github.imdmk.automessage.platform.viewer.Viewer;
 
-public final class MessageService extends BukkitMultification<LanguageConfig> {
+import java.util.function.Function;
+import java.util.function.UnaryOperator;
 
-    private static final MiniMessage MINI_MESSAGE = MiniMessage.miniMessage();
+public final class MessageService {
 
     private final LanguageRegistry languages;
-    private final AudienceProvider audienceProvider;
+    private final NoticeRenderer renderer;
 
-    public MessageService(
-            LanguageRegistry languages,
-            Plugin plugin
-    ) {
+    public MessageService(LanguageRegistry languages, NoticeDelayer delayer) {
         this.languages = languages;
-        this.audienceProvider = BukkitAudiences.create(plugin);
+        this.renderer = NoticeRenderer.miniMessage(delayer);
     }
 
-    /**
-     * Multification hands the viewer's locale here, which is what lets two players in the same
-     * chat read the same reply in different languages.
-     */
-    @Override
-    protected TranslationProvider<LanguageConfig> translationProvider() {
-        return languages::provide;
+    public MessageBroadcast create() {
+        return new MessageBroadcast(this);
     }
 
-    @Override
-    protected ComponentSerializer<Component, Component, String> serializer() {
-        return MINI_MESSAGE;
+    public void send(Viewer viewer, Function<LanguageConfig, Notice> message) {
+        create().viewer(viewer).notice(message).send();
     }
 
-    @Override
-    protected AudienceConverter<CommandSender> audienceConverter() {
-        return sender -> {
-            if (sender instanceof Player player) {
-                return audienceProvider.player(player.getUniqueId());
-            }
-            return audienceProvider.console();
-        };
+    void render(Viewer viewer, Notice notice, UnaryOperator<String> placeholders) {
+        renderer.render(notice, viewer.audience(), placeholders);
     }
 
-    public void send(CommandSender sender, NoticeProvider<LanguageConfig> notice) {
-        create().viewer(sender).notice(notice).send();
+    // One parse for however many players are listening, rather than one parse per player.
+    public void render(Collection<Audience> audiences, Notice notice, UnaryOperator<String> placeholders) {
+        if (audiences.isEmpty()) {
+            return;
+        }
+
+        renderer.render(notice, AudienceGroup.of(audiences), placeholders);
     }
 
-    public void shutdown() {
-        audienceProvider.close();
+    LanguageConfig languageOf(Viewer viewer) {
+        return languages.provide(viewer.locale());
     }
 }

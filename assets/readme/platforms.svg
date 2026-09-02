@@ -1,0 +1,54 @@
+<svg width="1320" height="300" viewBox="0 0 1320 300" fill="none" xmlns="http://www.w3.org/2000/svg" role="img" aria-labelledby="pfTitle pfDesc">
+  <title id="pfTitle">One core, six runtimes</title>
+  <desc id="pfDesc">A single platform-neutral core connected to six platform artifacts: Bukkit, Folia, Sponge, Velocity, Fabric and Minestom, each with the Minecraft line it targets.</desc>
+  <defs>
+    <linearGradient id="coreFill" x1="56" y1="96" x2="296" y2="204" gradientUnits="userSpaceOnUse">
+      <stop stop-color="#A78BFA"/><stop offset="0.55" stop-color="#7C8CFF"/><stop offset="1" stop-color="#45D7E8"/>
+    </linearGradient>
+    <pattern id="pfGrid" width="30" height="30" patternUnits="userSpaceOnUse">
+      <path d="M30 0H0V30" stroke="#A8B2D1" stroke-opacity="0.045"/>
+    </pattern>
+    <clipPath id="pfClip"><rect width="1320" height="300" rx="16"/></clipPath>
+  </defs>
+  <g clip-path="url(#pfClip)" font-family="system-ui,-apple-system,'Segoe UI',Roboto,sans-serif">
+    <rect width="1320" height="300" fill="#0A0F1E"/>
+    <rect width="1320" height="300" fill="url(#pfGrid)"/>
+    <path d="M296 150 H372" stroke="#45D7E8" stroke-opacity="0.55" stroke-width="2"/>
+    <path d="M372 150 H440" stroke="#45D7E8" stroke-opacity="0.42" stroke-width="2"/>
+    <circle cx="440" cy="150" r="3.5" fill="#45D7E8" fill-opacity="0.75"/>
+    <path d="M372 150 H586" stroke="#45D7E8" stroke-opacity="0.38" stroke-width="2"/>
+    <circle cx="586" cy="150" r="3.5" fill="#45D7E8" fill-opacity="0.68"/>
+    <path d="M372 150 H732" stroke="#45D7E8" stroke-opacity="0.33" stroke-width="2"/>
+    <circle cx="732" cy="150" r="3.5" fill="#45D7E8" fill-opacity="0.61"/>
+    <path d="M372 150 H878" stroke="#45D7E8" stroke-opacity="0.28" stroke-width="2"/>
+    <circle cx="878" cy="150" r="3.5" fill="#45D7E8" fill-opacity="0.54"/>
+    <path d="M372 150 H1024" stroke="#45D7E8" stroke-opacity="0.24" stroke-width="2"/>
+    <circle cx="1024" cy="150" r="3.5" fill="#45D7E8" fill-opacity="0.47"/>
+    <path d="M372 150 H1170" stroke="#45D7E8" stroke-opacity="0.20" stroke-width="2"/>
+    <circle cx="1170" cy="150" r="3.5" fill="#45D7E8" fill-opacity="0.40"/>
+    <rect x="56" y="96" width="240" height="108" rx="20" fill="url(#coreFill)"/>
+    <text x="176" y="142" fill="#0A0F1E" font-size="23" font-weight="700" text-anchor="middle">One core</text>
+    <text x="176" y="172" fill="#0A0F1E" fill-opacity="0.72" font-size="15" text-anchor="middle">no server API inside</text>
+    <rect x="440" y="104" width="128" height="92" rx="16" fill="#101932" stroke="#2E3A5C" stroke-width="1.5"/>
+    <text x="504" y="144" fill="#E8ECFB" font-size="19" font-weight="600" text-anchor="middle">Bukkit</text>
+    <text x="504" y="170" fill="#7C89A8" font-size="14" text-anchor="middle">1.21 – 26.2</text>
+    <rect x="586" y="104" width="128" height="92" rx="16" fill="#101932" stroke="#2E3A5C" stroke-width="1.5"/>
+    <text x="650" y="144" fill="#E8ECFB" font-size="19" font-weight="600" text-anchor="middle">Folia</text>
+    <text x="650" y="170" fill="#7C89A8" font-size="14" text-anchor="middle">1.21 – 26.2</text>
+    <rect x="732" y="104" width="128" height="92" rx="16" fill="#101932" stroke="#2E3A5C" stroke-width="1.5"/>
+    <text x="796" y="144" fill="#E8ECFB" font-size="19" font-weight="600" text-anchor="middle">Sponge</text>
+    <text x="796" y="170" fill="#7C89A8" font-size="14" text-anchor="middle">1.21.10</text>
+    <rect x="878" y="104" width="128" height="92" rx="16" fill="#101932" stroke="#2E3A5C" stroke-width="1.5"/>
+    <text x="942" y="144" fill="#E8ECFB" font-size="19" font-weight="600" text-anchor="middle">Velocity</text>
+    <text x="942" y="170" fill="#7C89A8" font-size="14" text-anchor="middle">proxy 3.x</text>
+    <rect x="1024" y="104" width="128" height="92" rx="16" fill="#101932" stroke="#2E3A5C" stroke-width="1.5"/>
+    <text x="1088" y="144" fill="#E8ECFB" font-size="19" font-weight="600" text-anchor="middle">Fabric</text>
+    <text x="1088" y="170" fill="#7C89A8" font-size="14" text-anchor="middle">1.21.11</text>
+    <rect x="1170" y="104" width="128" height="92" rx="16" fill="#101932" stroke="#2E3A5C" stroke-width="1.5"/>
+    <text x="1234" y="144" fill="#E8ECFB" font-size="19" font-weight="600" text-anchor="middle">Minestom</text>
+    <text x="1234" y="170" fill="#7C89A8" font-size="14" text-anchor="middle">1.21.11</text>
+    <text x="176" y="248" fill="#7C89A8" font-size="14" text-anchor="middle">shared behaviour</text>
+    <text x="869" y="248" fill="#7C89A8" font-size="14" text-anchor="middle">native scheduling, viewers, permissions and lifecycle</text>
+    <rect x="0.75" y="0.75" width="1318.5" height="298.5" rx="15.5" fill="none" stroke="#A8B2D1" stroke-opacity="0.11"/>
+  </g>
+</svg>

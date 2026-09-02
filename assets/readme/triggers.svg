@@ -1,0 +1,46 @@
+<svg width="1320" height="470" viewBox="0 0 1320 470" fill="none" xmlns="http://www.w3.org/2000/svg" role="img" aria-labelledby="trgTitle trgDesc">
+  <title id="trgTitle">Three ways an announcement can fire</title>
+  <desc id="trgDesc">A timeline with three lanes: a channel sending on a fixed period, a JOIN trigger firing shortly after a player connects, and a PLAYER_COUNT milestone that fires once when the online count crosses one hundred and re-arms only after it falls below.</desc>
+  <defs>
+    <linearGradient id="fire" x1="0" y1="0" x2="1" y2="1"><stop stop-color="#A78BFA"/><stop offset="1" stop-color="#45D7E8"/></linearGradient>
+    <linearGradient id="curveStroke" x1="236" y1="0" x2="1264" y2="0" gradientUnits="userSpaceOnUse">
+      <stop stop-color="#3FA8D8" stop-opacity="0.65"/><stop offset="1" stop-color="#A78BFA"/>
+    </linearGradient>
+    <pattern id="trgGrid" width="30" height="30" patternUnits="userSpaceOnUse"><path d="M30 0H0V30" stroke="#A8B2D1" stroke-opacity="0.04"/></pattern>
+    <clipPath id="trgClip"><rect width="1320" height="470" rx="16"/></clipPath>
+  </defs>
+  <g clip-path="url(#trgClip)" font-family="system-ui,-apple-system,'Segoe UI',Roboto,sans-serif">
+    <rect width="1320" height="470" fill="#0A0F1E"/>
+    <rect width="1320" height="470" fill="url(#trgGrid)"/>
+    <text x="48" y="50" fill="#8593B4" font-size="14" letter-spacing="1.6">THREE WAYS AN ANNOUNCEMENT CAN FIRE</text>
+
+    <text x="48" y="98" fill="#E8ECFB" font-size="16" font-weight="600">On a channel</text>
+    <text x="48" y="120" fill="#5D6884" font-size="13">period: 5m</text>
+    <path d="M236 104 H1264" stroke="#22304F" stroke-width="2"/>
+    <circle cx="236" cy="104" r="7" fill="url(#fire)"/><circle cx="407" cy="104" r="7" fill="url(#fire)"/><circle cx="579" cy="104" r="7" fill="url(#fire)"/><circle cx="750" cy="104" r="7" fill="url(#fire)"/><circle cx="921" cy="104" r="7" fill="url(#fire)"/><circle cx="1093" cy="104" r="7" fill="url(#fire)"/><circle cx="1264" cy="104" r="7" fill="url(#fire)"/>
+
+    <text x="48" y="190" fill="#E8ECFB" font-size="16" font-weight="600">On a join</text>
+    <text x="48" y="212" fill="#5D6884" font-size="13">delay: 3s</text>
+    <path d="M236 196 H1264" stroke="#22304F" stroke-width="2"/>
+    <circle cx="668" cy="196" r="9" fill="#0A0F1E" stroke="#F7C65B" stroke-width="2.5"/>
+    <text x="668" y="176" fill="#F7C65B" font-size="13" text-anchor="middle">player joins</text>
+    <path d="M679 196 H723" stroke="#F7C65B" stroke-opacity="0.5" stroke-width="2" stroke-dasharray="3 4"/>
+    <circle cx="734" cy="196" r="7" fill="url(#fire)"/>
+    <text x="734" y="226" fill="#8593B4" font-size="13" text-anchor="middle">sent</text>
+
+    <text x="48" y="288" fill="#E8ECFB" font-size="16" font-weight="600">On a milestone</text>
+    <text x="48" y="310" fill="#5D6884" font-size="13">threshold: 100</text>
+    <path d="M236 310 H1264" stroke="#F7C65B" stroke-opacity="0.40" stroke-width="1.5" stroke-dasharray="6 6"/>
+    <text x="236" y="300" fill="#F7C65B" fill-opacity="0.85" font-size="12.5">100 online</text>
+    <path d="M236 384 L309 370 L383 356 L456 332 L530 316 L603 304 L677 290 L750 279 L823 295 L897 318 L970 338 L1044 324 L1117 305 L1191 291 L1264 300" stroke="url(#curveStroke)" stroke-width="2.75" fill="none" stroke-linejoin="round" stroke-linecap="round"/>
+    <circle cx="603" cy="304" r="8" fill="url(#fire)"/>
+    <text x="603" y="284" fill="#E8ECFB" font-size="13.5" text-anchor="middle">fires</text>
+    <circle cx="897" cy="318" r="6" fill="#0A0F1E" stroke="#6B7899" stroke-width="2"/>
+    <text x="897" y="344" fill="#6B7899" font-size="13" text-anchor="middle">re-arms below 100</text>
+    <circle cx="1117" cy="305" r="8" fill="url(#fire)"/>
+    <text x="1117" y="286" fill="#E8ECFB" font-size="13.5" text-anchor="middle">fires again</text>
+
+    <text x="48" y="444" fill="#8593B4" font-size="13.5">A message with a trigger leaves the rotation entirely — and its audience rules still apply.</text>
+    <rect x="0.75" y="0.75" width="1318.5" height="468.5" rx="15.5" fill="none" stroke="#A8B2D1" stroke-opacity="0.11"/>
+  </g>
+</svg>

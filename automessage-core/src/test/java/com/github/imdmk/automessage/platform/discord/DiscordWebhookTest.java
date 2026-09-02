@@ -1,6 +1,6 @@
 package com.github.imdmk.automessage.platform.discord;
 
-import com.eternalcode.multification.notice.Notice;
+import com.github.imdmk.automessage.notice.Notice;
 import net.kyori.adventure.bossbar.BossBar;
 import net.kyori.adventure.key.Key;
 import net.kyori.adventure.sound.Sound;
@@ -68,7 +68,7 @@ class DiscordWebhookTest {
     @DisplayName("skips notice types a text channel cannot show")
     void skipsNonChatNotices() {
         List<Notice> message = message(
-                Notice.actionbar("<red>action bar"),
+                Notice.actionBar("<red>action bar"),
                 Notice.title("<red>title", "<gray>subtitle"),
                 Notice.bossBar(BossBar.Color.RED, BossBar.Overlay.PROGRESS, Duration.ofSeconds(1), "boss"),
                 Notice.sound(Key.key("entity.experience_orb.pickup"), Sound.Source.MASTER, 1.0F, 1.0F)
