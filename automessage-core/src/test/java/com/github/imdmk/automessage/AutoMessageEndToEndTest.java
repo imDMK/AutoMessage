@@ -151,6 +151,38 @@ class AutoMessageEndToEndTest {
     }
 
     @Test
+    @DisplayName("should send nothing to a player who turned announcements off")
+    void shouldSkipAPlayerWhoTurnedAnnouncementsOff() {
+        final RecordingViewer quiet = RecordingViewer.english("Quiet");
+        final RecordingViewer listening = RecordingViewer.english("Listening");
+
+        start(TestPlatform.fullServer().join(quiet).join(listening));
+        automessage.optOut().toggle(quiet.uniqueId());
+
+        platform.scheduler().tick();
+
+        assertThat(listening.everythingSeen()).isNotEmpty();
+        assertThat(quiet.everythingSeen()).isEmpty();
+        assertThat(quiet.sounds).isEmpty();
+    }
+
+    @Test
+    @DisplayName("should not greet a player who turned announcements off either")
+    void shouldNotGreetAPlayerWhoTurnedAnnouncementsOff() {
+        final RecordingViewer quiet = RecordingViewer.english("Quiet");
+
+        start(TestPlatform.fullServer().join(quiet));
+        automessage.optOut().toggle(quiet.uniqueId());
+
+        // A greeting is dispatched by an event rather than by the rotation, and asking for quiet
+        // has to cover both - otherwise turning announcements off still greets you on the way in.
+        automessage.triggerService().onJoin(quiet, true);
+        platform.scheduler().runDelayed();
+
+        assertThat(quiet.everythingSeen()).isEmpty();
+    }
+
+    @Test
     @DisplayName("should greet a first-time player and nobody else")
     void shouldGreetAFirstJoin() {
         final RecordingViewer newcomer = RecordingViewer.english("Newcomer");

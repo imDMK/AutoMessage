@@ -68,8 +68,10 @@ public final class MessageTriggerService {
     }
 
     private void dispatchTo(Viewer viewer, ScheduledMessage message) {
-        // Audience rules still apply: a join message restricted to a permission should not reach
-        // a player who lacks it just because the trigger fired for them.
+        // Not the rules themselves - the dispatcher applies those to whoever it is handed. This
+        // asks first so a trigger that reaches nobody is not dispatched at all: the dispatcher
+        // tells its observers about every announcement it is given, recipients or none, and a
+        // greeting for a player who fails the rules would otherwise show up in the statistics.
         if (filter.allows(viewer, message, audienceContext)) {
             dispatcher.dispatch(message, DispatchTarget.viewer(viewer));
         }

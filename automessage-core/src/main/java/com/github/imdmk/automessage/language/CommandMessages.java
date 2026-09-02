@@ -52,11 +52,11 @@ public class CommandMessages extends OkaeriConfig {
 
     @Comment({"#", "# /automessage view. {MESSAGE} - the message name.", "#"})
     public Notice messagePreviewed = Notice.chat(
-            "<dark_gray>• <green>Previewed scheduled message <gray>{MESSAGE}<green>.<dark_gray>"
+            "<dark_gray>• <green>Previewed scheduled message <yellow>{MESSAGE}<green>.<dark_gray>"
     );
 
     public Notice messageNotFound = Notice.chat(
-            "<dark_gray>• <red>No scheduled message named <gray>{MESSAGE} <red>exists in scheduledMessages.yml."
+            "<dark_gray>• <red>No scheduled message named <yellow>{MESSAGE} <red>exists in scheduledMessages.yml."
     );
 
     public Notice viewPlayerOnly = Notice.chat(
@@ -68,7 +68,7 @@ public class CommandMessages extends OkaeriConfig {
     public Notice nextHeader = Notice.chat("<dark_gray>» <gradient:#4FC3F7:#0288D1><b>Next up on each channel</b></gradient>");
 
     public Notice nextEntry = Notice.chat(
-            "<dark_gray>  • <aqua>{CHANNEL} <dark_gray>· <gray>{MESSAGE} <dark_gray>· <gray>in <green>{DELAY}"
+            "<dark_gray>  • <aqua>{CHANNEL} <dark_gray>· <yellow>{MESSAGE} <dark_gray>· <gray>in <green>{DELAY}"
     );
 
     public Notice nextUnpredictable = Notice.chat(
@@ -125,24 +125,37 @@ public class CommandMessages extends OkaeriConfig {
 
     @Comment({"#", "# /automessage send. {CHANNEL}, {MESSAGE} and {DELAY} until the next one.", "#"})
     public Notice sendDone = Notice.chat(
-            "<dark_gray>• <green>Sent <gray>{MESSAGE} <green>on <gray>{CHANNEL}<green>. "
+            "<dark_gray>• <green>Sent <yellow>{MESSAGE} <green>on <aqua>{CHANNEL}<green>. "
                     + "Next one in <gray>{DELAY}<green>.<dark_gray>"
     );
 
     public Notice sendNobodyOnline = Notice.chat(
-            "<dark_gray>• <yellow>Nobody is online, so nothing was sent on <gray>{CHANNEL}<yellow>. "
+            "<dark_gray>• <yellow>Nobody is online, so nothing was sent on <aqua>{CHANNEL}<yellow>. "
                     + "Its schedule was left alone.<dark_gray>"
     );
 
     public Notice sendNoMessages = Notice.chat(
-            "<dark_gray>• <red>Channel <gray>{CHANNEL} <red>has no messages assigned to it.<dark_gray>"
+            "<dark_gray>• <red>Channel <aqua>{CHANNEL} <red>has no messages assigned to it.<dark_gray>"
     );
 
     public Notice sendDisabled = Notice.chat(
-            "<dark_gray>• <red>Channel <gray>{CHANNEL} <red>is disabled in config.yml.<dark_gray>"
+            "<dark_gray>• <red>Channel <aqua>{CHANNEL} <red>is disabled in config.yml.<dark_gray>"
+    );
+
+    @Comment({"#", "# /automessage toggle. A player turning announcements off for themselves.", "#"})
+    public Notice toggleOff = Notice.chat(
+            "<dark_gray>• <gray>Announcements are now <red>off <gray>for you"
+    );
+
+    public Notice toggleOn = Notice.chat(
+            "<dark_gray>• <gray>Announcements are <green>on <gray>for you again"
+    );
+
+    public Notice togglePlayerOnly = Notice.chat(
+            "<dark_gray>• <red>Only players can turn announcements off"
     );
 
     public Notice channelNotFound = Notice.chat(
-            "<dark_gray>• <red>No channel named <gray>{CHANNEL} <red>exists in config.yml."
+            "<dark_gray>• <red>No channel named <aqua>{CHANNEL} <red>exists in config.yml."
     );
 }

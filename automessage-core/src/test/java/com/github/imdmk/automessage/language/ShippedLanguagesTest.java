@@ -50,6 +50,8 @@ class ShippedLanguagesTest {
         assertThat(text("pl", commands -> commands.statsChannelDisabled)).contains("wyłączony w config.yml");
         assertThat(text("pl", commands -> commands.statsChannelEmpty)).contains("brak przypisanych");
         assertThat(text("pl", commands -> commands.channelNotFound)).contains("nie istnieje");
+        assertThat(text("pl", commands -> commands.toggleOff)).contains("wyłączone");
+        assertThat(text("pl", commands -> commands.togglePlayerOnly)).contains("Tylko gracze");
     }
 
     @Test
@@ -62,6 +64,8 @@ class ShippedLanguagesTest {
         assertThat(text("de", commands -> commands.statsChannelDisabled)).contains("deaktiviert");
         assertThat(text("de", commands -> commands.statsChannelEmpty)).contains("keine Nachrichten");
         assertThat(text("de", commands -> commands.channelNotFound)).contains("keinen Kanal");
+        assertThat(text("de", commands -> commands.toggleOff)).contains("aus");
+        assertThat(text("de", commands -> commands.togglePlayerOnly)).contains("Nur Spieler");
     }
 
     @Test

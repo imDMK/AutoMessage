@@ -1,5 +1,6 @@
 package com.github.imdmk.automessage;
 
+import com.github.imdmk.automessage.scheduled.audience.optout.AnnouncementOptOut;
 import com.github.imdmk.automessage.config.ConfigManager;
 import com.github.imdmk.automessage.config.ConfigReloadService;
 import com.github.imdmk.automessage.language.LanguageRegistry;
@@ -48,6 +49,7 @@ public final class AutoMessage {
     private final MessageTriggerService triggerService;
     private final DispatchObserver dispatchObserver;
     private final DispatchStatistics statistics;
+    private final AnnouncementOptOut optOut;
 
     public AutoMessage(
             Platform platform,
@@ -76,6 +78,12 @@ public final class AutoMessage {
         final TaskScheduler scheduler = platform.scheduler();
         final ViewerRegistry viewers = platform.viewers();
         final AudienceContext audienceContext = AudienceContext.of(viewers, platform.playtime());
+
+        // One filter for both the rotation and the triggers, so a player who turned announcements
+        // off is not greeted by one on the way in.
+        this.optOut = AnnouncementOptOut.load(logger, dataFolder);
+        final AudienceFilter audienceFilter =
+                AudienceFilter.notMuted(optOut).and(AudienceFilter.ruleFilter());
 
         // A boss bar hides itself on the plugin's own scheduler, which is the only clock the
         // notice module is given - it has no way to tell the time by itself, by design.
@@ -106,7 +114,7 @@ public final class AutoMessage {
                 selector -> new MessageDispatcher(
                         messageSender,
                         selector,
-                        AudienceFilter.ruleFilter(),
+                        audienceFilter,
                         audienceContext,
                         dispatchObserver
                 );
@@ -130,7 +138,7 @@ public final class AutoMessage {
                 scheduler,
                 messageRepository,
                 triggerDispatcher,
-                AudienceFilter.ruleFilter(),
+                audienceFilter,
                 audienceContext,
                 new PlayerCountMilestones()
         );
@@ -141,6 +149,7 @@ public final class AutoMessage {
 
     public void shutdown() {
         close("stop the dispatcher", dispatcherService::stop);
+        close("save who turned announcements off", optOut::save);
         close("save the configuration", configManager::saveAll);
         close("release the configuration", configManager::clearAll);
         close("stop the scheduler", platform.scheduler()::shutdown);
@@ -191,6 +200,10 @@ public final class AutoMessage {
 
     public MessageDispatcherService dispatcherService() {
         return dispatcherService;
+    }
+
+    public AnnouncementOptOut optOut() {
+        return optOut;
     }
 
     public DispatchStatistics statistics() {

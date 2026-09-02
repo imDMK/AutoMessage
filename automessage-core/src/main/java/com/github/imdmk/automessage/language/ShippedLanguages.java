@@ -70,6 +70,9 @@ final class ShippedLanguages {
         config.commands.sendNobodyOnline = Notice.chat(commands.sendNobodyOnline());
         config.commands.sendNoMessages = Notice.chat(commands.sendNoMessages());
         config.commands.sendDisabled = Notice.chat(commands.sendDisabled());
+        config.commands.toggleOff = Notice.chat(commands.toggleOff());
+        config.commands.toggleOn = Notice.chat(commands.toggleOn());
+        config.commands.togglePlayerOnly = Notice.chat(commands.togglePlayerOnly());
         config.commands.channelNotFound = Notice.chat(commands.channelNotFound());
 
         config.announcements = announcements(announcements);
@@ -153,6 +156,9 @@ final class ShippedLanguages {
             String sendNobodyOnline,
             String sendNoMessages,
             String sendDisabled,
+            String toggleOff,
+            String toggleOn,
+            String togglePlayerOnly,
             String channelNotFound
     ) {
     }
@@ -193,11 +199,11 @@ final class ShippedLanguages {
             "<dark_gray>• <yellow>Automatyczne wiadomości są już wyłączone.<dark_gray>",
             "<dark_gray>• <green>Konfiguracja AutoMessage została przeładowana pomyślnie.<dark_gray>",
             "<dark_gray>• <red>Nie udało się przeładować plików konfiguracyjnych AutoMessage. <red>Wyłącz plugin i sprawdź swoją konfigurację.",
-            "<dark_gray>• <green>Podgląd zaplanowanej wiadomości <gray>{MESSAGE}<green>.<dark_gray>",
-            "<dark_gray>• <red>Wiadomość o nazwie <gray>{MESSAGE} <red>nie istnieje w scheduledMessages.yml.",
+            "<dark_gray>• <green>Podgląd zaplanowanej wiadomości <yellow>{MESSAGE}<green>.<dark_gray>",
+            "<dark_gray>• <red>Wiadomość o nazwie <yellow>{MESSAGE} <red>nie istnieje w scheduledMessages.yml.",
             "<dark_gray>• <red>Tylko gracze mogą oglądać podgląd zaplanowanych wiadomości.<dark_gray>",
             "<dark_gray>» <gradient:#4FC3F7:#0288D1><b>Następna na każdym kanale</b></gradient>",
-            "<dark_gray>  • <aqua>{CHANNEL} <dark_gray>· <gray>{MESSAGE} <dark_gray>· <gray>za <green>{DELAY}",
+            "<dark_gray>  • <aqua>{CHANNEL} <dark_gray>· <yellow>{MESSAGE} <dark_gray>· <gray>za <green>{DELAY}",
             "<dark_gray>  • <aqua>{CHANNEL} <dark_gray>· <gray>losowana <dark_gray>· <gray>za <green>{DELAY}",
             "<dark_gray>  • <aqua>{CHANNEL} <dark_gray>· <red>wyłączony w config.yml",
             "<dark_gray>  • <aqua>{CHANNEL} <dark_gray>· <red>brak przypisanych wiadomości",
@@ -213,13 +219,16 @@ final class ShippedLanguages {
             "<dark_gray>» <gradient:#FFD54F:#FFA000><b>Wiadomości</b></gradient>",
             "<dark_gray>  • <yellow>{MESSAGE} <dark_gray>(<aqua>{CHANNEL}<dark_gray>) · "
                     + "<white><b>{COUNT}x</b> <dark_gray>· <green>{AGO} <gray>temu",
-            "<dark_gray>• <green>Wysłano <gray>{MESSAGE} <green>na kanale <gray>{CHANNEL}<green>. "
+            "<dark_gray>• <green>Wysłano <yellow>{MESSAGE} <green>na kanale <aqua>{CHANNEL}<green>. "
                     + "Następna za <gray>{DELAY}<green>.<dark_gray>",
-            "<dark_gray>• <yellow>Nikt nie jest online, więc nic nie wysłano na kanale <gray>{CHANNEL}<yellow>. "
+            "<dark_gray>• <yellow>Nikt nie jest online, więc nic nie wysłano na kanale <aqua>{CHANNEL}<yellow>. "
                     + "Harmonogram pozostał bez zmian.<dark_gray>",
-            "<dark_gray>• <red>Kanał <gray>{CHANNEL} <red>nie ma przypisanych żadnych wiadomości.<dark_gray>",
-            "<dark_gray>• <red>Kanał <gray>{CHANNEL} <red>jest wyłączony w config.yml.<dark_gray>",
-            "<dark_gray>• <red>Kanał o nazwie <gray>{CHANNEL} <red>nie istnieje w config.yml."
+            "<dark_gray>• <red>Kanał <aqua>{CHANNEL} <red>nie ma przypisanych żadnych wiadomości.<dark_gray>",
+            "<dark_gray>• <red>Kanał <aqua>{CHANNEL} <red>jest wyłączony w config.yml.<dark_gray>",
+            "<dark_gray>• <gray>Ogłoszenia są teraz dla Ciebie <red>wyłączone",
+            "<dark_gray>• <gray>Ogłoszenia są znów dla Ciebie <green>włączone",
+            "<dark_gray>• <red>Tylko gracze mogą wyłączyć ogłoszenia",
+            "<dark_gray>• <red>Kanał o nazwie <aqua>{CHANNEL} <red>nie istnieje w config.yml."
     );
 
     private static final Announcements POLISH_ANNOUNCEMENTS = new Announcements(
@@ -245,11 +254,11 @@ final class ShippedLanguages {
             "<dark_gray>• <yellow>Automatische Nachrichten sind bereits deaktiviert.<dark_gray>",
             "<dark_gray>• <green>Die AutoMessage-Konfiguration wurde erfolgreich neu geladen.<dark_gray>",
             "<dark_gray>• <red>Die AutoMessage-Konfigurationsdateien konnten nicht neu geladen werden. <red>Deaktiviere das Plugin und prüfe deine Konfiguration.",
-            "<dark_gray>• <green>Vorschau der geplanten Nachricht <gray>{MESSAGE}<green>.<dark_gray>",
-            "<dark_gray>• <red>Es gibt keine geplante Nachricht namens <gray>{MESSAGE} <red>in scheduledMessages.yml.",
+            "<dark_gray>• <green>Vorschau der geplanten Nachricht <yellow>{MESSAGE}<green>.<dark_gray>",
+            "<dark_gray>• <red>Es gibt keine geplante Nachricht namens <yellow>{MESSAGE} <red>in scheduledMessages.yml.",
             "<dark_gray>• <red>Nur Spieler können geplante Nachrichten in der Vorschau ansehen.<dark_gray>",
             "<dark_gray>» <gradient:#4FC3F7:#0288D1><b>Nächste pro Kanal</b></gradient>",
-            "<dark_gray>  • <aqua>{CHANNEL} <dark_gray>· <gray>{MESSAGE} <dark_gray>· <gray>in <green>{DELAY}",
+            "<dark_gray>  • <aqua>{CHANNEL} <dark_gray>· <yellow>{MESSAGE} <dark_gray>· <gray>in <green>{DELAY}",
             "<dark_gray>  • <aqua>{CHANNEL} <dark_gray>· <gray>zufällig gezogen <dark_gray>· <gray>in <green>{DELAY}",
             "<dark_gray>  • <aqua>{CHANNEL} <dark_gray>· <red>in config.yml deaktiviert",
             "<dark_gray>  • <aqua>{CHANNEL} <dark_gray>· <red>keine Nachrichten zugewiesen",
@@ -265,13 +274,16 @@ final class ShippedLanguages {
             "<dark_gray>» <gradient:#FFD54F:#FFA000><b>Nachrichten</b></gradient>",
             "<dark_gray>  • <yellow>{MESSAGE} <dark_gray>(<aqua>{CHANNEL}<dark_gray>) · "
                     + "<white><b>{COUNT}x</b> <dark_gray>· <gray>vor <green>{AGO}",
-            "<dark_gray>• <green>Hat <gray>{MESSAGE} <green>auf <gray>{CHANNEL} <green>gesendet. "
+            "<dark_gray>• <green>Hat <yellow>{MESSAGE} <green>auf <aqua>{CHANNEL} <green>gesendet. "
                     + "Die nächste in <gray>{DELAY}<green>.<dark_gray>",
-            "<dark_gray>• <yellow>Niemand ist online, daher wurde auf <gray>{CHANNEL} <yellow>nichts gesendet. "
+            "<dark_gray>• <yellow>Niemand ist online, daher wurde auf <aqua>{CHANNEL} <yellow>nichts gesendet. "
                     + "Der Zeitplan bleibt unberührt.<dark_gray>",
-            "<dark_gray>• <red>Dem Kanal <gray>{CHANNEL} <red>sind keine Nachrichten zugewiesen.<dark_gray>",
-            "<dark_gray>• <red>Kanal <gray>{CHANNEL} <red>ist in config.yml deaktiviert.<dark_gray>",
-            "<dark_gray>• <red>Es gibt keinen Kanal namens <gray>{CHANNEL} <red>in config.yml."
+            "<dark_gray>• <red>Dem Kanal <aqua>{CHANNEL} <red>sind keine Nachrichten zugewiesen.<dark_gray>",
+            "<dark_gray>• <red>Kanal <aqua>{CHANNEL} <red>ist in config.yml deaktiviert.<dark_gray>",
+            "<dark_gray>• <gray>Ankündigungen sind für dich jetzt <red>aus",
+            "<dark_gray>• <gray>Ankündigungen sind für dich wieder <green>an",
+            "<dark_gray>• <red>Nur Spieler können Ankündigungen abschalten",
+            "<dark_gray>• <red>Es gibt keinen Kanal namens <aqua>{CHANNEL} <red>in config.yml."
     );
 
     private static final Announcements GERMAN_ANNOUNCEMENTS = new Announcements(

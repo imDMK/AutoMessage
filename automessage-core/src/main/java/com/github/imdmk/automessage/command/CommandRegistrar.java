@@ -1,5 +1,6 @@
 package com.github.imdmk.automessage.command;
 
+import com.github.imdmk.automessage.command.toggle.ToggleCommand;
 import com.github.imdmk.automessage.AutoMessage;
 import com.github.imdmk.automessage.scheduled.channel.AnnouncementChannel;
 import com.github.imdmk.automessage.command.handler.UnknownAnnouncementChannelHandler;
@@ -63,7 +64,9 @@ public final class CommandRegistrar {
                         new NextCommand(automessage.dispatcherService(), automessage.messageService()),
                         new StatsCommand(automessage.statistics(), automessage.dispatcherService(),
                                 automessage.messageService()),
-                        new SendCommand(automessage.dispatcherService(), automessage.messageService())
+                        new SendCommand(automessage.dispatcherService(), automessage.messageService()),
+                        new ToggleCommand(automessage.optOut(), automessage.scheduler(),
+                                automessage.messageService())
                 );
     }
 }
