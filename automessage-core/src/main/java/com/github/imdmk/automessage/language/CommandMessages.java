@@ -96,7 +96,7 @@ public class CommandMessages extends OkaeriConfig {
 
     public Notice statsEmpty = Notice.chat("<dark_gray>• <gray>AutoMessage has not announced anything yet.");
 
-    public Notice statsChannelsHeader = Notice.chat("<dark_gray>• <gray>Channels");
+    public Notice statsChannelsHeader = Notice.chat("<dark_gray>• <gold><b>Channels");
 
     public Notice statsChannel = Notice.chat(
             "<dark_gray>  • <gold>{CHANNEL} <dark_gray>- <green>{COUNT} <gray>sent, last <green>{AGO} <gray>ago, "
@@ -117,7 +117,7 @@ public class CommandMessages extends OkaeriConfig {
                     + "<red>no messages assigned"
     );
 
-    public Notice statsMessagesHeader = Notice.chat("<dark_gray>• <gray>Messages");
+    public Notice statsMessagesHeader = Notice.chat("<dark_gray>• <gold><b>Messages");
 
     public Notice statsEntry = Notice.chat(
             "<dark_gray>  • <yellow>{MESSAGE} <dark_gray>(<gold>{CHANNEL}<dark_gray>) - "

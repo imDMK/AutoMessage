@@ -203,7 +203,7 @@ final class ShippedLanguages {
             "<dark_gray>  • <gold>{CHANNEL} <dark_gray>- <red>brak przypisanych wiadomości",
             "<dark_gray>• <gray>AutoMessage wysłał <green>{TOTAL} <gray>ogłoszeń od uruchomienia.",
             "<dark_gray>• <gray>AutoMessage jeszcze nic nie ogłosił.",
-            "<dark_gray>• <gray>Kanały",
+            "<dark_gray>• <gold><b>Kanały",
             "<dark_gray>  • <gold>{CHANNEL} <dark_gray>- <green>{COUNT} <gray>wysłanych, ostatnio "
                     + "<green>{AGO} <gray>temu, następna za <green>{DELAY}",
             "<dark_gray>  • <gold>{CHANNEL} <dark_gray>- <gray>nic jeszcze nie wysłano, następna za <green>{DELAY}",
@@ -211,7 +211,7 @@ final class ShippedLanguages {
                     + "<red>wyłączony w config.yml",
             "<dark_gray>  • <gold>{CHANNEL} <dark_gray>- <green>{COUNT} <gray>wysłanych, "
                     + "<red>brak przypisanych wiadomości",
-            "<dark_gray>• <gray>Wiadomości",
+            "<dark_gray>• <gold><b>Wiadomości",
             "<dark_gray>  • <yellow>{MESSAGE} <dark_gray>(<gold>{CHANNEL}<dark_gray>) - "
                     + "<green>{COUNT} <gray>wysłanych, ostatnio <green>{AGO} <gray>temu",
             "<dark_gray>• <green>Wysłano <gray>{MESSAGE} <green>na kanale <gray>{CHANNEL}<green>. "
@@ -256,7 +256,7 @@ final class ShippedLanguages {
             "<dark_gray>  • <gold>{CHANNEL} <dark_gray>- <red>keine Nachrichten zugewiesen",
             "<dark_gray>• <gray>AutoMessage hat seit dem Start <green>{TOTAL} <gray>Ankündigungen gesendet.",
             "<dark_gray>• <gray>AutoMessage hat noch nichts angekündigt.",
-            "<dark_gray>• <gray>Kanäle",
+            "<dark_gray>• <gold><b>Kanäle",
             "<dark_gray>  • <gold>{CHANNEL} <dark_gray>- <green>{COUNT} <gray>gesendet, zuletzt vor "
                     + "<green>{AGO}<gray>, nächste in <green>{DELAY}",
             "<dark_gray>  • <gold>{CHANNEL} <dark_gray>- <gray>noch nichts gesendet, nächste in <green>{DELAY}",
@@ -264,7 +264,7 @@ final class ShippedLanguages {
                     + "<red>in config.yml deaktiviert",
             "<dark_gray>  • <gold>{CHANNEL} <dark_gray>- <green>{COUNT} <gray>gesendet, "
                     + "<red>keine Nachrichten zugewiesen",
-            "<dark_gray>• <gray>Nachrichten",
+            "<dark_gray>• <gold><b>Nachrichten",
             "<dark_gray>  • <yellow>{MESSAGE} <dark_gray>(<gold>{CHANNEL}<dark_gray>) - "
                     + "<green>{COUNT} <gray>gesendet, zuletzt vor <green>{AGO}",
             "<dark_gray>• <green>Hat <gray>{MESSAGE} <green>auf <gray>{CHANNEL} <green>gesendet. "
