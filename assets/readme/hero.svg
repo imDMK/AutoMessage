@@ -59,10 +59,10 @@
 
   <g font-family="Inter, ui-sans-serif, system-ui, -apple-system, BlinkMacSystemFont, Segoe UI, sans-serif">
     <g transform="translate(112 74)">
-      <rect width="304" height="40" rx="20" fill="#131A32" stroke="#8B7CF6" stroke-opacity="0.45"/>
+      <rect width="368" height="40" rx="20" fill="#131A32" stroke="#8B7CF6" stroke-opacity="0.45"/>
       <circle cx="23" cy="20" r="5" fill="#8B7CF6"/>
       <circle cx="23" cy="20" r="10" stroke="#8B7CF6" stroke-opacity="0.25"/>
-      <text x="42" y="25" fill="#C8C7E8" font-size="14" font-weight="700" letter-spacing="2.1">MULTIPLATFORM ANNOUNCEMENTS</text>
+      <text x="42" y="25" fill="#C8C7E8" font-size="14" font-weight="700" letter-spacing="2.1" textLength="313" lengthAdjust="spacing">MULTIPLATFORM ANNOUNCEMENTS</text>
     </g>
 
     <text x="106" y="236" fill="url(#brand)" font-size="92" font-weight="780" letter-spacing="-4.4">AutoMessage</text>
@@ -71,24 +71,24 @@
 
     <g transform="translate(112 365)">
       <g>
-        <rect width="124" height="38" rx="11" fill="#11182D" stroke="#A78BFA" stroke-opacity="0.24"/>
+        <rect width="129" height="38" rx="11" fill="#11182D" stroke="#A78BFA" stroke-opacity="0.24"/>
         <circle cx="19" cy="19" r="4" fill="#A78BFA"/>
-        <text x="33" y="24" fill="#C9CCE0" font-size="13" font-weight="720" letter-spacing="1.1">SCHEDULE</text>
+        <text x="33" y="24" fill="#C9CCE0" font-size="13" font-weight="720" letter-spacing="1.1" textLength="81" lengthAdjust="spacing">SCHEDULE</text>
       </g>
-      <g transform="translate(136)">
-        <rect width="112" height="38" rx="11" fill="#11182D" stroke="#8B8CFF" stroke-opacity="0.24"/>
+      <g transform="translate(141)">
+        <rect width="107" height="38" rx="11" fill="#11182D" stroke="#8B8CFF" stroke-opacity="0.24"/>
         <circle cx="19" cy="19" r="4" fill="#8B8CFF"/>
-        <text x="33" y="24" fill="#C9CCE0" font-size="13" font-weight="720" letter-spacing="1.1">TARGET</text>
+        <text x="33" y="24" fill="#C9CCE0" font-size="13" font-weight="720" letter-spacing="1.1" textLength="59" lengthAdjust="spacing">TARGET</text>
       </g>
       <g transform="translate(260)">
-        <rect width="116" height="38" rx="11" fill="#11182D" stroke="#5DBDE9" stroke-opacity="0.24"/>
+        <rect width="114" height="38" rx="11" fill="#11182D" stroke="#5DBDE9" stroke-opacity="0.24"/>
         <circle cx="19" cy="19" r="4" fill="#5DBDE9"/>
-        <text x="33" y="24" fill="#C9CCE0" font-size="13" font-weight="720" letter-spacing="1.1">TRIGGER</text>
+        <text x="33" y="24" fill="#C9CCE0" font-size="13" font-weight="720" letter-spacing="1.1" textLength="66" lengthAdjust="spacing">TRIGGER</text>
       </g>
-      <g transform="translate(388)">
-        <rect width="128" height="38" rx="11" fill="#11182D" stroke="#45D7E8" stroke-opacity="0.24"/>
+      <g transform="translate(386)">
+        <rect width="122" height="38" rx="11" fill="#11182D" stroke="#45D7E8" stroke-opacity="0.24"/>
         <circle cx="19" cy="19" r="4" fill="#45D7E8"/>
-        <text x="33" y="24" fill="#C9CCE0" font-size="13" font-weight="720" letter-spacing="1.1">LOCALIZE</text>
+        <text x="33" y="24" fill="#C9CCE0" font-size="13" font-weight="720" letter-spacing="1.1" textLength="74" lengthAdjust="spacing">LOCALIZE</text>
       </g>
     </g>
 
