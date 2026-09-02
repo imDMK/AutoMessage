@@ -39,26 +39,23 @@
 
 ## 📣 Broadcasts should earn attention
 
-Players learn to ignore announcements when every message reaches everyone. AutoMessage makes
-server communication intentional: give each stream its own schedule, select exactly who should
-see it, react to live events, and render the result through the presentation layer that fits.
-
-One announcement can combine **chat, action bar, title, subtitle, boss bar and sound**. Its audience
-can be narrowed by **permission, group, world, player count or playtime**. Its content can follow
-each player's language, use MiniMessage formatting and placeholders, and optionally mirror to
-Discord.
-
-The same core runs across **Bukkit, Folia, Sponge, Velocity, Fabric and Minestom** through a
-dedicated artifact for each runtime.
+Players learn to ignore announcements when every message reaches everyone. AutoMessage makes server
+communication deliberate: every stream keeps its own schedule, every message chooses its own
+audience, and the text arrives in the language each player actually plays in - from one shared core
+running on **Bukkit, Folia, Sponge, Velocity, Fabric and Minestom**.
 
 <p align="center">
-  <img src="assets/automessage-preview.gif" alt="AutoMessage rendering chat, title and boss bar announcements in Minecraft" width="800">
+  <img src="assets/readme/announcement-ingame.png" alt="Three announcement surfaces in game at once: a boss bar countdown across the top of the screen, a full-screen title in the middle, and a chat line below it" width="800">
+</p>
+
+<p align="center">
+  <sub>One announcement set, in game, on one server: a boss bar countdown, a full-screen title and a chat line.</sub>
 </p>
 
 ### A complete announcement, start to finish
 
-Greet returning veterans three seconds after they join - never on a timer, never the newcomers,
-and in their own language.
+Greet returning veterans three seconds after they join - never on a timer, never the newcomers, and
+in their own language. Two files say all of it:
 
 ```yaml
 # scheduledMessages.yml - who gets it, and when
@@ -79,6 +76,12 @@ announcements:
     - chat: "<gray>Welcome back, <aqua>{PLAYER}<gray>."
       sound: "entity.player.levelup MASTER 1.0 1.2"
 ```
+
+And this is what the server does with them:
+
+<p align="center">
+  <img src="assets/readme/start-to-finish.svg" alt="Two players join. Three seconds later the veteran with 240 hours played passes the playtime rule and receives the greeting with a level-up sound; the newcomer with twelve minutes played receives nothing at all." width="100%">
+</p>
 
 That is the whole feature set in miniature: an event instead of a clock, an audience instead of
 everyone, and text that lives beside every other translation.

@@ -48,3 +48,6 @@ replay_pid*.log
 
 ### Mac OS ###
 .DS_Store
+
+# Kotlin build sessions
+**/.kotlin/
