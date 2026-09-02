@@ -72,9 +72,11 @@ class ShippedLanguagesTest {
             assertThat(text(code, commands -> commands.nextEntry))
                     .withFailMessage("nextEntry in %s lost a placeholder", code)
                     .contains("{CHANNEL}", "{MESSAGE}", "{DELAY}");
+            // No {AGO}: when a channel last fired is dropped from its row on purpose, because
+            // the row has to fit a chat line. The message rows underneath still carry it.
             assertThat(text(code, commands -> commands.statsChannel))
                     .withFailMessage("statsChannel in %s lost a placeholder", code)
-                    .contains("{CHANNEL}", "{COUNT}", "{AGO}", "{DELAY}");
+                    .contains("{CHANNEL}", "{COUNT}", "{DELAY}");
             assertThat(text(code, commands -> commands.statsEntry))
                     .withFailMessage("statsEntry in %s lost a placeholder", code)
                     .contains("{MESSAGE}", "{CHANNEL}", "{COUNT}", "{AGO}");

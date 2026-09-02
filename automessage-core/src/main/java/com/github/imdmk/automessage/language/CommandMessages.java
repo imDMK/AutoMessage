@@ -91,29 +91,28 @@ public class CommandMessages extends OkaeriConfig {
             "#"
     })
     public Notice statsHeader = Notice.chat(
-            "<dark_gray>• <gray>AutoMessage has sent <green>{TOTAL} <gray>announcements since startup."
+            "<dark_gray>• <gray>Announcements since startup: <green>{TOTAL}"
     );
 
-    public Notice statsEmpty = Notice.chat("<dark_gray>• <gray>AutoMessage has not announced anything yet.");
+    public Notice statsEmpty = Notice.chat("<dark_gray>• <gray>Nothing announced yet.");
 
     public Notice statsChannelsHeader = Notice.chat("<dark_gray>• <gold><b>Channels");
 
     public Notice statsChannel = Notice.chat(
-            "<dark_gray>  • <gold>{CHANNEL} <dark_gray>- <green>{COUNT} <gray>sent, last <green>{AGO} <gray>ago, "
-                    + "next in <green>{DELAY}"
+            "<dark_gray>  • <gold>{CHANNEL} <dark_gray>- <green>{COUNT}x<gray>, next in <green>{DELAY}"
     );
 
     public Notice statsChannelPending = Notice.chat(
-            "<dark_gray>  • <gold>{CHANNEL} <dark_gray>- <gray>nothing sent yet, next in <green>{DELAY}"
+            "<dark_gray>  • <gold>{CHANNEL} <dark_gray>- <gray>nothing yet, next in <green>{DELAY}"
     );
 
     public Notice statsChannelDisabled = Notice.chat(
-            "<dark_gray>  • <gold>{CHANNEL} <dark_gray>- <green>{COUNT} <gray>sent, "
+            "<dark_gray>  • <gold>{CHANNEL} <dark_gray>- <green>{COUNT}x<gray>, "
                     + "<red>disabled in config.yml"
     );
 
     public Notice statsChannelEmpty = Notice.chat(
-            "<dark_gray>  • <gold>{CHANNEL} <dark_gray>- <green>{COUNT} <gray>sent, "
+            "<dark_gray>  • <gold>{CHANNEL} <dark_gray>- <green>{COUNT}x<gray>, "
                     + "<red>no messages assigned"
     );
 
@@ -121,7 +120,7 @@ public class CommandMessages extends OkaeriConfig {
 
     public Notice statsEntry = Notice.chat(
             "<dark_gray>  • <yellow>{MESSAGE} <dark_gray>(<gold>{CHANNEL}<dark_gray>) - "
-                    + "<green>{COUNT} <gray>sent, last <green>{AGO} <gray>ago"
+                    + "<green>{COUNT}x<gray>, <green>{AGO} <gray>ago"
     );
 
     @Comment({"#", "# /automessage send. {CHANNEL}, {MESSAGE} and {DELAY} until the next one.", "#"})

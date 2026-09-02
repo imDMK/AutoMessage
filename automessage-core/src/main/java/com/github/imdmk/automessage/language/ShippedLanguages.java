@@ -201,19 +201,18 @@ final class ShippedLanguages {
             "<dark_gray>  • <gold>{CHANNEL} <dark_gray>- <gray>losowana, za <green>{DELAY}",
             "<dark_gray>  • <gold>{CHANNEL} <dark_gray>- <red>wyłączony w config.yml",
             "<dark_gray>  • <gold>{CHANNEL} <dark_gray>- <red>brak przypisanych wiadomości",
-            "<dark_gray>• <gray>AutoMessage wysłał <green>{TOTAL} <gray>ogłoszeń od uruchomienia.",
-            "<dark_gray>• <gray>AutoMessage jeszcze nic nie ogłosił.",
+            "<dark_gray>• <gray>Ogłoszeń od uruchomienia: <green>{TOTAL}",
+            "<dark_gray>• <gray>Nic jeszcze nie ogłoszono.",
             "<dark_gray>• <gold><b>Kanały",
-            "<dark_gray>  • <gold>{CHANNEL} <dark_gray>- <green>{COUNT} <gray>wysłanych, ostatnio "
-                    + "<green>{AGO} <gray>temu, następna za <green>{DELAY}",
-            "<dark_gray>  • <gold>{CHANNEL} <dark_gray>- <gray>nic jeszcze nie wysłano, następna za <green>{DELAY}",
-            "<dark_gray>  • <gold>{CHANNEL} <dark_gray>- <green>{COUNT} <gray>wysłanych, "
+            "<dark_gray>  • <gold>{CHANNEL} <dark_gray>- <green>{COUNT}x<gray>, następna za <green>{DELAY}",
+            "<dark_gray>  • <gold>{CHANNEL} <dark_gray>- <gray>jeszcze nic, następna za <green>{DELAY}",
+            "<dark_gray>  • <gold>{CHANNEL} <dark_gray>- <green>{COUNT}x<gray>, "
                     + "<red>wyłączony w config.yml",
-            "<dark_gray>  • <gold>{CHANNEL} <dark_gray>- <green>{COUNT} <gray>wysłanych, "
+            "<dark_gray>  • <gold>{CHANNEL} <dark_gray>- <green>{COUNT}x<gray>, "
                     + "<red>brak przypisanych wiadomości",
             "<dark_gray>• <gold><b>Wiadomości",
             "<dark_gray>  • <yellow>{MESSAGE} <dark_gray>(<gold>{CHANNEL}<dark_gray>) - "
-                    + "<green>{COUNT} <gray>wysłanych, ostatnio <green>{AGO} <gray>temu",
+                    + "<green>{COUNT}x<gray>, <green>{AGO} <gray>temu",
             "<dark_gray>• <green>Wysłano <gray>{MESSAGE} <green>na kanale <gray>{CHANNEL}<green>. "
                     + "Następna za <gray>{DELAY}<green>.<dark_gray>",
             "<dark_gray>• <yellow>Nikt nie jest online, więc nic nie wysłano na kanale <gray>{CHANNEL}<yellow>. "
@@ -254,19 +253,18 @@ final class ShippedLanguages {
             "<dark_gray>  • <gold>{CHANNEL} <dark_gray>- <gray>zufällig gezogen, in <green>{DELAY}",
             "<dark_gray>  • <gold>{CHANNEL} <dark_gray>- <red>in config.yml deaktiviert",
             "<dark_gray>  • <gold>{CHANNEL} <dark_gray>- <red>keine Nachrichten zugewiesen",
-            "<dark_gray>• <gray>AutoMessage hat seit dem Start <green>{TOTAL} <gray>Ankündigungen gesendet.",
-            "<dark_gray>• <gray>AutoMessage hat noch nichts angekündigt.",
+            "<dark_gray>• <gray>Ankündigungen seit dem Start: <green>{TOTAL}",
+            "<dark_gray>• <gray>Noch nichts angekündigt.",
             "<dark_gray>• <gold><b>Kanäle",
-            "<dark_gray>  • <gold>{CHANNEL} <dark_gray>- <green>{COUNT} <gray>gesendet, zuletzt vor "
-                    + "<green>{AGO}<gray>, nächste in <green>{DELAY}",
-            "<dark_gray>  • <gold>{CHANNEL} <dark_gray>- <gray>noch nichts gesendet, nächste in <green>{DELAY}",
-            "<dark_gray>  • <gold>{CHANNEL} <dark_gray>- <green>{COUNT} <gray>gesendet, "
+            "<dark_gray>  • <gold>{CHANNEL} <dark_gray>- <green>{COUNT}x<gray>, nächste in <green>{DELAY}",
+            "<dark_gray>  • <gold>{CHANNEL} <dark_gray>- <gray>noch nichts, nächste in <green>{DELAY}",
+            "<dark_gray>  • <gold>{CHANNEL} <dark_gray>- <green>{COUNT}x<gray>, "
                     + "<red>in config.yml deaktiviert",
-            "<dark_gray>  • <gold>{CHANNEL} <dark_gray>- <green>{COUNT} <gray>gesendet, "
+            "<dark_gray>  • <gold>{CHANNEL} <dark_gray>- <green>{COUNT}x<gray>, "
                     + "<red>keine Nachrichten zugewiesen",
             "<dark_gray>• <gold><b>Nachrichten",
             "<dark_gray>  • <yellow>{MESSAGE} <dark_gray>(<gold>{CHANNEL}<dark_gray>) - "
-                    + "<green>{COUNT} <gray>gesendet, zuletzt vor <green>{AGO}",
+                    + "<green>{COUNT}x<gray>, vor <green>{AGO}",
             "<dark_gray>• <green>Hat <gray>{MESSAGE} <green>auf <gray>{CHANNEL} <green>gesendet. "
                     + "Die nächste in <gray>{DELAY}<green>.<dark_gray>",
             "<dark_gray>• <yellow>Niemand ist online, daher wurde auf <gray>{CHANNEL} <yellow>nichts gesendet. "
