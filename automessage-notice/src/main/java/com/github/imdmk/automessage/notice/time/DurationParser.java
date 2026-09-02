@@ -19,7 +19,9 @@ public final class DurationParser {
             throw new IllegalArgumentException("duration must not be blank");
         }
 
-        final String normalized = value.trim().toLowerCase(Locale.ROOT);
+        // Whitespace anywhere, not just at the ends: durations are shown to operators spaced
+        // ("1h 34s"), and a value read off the screen has to be typeable back into a file.
+        final String normalized = value.replaceAll("\\s+", "").toLowerCase(Locale.ROOT);
 
         // Matches how 'period: 10' is read in messagesDispatcher.yml.
         if (BARE_NUMBER.matcher(normalized).matches()) {

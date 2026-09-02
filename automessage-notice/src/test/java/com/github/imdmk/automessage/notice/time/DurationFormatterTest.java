@@ -33,14 +33,31 @@ class DurationFormatterTest {
     }
 
     @Test
-    @DisplayName("a countdown is rounded up to the whole second a person can read")
-    void countdownRoundsUpToSeconds() {
-        // Up rather than down: "9s487ms" is noise on a line somebody reads, and a countdown must
-        // never claim less time than is left, nor say "0s" while there is any.
-        assertEquals("10s", DurationFormatter.formatCountdown(Duration.ofMillis(9_487)));
-        assertEquals("1s", DurationFormatter.formatCountdown(Duration.ofMillis(400)));
-        assertEquals("5m", DurationFormatter.formatCountdown(Duration.ofMinutes(5)));
-        assertEquals("0s", DurationFormatter.formatCountdown(Duration.ZERO));
-        assertEquals("unset", DurationFormatter.formatCountdown(null));
+    @DisplayName("written for a person: whole seconds, spaced units, no milliseconds")
+    void readableDropsMillisAndSpacesUnits() {
+        assertEquals("34s", DurationFormatter.formatReadable(Duration.ofMillis(34_572)));
+        assertEquals("1h 34s", DurationFormatter.formatReadable(Duration.ofSeconds(3_634)));
+        assertEquals("1h 2m 3s", DurationFormatter.formatReadable(Duration.ofSeconds(3_723)));
+        assertEquals("5m", DurationFormatter.formatReadable(Duration.ofMinutes(5)));
+    }
+
+    @Test
+    @DisplayName("a fraction of a second left still reads as a second, never as none")
+    void readableNeverRoundsAwayARemainder() {
+        // "next in 0s" on a channel that has not fired yet reads as broken.
+        assertEquals("1s", DurationFormatter.formatReadable(Duration.ofMillis(400)));
+        assertEquals("1s", DurationFormatter.formatReadable(Duration.ofMillis(1)));
+        assertEquals("0s", DurationFormatter.formatReadable(Duration.ZERO));
+        assertEquals("unset", DurationFormatter.formatReadable(null));
+    }
+
+    @Test
+    @DisplayName("the configuration notation keeps its milliseconds and stays unspaced")
+    void configNotationIsUntouched() {
+        // format() is what gets written into config.yml and read back by the parser; a space or
+        // a dropped unit there would change files on disk, not just a line in chat.
+        assertEquals("500ms", DurationFormatter.format(Duration.ofMillis(500)));
+        assertEquals("1m30s", DurationFormatter.format(Duration.ofSeconds(90)));
+        assertEquals("1s500ms", DurationFormatter.format(Duration.ofMillis(1_500)));
     }
 }

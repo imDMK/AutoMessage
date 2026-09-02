@@ -34,7 +34,7 @@ public final class NextCommand {
                     .notice(notice -> lineFor(notice.commands, preview))
                     .placeholder("{CHANNEL}", preview.channel())
                     .placeholder("{MESSAGE}", preview.message() == null ? "" : preview.message())
-                    .placeholder("{DELAY}", preview.due() == null ? "" : DurationFormatter.formatCountdown(preview.due()))
+                    .placeholder("{DELAY}", preview.due() == null ? "" : DurationFormatter.formatReadable(preview.due()))
                     .send();
         }
     }

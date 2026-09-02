@@ -608,7 +608,7 @@ AutoMessage after changing the webhook's enabled state or URL so the connection 
 | `/automessage view <name>` | `command.automessage.view` | Preview one localized message; player-only, with tab completion |
 | `/automessage next` | `command.automessage.next` | Show what each channel will announce next and how long until it fires, without using it up |
 | `/automessage send <channel>` | `command.automessage.send` | Send that channel's next announcement now; its interval restarts from this moment |
-| `/automessage stats` | `command.automessage.stats` | Show how often each message has been announced, and how long ago |
+| `/automessage stats` | `command.automessage.stats` | Per channel: how much it has carried, when the last one went out and when the next is due, then the same per message |
 
 <details>
 <summary><strong>Embedding AutoMessage in Minestom</strong></summary>

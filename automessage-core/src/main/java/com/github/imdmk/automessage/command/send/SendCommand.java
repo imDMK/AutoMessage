@@ -39,7 +39,7 @@ public final class SendCommand {
                 .notice(notice -> lineFor(notice.commands, result))
                 .placeholder("{CHANNEL}", channel.name())
                 .placeholder("{MESSAGE}", result.message().map(ScheduledMessage::name).orElse(""))
-                .placeholder("{DELAY}", result.nextIn() == null ? "" : DurationFormatter.formatCountdown(result.nextIn()))
+                .placeholder("{DELAY}", result.nextIn() == null ? "" : DurationFormatter.formatReadable(result.nextIn()))
                 .send();
     }
 

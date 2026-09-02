@@ -61,7 +61,8 @@ public final class CommandRegistrar {
                         ),
                         new ViewCommand(automessage.messageSender(), automessage.messageService()),
                         new NextCommand(automessage.dispatcherService(), automessage.messageService()),
-                        new StatsCommand(automessage.statistics(), automessage.messageService()),
+                        new StatsCommand(automessage.statistics(), automessage.dispatcherService(),
+                                automessage.messageService()),
                         new SendCommand(automessage.dispatcherService(), automessage.messageService())
                 );
     }

@@ -58,6 +58,9 @@ final class ShippedLanguages {
         config.commands.nextDisabled = Notice.chat(commands.nextDisabled());
         config.commands.nextEmpty = Notice.chat(commands.nextEmpty());
         config.commands.statsHeader = Notice.chat(commands.statsHeader());
+        config.commands.statsChannel = Notice.chat(commands.statsChannel());
+        config.commands.statsChannelPending = Notice.chat(commands.statsChannelPending());
+        config.commands.statsChannelIdle = Notice.chat(commands.statsChannelIdle());
         config.commands.statsEntry = Notice.chat(commands.statsEntry());
         config.commands.statsEmpty = Notice.chat(commands.statsEmpty());
         config.commands.sendDone = Notice.chat(commands.sendDone());
@@ -135,6 +138,9 @@ final class ShippedLanguages {
             String nextDisabled,
             String nextEmpty,
             String statsHeader,
+            String statsChannel,
+            String statsChannelPending,
+            String statsChannelIdle,
             String statsEntry,
             String statsEmpty,
             String sendDone,
@@ -190,7 +196,11 @@ final class ShippedLanguages {
             "<dark_gray>  • <gold>{CHANNEL}<dark_gray>: <red>wyłączony",
             "<dark_gray>  • <gold>{CHANNEL}<dark_gray>: <red>brak wiadomości",
             "<dark_gray>• <gray>Wysłanych ogłoszeń od uruchomienia: <green>{TOTAL}<gray>.",
-            "<dark_gray>  • <gold>{MESSAGE}<dark_gray>: <green>{COUNT}<gray>, ostatnio <green>{AGO} <gray>temu",
+            "<dark_gray>  • <gold>{CHANNEL}<dark_gray>: <green>{COUNT}<gray>, ostatnio <green>{AGO} <gray>temu, "
+                    + "następna za <green>{DELAY}",
+            "<dark_gray>  • <gold>{CHANNEL}<dark_gray>: <gray>nic jeszcze nie wysłano, następna za <green>{DELAY}",
+            "<dark_gray>  • <gold>{CHANNEL}<dark_gray>: <green>{COUNT} <gray>wysłanych, nie odlicza",
+            "<dark_gray>    - <yellow>{MESSAGE}<dark_gray>: <green>{COUNT}<gray>, ostatnio <green>{AGO} <gray>temu",
             "<dark_gray>• <gray>Nic jeszcze nie zostało ogłoszone.",
             "<dark_gray>• <green>Wysłano <gray>{MESSAGE} <green>na kanale <gray>{CHANNEL}<green>. "
                     + "Następna za <gray>{DELAY}<green>.<dark_gray>",
@@ -233,7 +243,11 @@ final class ShippedLanguages {
             "<dark_gray>  • <gold>{CHANNEL}<dark_gray>: <red>deaktiviert",
             "<dark_gray>  • <gold>{CHANNEL}<dark_gray>: <red>keine Nachrichten",
             "<dark_gray>• <gray>Gesendete Ankündigungen seit dem Start: <green>{TOTAL}<gray>.",
-            "<dark_gray>  • <gold>{MESSAGE}<dark_gray>: <green>{COUNT}<gray>, zuletzt vor <green>{AGO}",
+            "<dark_gray>  • <gold>{CHANNEL}<dark_gray>: <green>{COUNT}<gray>, zuletzt vor <green>{AGO}<gray>, "
+                    + "nächste in <green>{DELAY}",
+            "<dark_gray>  • <gold>{CHANNEL}<dark_gray>: <gray>noch nichts gesendet, nächste in <green>{DELAY}",
+            "<dark_gray>  • <gold>{CHANNEL}<dark_gray>: <green>{COUNT} <gray>gesendet, zählt nicht herunter",
+            "<dark_gray>    - <yellow>{MESSAGE}<dark_gray>: <green>{COUNT}<gray>, zuletzt vor <green>{AGO}",
             "<dark_gray>• <gray>Es wurde noch nichts angekündigt.",
             "<dark_gray>• <green>Hat <gray>{MESSAGE} <green>auf <gray>{CHANNEL} <green>gesendet. "
                     + "Die nächste in <gray>{DELAY}<green>.<dark_gray>",

@@ -1,6 +1,7 @@
 package com.github.imdmk.automessage.notice.time;
 
 import java.time.Duration;
+import java.time.temporal.ChronoUnit;
 
 public final class DurationFormatter {
 
@@ -41,13 +42,28 @@ public final class DurationFormatter {
         }
     }
 
-    // Rounded up to the whole second, for a countdown somebody is reading: the milliseconds in
-    // "in 9s487ms" are noise, and a second still to go should not read as "0s".
-    public static String formatCountdown(Duration duration) {
-        if (duration == null || duration.isNegative()) {
-            return format(duration);
+    /**
+     * The same duration written for somebody to read rather than for a configuration file.
+     */
+    // Whole seconds, because the milliseconds in "34s572ms" are noise on a line a person reads,
+    // and spaced, because "1h 34s" is read at a glance where "1h34s" has to be picked apart.
+    // Anything left under a second still reads as "1s": a countdown that says "0s" while there
+    // is time left is worse than one that rounds.
+    public static String formatReadable(Duration duration) {
+        if (duration == null) {
+            return UNSET;
         }
 
-        return format(Duration.ofSeconds((duration.toMillis() + 999L) / 1000L));
+        final Duration whole = duration.truncatedTo(ChronoUnit.SECONDS);
+
+        if (whole.isZero() && !duration.isZero()) {
+            return format(Duration.ofSeconds(duration.isNegative() ? -1L : 1L));
+        }
+
+        return space(format(whole));
+    }
+
+    private static String space(String formatted) {
+        return formatted.replaceAll("(?<=[a-z])(?=\\d)", " ");
     }
 }

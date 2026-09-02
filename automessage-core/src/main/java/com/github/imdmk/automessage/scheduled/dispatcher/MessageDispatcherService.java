@@ -126,8 +126,8 @@ public final class MessageDispatcherService implements ConfigReloadListener {
         logger.info(
                 "Channel '%s': a message every %s, first one in %s, rotation %s.",
                 channel.name(),
-                DurationFormatter.format(timing.period()),
-                DurationFormatter.format(timing.initialDelay()),
+                DurationFormatter.formatReadable(timing.period()),
+                DurationFormatter.formatReadable(timing.initialDelay()),
                 channel.selector()
         );
     }

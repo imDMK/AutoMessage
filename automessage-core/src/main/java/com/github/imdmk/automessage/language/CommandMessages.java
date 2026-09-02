@@ -83,8 +83,21 @@ public class CommandMessages extends OkaeriConfig {
             "<dark_gray>• <gray>Announcements sent since startup: <green>{TOTAL}<gray>."
     );
 
+    public Notice statsChannel = Notice.chat(
+            "<dark_gray>  • <gold>{CHANNEL}<dark_gray>: <green>{COUNT}<gray>, last one <green>{AGO} <gray>ago, "
+                    + "next in <green>{DELAY}"
+    );
+
+    public Notice statsChannelPending = Notice.chat(
+            "<dark_gray>  • <gold>{CHANNEL}<dark_gray>: <gray>nothing sent yet, next in <green>{DELAY}"
+    );
+
+    public Notice statsChannelIdle = Notice.chat(
+            "<dark_gray>  • <gold>{CHANNEL}<dark_gray>: <green>{COUNT} <gray>sent, not counting down"
+    );
+
     public Notice statsEntry = Notice.chat(
-            "<dark_gray>  • <gold>{MESSAGE}<dark_gray>: <green>{COUNT}<gray>, last one <green>{AGO} <gray>ago"
+            "<dark_gray>    - <yellow>{MESSAGE}<dark_gray>: <green>{COUNT}<gray>, last one <green>{AGO} <gray>ago"
     );
 
     public Notice statsEmpty = Notice.chat("<dark_gray>• <gray>Nothing has been announced yet.");

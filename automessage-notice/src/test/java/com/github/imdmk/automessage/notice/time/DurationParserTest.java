@@ -35,9 +35,12 @@ class DurationParserTest {
     }
 
     @Test
-    @DisplayName("is case-insensitive and tolerates surrounding whitespace")
+    @DisplayName("is case-insensitive and tolerates whitespace, including between the units")
     void normalisesInput() {
         assertThat(DurationParser.parse("  1H30M ")).isEqualTo(Duration.ofMinutes(90));
+        // This is the shape a duration is shown in, so it has to be the shape one can be typed in.
+        assertThat(DurationParser.parse("1h 34s")).isEqualTo(Duration.ofSeconds(3_634));
+        assertThat(DurationParser.parse("1h 2m 3s")).isEqualTo(Duration.ofSeconds(3_723));
     }
 
     @Test

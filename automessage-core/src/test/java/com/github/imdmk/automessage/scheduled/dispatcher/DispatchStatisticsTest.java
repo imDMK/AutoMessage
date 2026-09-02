@@ -1,6 +1,7 @@
 package com.github.imdmk.automessage.scheduled.dispatcher;
 
 import com.github.imdmk.automessage.scheduled.ScheduledMessage;
+import com.github.imdmk.automessage.scheduled.ScheduledMessageBuilder;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 
@@ -22,6 +23,12 @@ class DispatchStatisticsTest {
         statistics.onDispatched(new ScheduledMessage(name, List.of()), null);
     }
 
+    private void dispatched(String name, String channel) {
+        statistics.onDispatched(
+                ScheduledMessageBuilder.create().name(name).channel(channel).build(), null
+        );
+    }
+
     private void advance(Duration duration) {
         clock.addAndGet(duration.toNanos());
     }
@@ -35,7 +42,7 @@ class DispatchStatisticsTest {
 
         assertThat(statistics.total()).isEqualTo(3);
         assertThat(statistics.snapshot())
-                .extracting(DispatchStatistics.Entry::message, DispatchStatistics.Entry::count)
+                .extracting(DispatchStatistics.Entry::name, DispatchStatistics.Entry::count)
                 .containsExactly(
                         org.assertj.core.groups.Tuple.tuple("vote", 2L),
                         org.assertj.core.groups.Tuple.tuple("shop", 1L)
@@ -51,7 +58,7 @@ class DispatchStatisticsTest {
         advance(Duration.ofMinutes(1));
 
         assertThat(statistics.snapshot())
-                .extracting(DispatchStatistics.Entry::message, DispatchStatistics.Entry::since)
+                .extracting(DispatchStatistics.Entry::name, DispatchStatistics.Entry::since)
                 .containsExactlyInAnyOrder(
                         org.assertj.core.groups.Tuple.tuple("vote", Duration.ofMinutes(6)),
                         org.assertj.core.groups.Tuple.tuple("shop", Duration.ofMinutes(1))
@@ -91,5 +98,47 @@ class DispatchStatisticsTest {
         combined.onDispatched(new ScheduledMessage("vote", List.of()), null);
 
         assertThat(told).containsExactly("first", "second");
+    }
+
+    @Test
+    @DisplayName("counts what each channel carried, not only what each message did")
+    void countsPerChannel() {
+        dispatched("advert", "ads");
+        dispatched("another-advert", "ads");
+        dispatched("tip", "default");
+
+        assertThat(statistics.channel("ads")).map(DispatchStatistics.Entry::count).contains(2L);
+        assertThat(statistics.channel("default")).map(DispatchStatistics.Entry::count).contains(1L);
+    }
+
+    @Test
+    @DisplayName("a channel is found however it was typed")
+    void channelLookupIsNormalised() {
+        dispatched("advert", "ads");
+
+        // The name comes from a command argument, so it arrives however somebody typed it.
+        assertThat(statistics.channel("  ADS ")).map(DispatchStatistics.Entry::count).contains(1L);
+    }
+
+    @Test
+    @DisplayName("a channel that has carried nothing is absent rather than zero")
+    void unusedChannelIsAbsent() {
+        dispatched("tip", "default");
+
+        assertThat(statistics.channel("ads")).isEmpty();
+    }
+
+    @Test
+    @DisplayName("a channel is timed from its own last announcement")
+    void channelTimesFromItsOwnLast() {
+        dispatched("tip", "default");
+        advance(Duration.ofMinutes(4));
+        dispatched("advert", "ads");
+        advance(Duration.ofMinutes(1));
+
+        assertThat(statistics.channel("default")).map(DispatchStatistics.Entry::since)
+                .contains(Duration.ofMinutes(5));
+        assertThat(statistics.channel("ads")).map(DispatchStatistics.Entry::since)
+                .contains(Duration.ofMinutes(1));
     }
 }
