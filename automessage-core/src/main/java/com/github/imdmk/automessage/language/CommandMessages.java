@@ -66,10 +66,12 @@ public class CommandMessages extends OkaeriConfig {
     @Comment({"#", "# /automessage next. {CHANNEL} - the channel, {MESSAGE} - the message name.", "#"})
     public Notice nextHeader = Notice.chat("<dark_gray>• <gray>Next announcement on each channel:");
 
-    public Notice nextEntry = Notice.chat("<dark_gray>  • <gold>{CHANNEL}<dark_gray>: <gray>{MESSAGE}");
+    public Notice nextEntry = Notice.chat(
+            "<dark_gray>  • <gold>{CHANNEL}<dark_gray>: <gray>{MESSAGE} <dark_gray>- in <green>{DELAY}"
+    );
 
     public Notice nextUnpredictable = Notice.chat(
-            "<dark_gray>  • <gold>{CHANNEL}<dark_gray>: <gray>drawn at random when it fires"
+            "<dark_gray>  • <gold>{CHANNEL}<dark_gray>: <gray>drawn at random <dark_gray>- in <green>{DELAY}"
     );
 
     public Notice nextDisabled = Notice.chat("<dark_gray>  • <gold>{CHANNEL}<dark_gray>: <red>disabled");
@@ -86,4 +88,27 @@ public class CommandMessages extends OkaeriConfig {
     );
 
     public Notice statsEmpty = Notice.chat("<dark_gray>• <gray>Nothing has been announced yet.");
+
+    @Comment({"#", "# /automessage send. {CHANNEL}, {MESSAGE} and {DELAY} until the next one.", "#"})
+    public Notice sendDone = Notice.chat(
+            "<dark_gray>• <green>Sent <gray>{MESSAGE} <green>on <gray>{CHANNEL}<green>. "
+                    + "Next one in <gray>{DELAY}<green>.<dark_gray>"
+    );
+
+    public Notice sendNobodyOnline = Notice.chat(
+            "<dark_gray>• <yellow>Nobody is online, so nothing was sent on <gray>{CHANNEL}<yellow>. "
+                    + "Its schedule was left alone.<dark_gray>"
+    );
+
+    public Notice sendNoMessages = Notice.chat(
+            "<dark_gray>• <red>Channel <gray>{CHANNEL} <red>has no messages assigned to it.<dark_gray>"
+    );
+
+    public Notice sendDisabled = Notice.chat(
+            "<dark_gray>• <red>Channel <gray>{CHANNEL} <red>is disabled in config.yml.<dark_gray>"
+    );
+
+    public Notice channelNotFound = Notice.chat(
+            "<dark_gray>• <red>No channel named <gray>{CHANNEL} <red>exists in config.yml."
+    );
 }

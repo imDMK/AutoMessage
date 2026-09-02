@@ -34,6 +34,9 @@ final class PapiPlaceholderResolver implements ExternalPlaceholderResolver {
         // third-party expansions are written by other people and a player-scoped one may well
         // dereference it. A broken expansion must not take an announcement down with it.
         try {
+            // The cast is not redundant, whatever an IDE says: setPlaceholders is overloaded for
+            // Player and for OfflinePlayer, and a bare null only lands on the Player one because
+            // it happens to be the more specific of the two today.
             return PlaceholderAPI.setPlaceholders((Player) null, token);
         } catch (RuntimeException exception) {
             return token;

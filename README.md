@@ -606,7 +606,8 @@ AutoMessage after changing the webhook's enabled state or URL so the connection 
 | `/automessage disable` | `command.automessage.disable` | Pause scheduled announcement channels |
 | `/automessage reload` | `command.automessage.reload` | Reload schedules, message definitions and languages |
 | `/automessage view <name>` | `command.automessage.view` | Preview one localized message; player-only, with tab completion |
-| `/automessage next` | `command.automessage.next` | Show what each channel will announce next, without using it up |
+| `/automessage next` | `command.automessage.next` | Show what each channel will announce next and how long until it fires, without using it up |
+| `/automessage send <channel>` | `command.automessage.send` | Send that channel's next announcement now; its interval restarts from this moment |
 | `/automessage stats` | `command.automessage.stats` | Show how often each message has been announced, and how long ago |
 
 <details>

@@ -40,4 +40,14 @@ public final class DurationFormatter {
             builder.append(amount).append(unit);
         }
     }
+
+    // Rounded up to the whole second, for a countdown somebody is reading: the milliseconds in
+    // "in 9s487ms" are noise, and a second still to go should not read as "0s".
+    public static String formatCountdown(Duration duration) {
+        if (duration == null || duration.isNegative()) {
+            return format(duration);
+        }
+
+        return format(Duration.ofSeconds((duration.toMillis() + 999L) / 1000L));
+    }
 }

@@ -9,6 +9,7 @@ import com.github.imdmk.automessage.platform.viewer.Viewer;
 import com.github.imdmk.automessage.scheduled.audience.rule.AudienceContext;
 
 import java.util.ArrayList;
+import java.util.Optional;
 import java.util.List;
 import java.util.function.Supplier;
 
@@ -34,22 +35,26 @@ public final class MessageDispatcher {
         this.observer = observer;
     }
 
-    public void dispatchNext(List<ScheduledMessage> messages, DispatchTarget target) {
-        dispatchNext(messages, target, true);
+    public Optional<ScheduledMessage> dispatchNext(List<ScheduledMessage> messages, DispatchTarget target) {
+        return dispatchNext(messages, target, true);
     }
 
-    public void dispatchNext(
+    // Returns what it chose, so a caller that was asked to send something can say what went out.
+    // The selector is the only thing that knows: a weighted or random channel draws afresh on
+    // every call, so looking first and sending second would name a different message.
+    public Optional<ScheduledMessage> dispatchNext(
             List<ScheduledMessage> messages,
             DispatchTarget target,
             boolean advanceSelectorIndex
     ) {
         if (messages.isEmpty()) {
-            return;
+            return Optional.empty();
         }
 
-        selector.get()
-                .selectNext(messages, advanceSelectorIndex)
-                .ifPresent(message -> dispatch(message, target));
+        final Optional<ScheduledMessage> chosen = selector.get().selectNext(messages, advanceSelectorIndex);
+        chosen.ifPresent(message -> dispatch(message, target));
+
+        return chosen;
     }
 
     public void dispatch(

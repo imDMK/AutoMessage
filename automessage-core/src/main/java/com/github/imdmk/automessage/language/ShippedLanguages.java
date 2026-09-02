@@ -60,6 +60,11 @@ final class ShippedLanguages {
         config.commands.statsHeader = Notice.chat(commands.statsHeader());
         config.commands.statsEntry = Notice.chat(commands.statsEntry());
         config.commands.statsEmpty = Notice.chat(commands.statsEmpty());
+        config.commands.sendDone = Notice.chat(commands.sendDone());
+        config.commands.sendNobodyOnline = Notice.chat(commands.sendNobodyOnline());
+        config.commands.sendNoMessages = Notice.chat(commands.sendNoMessages());
+        config.commands.sendDisabled = Notice.chat(commands.sendDisabled());
+        config.commands.channelNotFound = Notice.chat(commands.channelNotFound());
 
         config.announcements = announcements(announcements);
     }
@@ -131,7 +136,12 @@ final class ShippedLanguages {
             String nextEmpty,
             String statsHeader,
             String statsEntry,
-            String statsEmpty
+            String statsEmpty,
+            String sendDone,
+            String sendNobodyOnline,
+            String sendNoMessages,
+            String sendDisabled,
+            String channelNotFound
     ) {
     }
 
@@ -175,13 +185,20 @@ final class ShippedLanguages {
             "<dark_gray>• <red>Wiadomość o nazwie <gray>{MESSAGE} <red>nie istnieje w scheduledMessages.yml.",
             "<dark_gray>• <red>Tylko gracze mogą oglądać podgląd zaplanowanych wiadomości.<dark_gray>",
             "<dark_gray>• <gray>Następna wiadomość na każdym kanale:",
-            "<dark_gray>  • <gold>{CHANNEL}<dark_gray>: <gray>{MESSAGE}",
-            "<dark_gray>  • <gold>{CHANNEL}<dark_gray>: <gray>losowana w chwili wysłania",
+            "<dark_gray>  • <gold>{CHANNEL}<dark_gray>: <gray>{MESSAGE} <dark_gray>- za <green>{DELAY}",
+            "<dark_gray>  • <gold>{CHANNEL}<dark_gray>: <gray>losowana <dark_gray>- za <green>{DELAY}",
             "<dark_gray>  • <gold>{CHANNEL}<dark_gray>: <red>wyłączony",
             "<dark_gray>  • <gold>{CHANNEL}<dark_gray>: <red>brak wiadomości",
             "<dark_gray>• <gray>Wysłanych ogłoszeń od uruchomienia: <green>{TOTAL}<gray>.",
             "<dark_gray>  • <gold>{MESSAGE}<dark_gray>: <green>{COUNT}<gray>, ostatnio <green>{AGO} <gray>temu",
-            "<dark_gray>• <gray>Nic jeszcze nie zostało ogłoszone."
+            "<dark_gray>• <gray>Nic jeszcze nie zostało ogłoszone.",
+            "<dark_gray>• <green>Wysłano <gray>{MESSAGE} <green>na kanale <gray>{CHANNEL}<green>. "
+                    + "Następna za <gray>{DELAY}<green>.<dark_gray>",
+            "<dark_gray>• <yellow>Nikt nie jest online, więc nic nie wysłano na kanale <gray>{CHANNEL}<yellow>. "
+                    + "Harmonogram pozostał bez zmian.<dark_gray>",
+            "<dark_gray>• <red>Kanał <gray>{CHANNEL} <red>nie ma przypisanych żadnych wiadomości.<dark_gray>",
+            "<dark_gray>• <red>Kanał <gray>{CHANNEL} <red>jest wyłączony w config.yml.<dark_gray>",
+            "<dark_gray>• <red>Kanał o nazwie <gray>{CHANNEL} <red>nie istnieje w config.yml."
     );
 
     private static final Announcements POLISH_ANNOUNCEMENTS = new Announcements(
@@ -212,12 +229,19 @@ final class ShippedLanguages {
             "<dark_gray>• <red>Nur Spieler können geplante Nachrichten in der Vorschau ansehen.<dark_gray>",
             "<dark_gray>• <gray>Nächste Nachricht pro Kanal:",
             "<dark_gray>  • <gold>{CHANNEL}<dark_gray>: <gray>{MESSAGE}",
-            "<dark_gray>  • <gold>{CHANNEL}<dark_gray>: <gray>wird beim Senden zufällig gezogen",
+            "<dark_gray>  • <gold>{CHANNEL}<dark_gray>: <gray>zufällig <dark_gray>- in <green>{DELAY}",
             "<dark_gray>  • <gold>{CHANNEL}<dark_gray>: <red>deaktiviert",
             "<dark_gray>  • <gold>{CHANNEL}<dark_gray>: <red>keine Nachrichten",
             "<dark_gray>• <gray>Gesendete Ankündigungen seit dem Start: <green>{TOTAL}<gray>.",
             "<dark_gray>  • <gold>{MESSAGE}<dark_gray>: <green>{COUNT}<gray>, zuletzt vor <green>{AGO}",
-            "<dark_gray>• <gray>Es wurde noch nichts angekündigt."
+            "<dark_gray>• <gray>Es wurde noch nichts angekündigt.",
+            "<dark_gray>• <green>Hat <gray>{MESSAGE} <green>auf <gray>{CHANNEL} <green>gesendet. "
+                    + "Die nächste in <gray>{DELAY}<green>.<dark_gray>",
+            "<dark_gray>• <yellow>Niemand ist online, daher wurde auf <gray>{CHANNEL} <yellow>nichts gesendet. "
+                    + "Der Zeitplan bleibt unberührt.<dark_gray>",
+            "<dark_gray>• <red>Dem Kanal <gray>{CHANNEL} <red>sind keine Nachrichten zugewiesen.<dark_gray>",
+            "<dark_gray>• <red>Kanal <gray>{CHANNEL} <red>ist in config.yml deaktiviert.<dark_gray>",
+            "<dark_gray>• <red>Es gibt keinen Kanal namens <gray>{CHANNEL} <red>in config.yml."
     );
 
     private static final Announcements GERMAN_ANNOUNCEMENTS = new Announcements(

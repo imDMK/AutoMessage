@@ -31,4 +31,16 @@ class DurationFormatterTest {
     void shouldDescribeMissingDuration() {
         assertEquals("unset", DurationFormatter.format(null));
     }
+
+    @Test
+    @DisplayName("a countdown is rounded up to the whole second a person can read")
+    void countdownRoundsUpToSeconds() {
+        // Up rather than down: "9s487ms" is noise on a line somebody reads, and a countdown must
+        // never claim less time than is left, nor say "0s" while there is any.
+        assertEquals("10s", DurationFormatter.formatCountdown(Duration.ofMillis(9_487)));
+        assertEquals("1s", DurationFormatter.formatCountdown(Duration.ofMillis(400)));
+        assertEquals("5m", DurationFormatter.formatCountdown(Duration.ofMinutes(5)));
+        assertEquals("0s", DurationFormatter.formatCountdown(Duration.ZERO));
+        assertEquals("unset", DurationFormatter.formatCountdown(null));
+    }
 }

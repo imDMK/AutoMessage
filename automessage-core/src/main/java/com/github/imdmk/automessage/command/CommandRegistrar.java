@@ -1,6 +1,11 @@
 package com.github.imdmk.automessage.command;
 
 import com.github.imdmk.automessage.AutoMessage;
+import com.github.imdmk.automessage.scheduled.channel.AnnouncementChannel;
+import com.github.imdmk.automessage.command.handler.UnknownAnnouncementChannelHandler;
+import com.github.imdmk.automessage.command.argument.UnknownAnnouncementChannel;
+import com.github.imdmk.automessage.command.argument.AnnouncementChannelArgument;
+import com.github.imdmk.automessage.command.send.SendCommand;
 import com.github.imdmk.automessage.command.next.NextCommand;
 import com.github.imdmk.automessage.command.stats.StatsCommand;
 import com.github.imdmk.automessage.command.argument.ScheduledMessageArgument;
@@ -38,8 +43,12 @@ public final class CommandRegistrar {
                 .result(Notice.class, new NoticeResultHandlerImpl<>(automessage.messageService(), viewers))
                 .result(UnknownScheduledMessage.class,
                         new UnknownScheduledMessageHandler<>(automessage.messageService(), viewers))
+                .result(UnknownAnnouncementChannel.class,
+                        new UnknownAnnouncementChannelHandler<>(automessage.messageService(), viewers))
 
                 .argument(ScheduledMessage.class, new ScheduledMessageArgument<>(automessage.messageRepository()))
+                .argument(AnnouncementChannel.class,
+                        new AnnouncementChannelArgument<>(automessage.dispatcherConfig()))
 
                 .commands(
                         new DisableCommand(automessage.dispatcherConfig(), automessage.messageService()),
@@ -52,7 +61,8 @@ public final class CommandRegistrar {
                         ),
                         new ViewCommand(automessage.messageSender(), automessage.messageService()),
                         new NextCommand(automessage.dispatcherService(), automessage.messageService()),
-                        new StatsCommand(automessage.statistics(), automessage.messageService())
+                        new StatsCommand(automessage.statistics(), automessage.messageService()),
+                        new SendCommand(automessage.dispatcherService(), automessage.messageService())
                 );
     }
 }

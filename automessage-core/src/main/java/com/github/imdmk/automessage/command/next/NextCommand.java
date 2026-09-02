@@ -3,6 +3,7 @@ package com.github.imdmk.automessage.command.next;
 import com.github.imdmk.automessage.language.CommandMessages;
 import com.github.imdmk.automessage.message.MessageService;
 import com.github.imdmk.automessage.notice.Notice;
+import com.github.imdmk.automessage.notice.time.DurationFormatter;
 import com.github.imdmk.automessage.platform.viewer.Viewer;
 import com.github.imdmk.automessage.scheduled.dispatcher.ChannelPreview;
 import com.github.imdmk.automessage.scheduled.dispatcher.MessageDispatcherService;
@@ -33,6 +34,7 @@ public final class NextCommand {
                     .notice(notice -> lineFor(notice.commands, preview))
                     .placeholder("{CHANNEL}", preview.channel())
                     .placeholder("{MESSAGE}", preview.message() == null ? "" : preview.message())
+                    .placeholder("{DELAY}", preview.due() == null ? "" : DurationFormatter.formatCountdown(preview.due()))
                     .send();
         }
     }
