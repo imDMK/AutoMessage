@@ -58,11 +58,13 @@ final class ShippedLanguages {
         config.commands.nextDisabled = Notice.chat(commands.nextDisabled());
         config.commands.nextEmpty = Notice.chat(commands.nextEmpty());
         config.commands.statsHeader = Notice.chat(commands.statsHeader());
+        config.commands.statsEmpty = Notice.chat(commands.statsEmpty());
+        config.commands.statsChannelsHeader = Notice.chat(commands.statsChannelsHeader());
         config.commands.statsChannel = Notice.chat(commands.statsChannel());
         config.commands.statsChannelPending = Notice.chat(commands.statsChannelPending());
         config.commands.statsChannelIdle = Notice.chat(commands.statsChannelIdle());
+        config.commands.statsMessagesHeader = Notice.chat(commands.statsMessagesHeader());
         config.commands.statsEntry = Notice.chat(commands.statsEntry());
-        config.commands.statsEmpty = Notice.chat(commands.statsEmpty());
         config.commands.sendDone = Notice.chat(commands.sendDone());
         config.commands.sendNobodyOnline = Notice.chat(commands.sendNobodyOnline());
         config.commands.sendNoMessages = Notice.chat(commands.sendNoMessages());
@@ -138,11 +140,13 @@ final class ShippedLanguages {
             String nextDisabled,
             String nextEmpty,
             String statsHeader,
+            String statsEmpty,
+            String statsChannelsHeader,
             String statsChannel,
             String statsChannelPending,
             String statsChannelIdle,
+            String statsMessagesHeader,
             String statsEntry,
-            String statsEmpty,
             String sendDone,
             String sendNobodyOnline,
             String sendNoMessages,
@@ -191,17 +195,20 @@ final class ShippedLanguages {
             "<dark_gray>• <red>Wiadomość o nazwie <gray>{MESSAGE} <red>nie istnieje w scheduledMessages.yml.",
             "<dark_gray>• <red>Tylko gracze mogą oglądać podgląd zaplanowanych wiadomości.<dark_gray>",
             "<dark_gray>• <gray>Następna wiadomość na każdym kanale:",
-            "<dark_gray>  • <gold>{CHANNEL}<dark_gray>: <gray>{MESSAGE} <dark_gray>- za <green>{DELAY}",
-            "<dark_gray>  • <gold>{CHANNEL}<dark_gray>: <gray>losowana <dark_gray>- za <green>{DELAY}",
-            "<dark_gray>  • <gold>{CHANNEL}<dark_gray>: <red>wyłączony",
-            "<dark_gray>  • <gold>{CHANNEL}<dark_gray>: <red>brak wiadomości",
-            "<dark_gray>• <gray>Wysłanych ogłoszeń od uruchomienia: <green>{TOTAL}<gray>.",
-            "<dark_gray>  • <gold>{CHANNEL}<dark_gray>: <green>{COUNT}<gray>, ostatnio <green>{AGO} <gray>temu, "
-                    + "następna za <green>{DELAY}",
-            "<dark_gray>  • <gold>{CHANNEL}<dark_gray>: <gray>nic jeszcze nie wysłano, następna za <green>{DELAY}",
-            "<dark_gray>  • <gold>{CHANNEL}<dark_gray>: <green>{COUNT} <gray>wysłanych, nie odlicza",
-            "<dark_gray>    - <yellow>{MESSAGE}<dark_gray>: <green>{COUNT}<gray>, ostatnio <green>{AGO} <gray>temu",
-            "<dark_gray>• <gray>Nic jeszcze nie zostało ogłoszone.",
+            "<dark_gray>  • <gold>{CHANNEL} <dark_gray>- <gray>{MESSAGE}<gray>, za <green>{DELAY}",
+            "<dark_gray>  • <gold>{CHANNEL} <dark_gray>- <gray>losowana, za <green>{DELAY}",
+            "<dark_gray>  • <gold>{CHANNEL} <dark_gray>- <red>wyłączony w config.yml",
+            "<dark_gray>  • <gold>{CHANNEL} <dark_gray>- <red>brak przypisanych wiadomości",
+            "<dark_gray>• <gray>AutoMessage wysłał <green>{TOTAL} <gray>ogłoszeń od uruchomienia.",
+            "<dark_gray>• <gray>AutoMessage jeszcze nic nie ogłosił.",
+            "<dark_gray>• <gray>Kanały",
+            "<dark_gray>  • <gold>{CHANNEL} <dark_gray>- <green>{COUNT} <gray>wysłanych, ostatnio "
+                    + "<green>{AGO} <gray>temu, następna za <green>{DELAY}",
+            "<dark_gray>  • <gold>{CHANNEL} <dark_gray>- <gray>nic jeszcze nie wysłano, następna za <green>{DELAY}",
+            "<dark_gray>  • <gold>{CHANNEL} <dark_gray>- <green>{COUNT} <gray>wysłanych, nie odlicza",
+            "<dark_gray>• <gray>Wiadomości",
+            "<dark_gray>  • <yellow>{MESSAGE} <dark_gray>(<gold>{CHANNEL}<dark_gray>) - "
+                    + "<green>{COUNT} <gray>wysłanych, ostatnio <green>{AGO} <gray>temu",
             "<dark_gray>• <green>Wysłano <gray>{MESSAGE} <green>na kanale <gray>{CHANNEL}<green>. "
                     + "Następna za <gray>{DELAY}<green>.<dark_gray>",
             "<dark_gray>• <yellow>Nikt nie jest online, więc nic nie wysłano na kanale <gray>{CHANNEL}<yellow>. "
@@ -238,17 +245,20 @@ final class ShippedLanguages {
             "<dark_gray>• <red>Es gibt keine geplante Nachricht namens <gray>{MESSAGE} <red>in scheduledMessages.yml.",
             "<dark_gray>• <red>Nur Spieler können geplante Nachrichten in der Vorschau ansehen.<dark_gray>",
             "<dark_gray>• <gray>Nächste Nachricht pro Kanal:",
-            "<dark_gray>  • <gold>{CHANNEL}<dark_gray>: <gray>{MESSAGE}",
-            "<dark_gray>  • <gold>{CHANNEL}<dark_gray>: <gray>zufällig <dark_gray>- in <green>{DELAY}",
-            "<dark_gray>  • <gold>{CHANNEL}<dark_gray>: <red>deaktiviert",
-            "<dark_gray>  • <gold>{CHANNEL}<dark_gray>: <red>keine Nachrichten",
-            "<dark_gray>• <gray>Gesendete Ankündigungen seit dem Start: <green>{TOTAL}<gray>.",
-            "<dark_gray>  • <gold>{CHANNEL}<dark_gray>: <green>{COUNT}<gray>, zuletzt vor <green>{AGO}<gray>, "
-                    + "nächste in <green>{DELAY}",
-            "<dark_gray>  • <gold>{CHANNEL}<dark_gray>: <gray>noch nichts gesendet, nächste in <green>{DELAY}",
-            "<dark_gray>  • <gold>{CHANNEL}<dark_gray>: <green>{COUNT} <gray>gesendet, zählt nicht herunter",
-            "<dark_gray>    - <yellow>{MESSAGE}<dark_gray>: <green>{COUNT}<gray>, zuletzt vor <green>{AGO}",
-            "<dark_gray>• <gray>Es wurde noch nichts angekündigt.",
+            "<dark_gray>  • <gold>{CHANNEL} <dark_gray>- <gray>{MESSAGE}<gray>, in <green>{DELAY}",
+            "<dark_gray>  • <gold>{CHANNEL} <dark_gray>- <gray>zufällig gezogen, in <green>{DELAY}",
+            "<dark_gray>  • <gold>{CHANNEL} <dark_gray>- <red>in config.yml deaktiviert",
+            "<dark_gray>  • <gold>{CHANNEL} <dark_gray>- <red>keine Nachrichten zugewiesen",
+            "<dark_gray>• <gray>AutoMessage hat seit dem Start <green>{TOTAL} <gray>Ankündigungen gesendet.",
+            "<dark_gray>• <gray>AutoMessage hat noch nichts angekündigt.",
+            "<dark_gray>• <gray>Kanäle",
+            "<dark_gray>  • <gold>{CHANNEL} <dark_gray>- <green>{COUNT} <gray>gesendet, zuletzt vor "
+                    + "<green>{AGO}<gray>, nächste in <green>{DELAY}",
+            "<dark_gray>  • <gold>{CHANNEL} <dark_gray>- <gray>noch nichts gesendet, nächste in <green>{DELAY}",
+            "<dark_gray>  • <gold>{CHANNEL} <dark_gray>- <green>{COUNT} <gray>gesendet, zählt nicht herunter",
+            "<dark_gray>• <gray>Nachrichten",
+            "<dark_gray>  • <yellow>{MESSAGE} <dark_gray>(<gold>{CHANNEL}<dark_gray>) - "
+                    + "<green>{COUNT} <gray>gesendet, zuletzt vor <green>{AGO}",
             "<dark_gray>• <green>Hat <gray>{MESSAGE} <green>auf <gray>{CHANNEL} <green>gesendet. "
                     + "Die nächste in <gray>{DELAY}<green>.<dark_gray>",
             "<dark_gray>• <yellow>Niemand ist online, daher wurde auf <gray>{CHANNEL} <yellow>nichts gesendet. "

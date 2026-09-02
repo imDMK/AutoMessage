@@ -13,6 +13,7 @@ import dev.rollczi.litecommands.annotations.context.Context;
 import dev.rollczi.litecommands.annotations.execute.Execute;
 import dev.rollczi.litecommands.annotations.permission.Permission;
 
+import java.util.List;
 import java.util.Optional;
 
 @Command(name = "automessage stats")
@@ -43,39 +44,59 @@ public final class StatsCommand {
                 .placeholder("{TOTAL}", Long.toString(total))
                 .send();
 
-        // Per channel first, because that is the line with a future in it - what has gone out and
-        // when the next one is due are the same question asked backwards and forwards.
-        for (final ChannelPreview preview : dispatcher.upcoming()) {
-            sendChannelLine(viewer, preview);
+        sendChannels(viewer);
+        sendMessages(viewer);
+    }
+
+    // Two labelled lists rather than one mixed one. A channel row and a message row used to look
+    // alike, and a reader had no way to tell which kind of name they were looking at.
+    private void sendChannels(Viewer viewer) {
+        final List<ChannelPreview> channels = dispatcher.upcoming();
+
+        if (channels.isEmpty()) {
+            return;
         }
 
-        for (final DispatchStatistics.Entry entry : statistics.snapshot()) {
+        messageService.send(viewer, notice -> notice.commands.statsChannelsHeader);
+
+        for (final ChannelPreview preview : channels) {
+            final Optional<DispatchStatistics.Entry> counted = statistics.channel(preview.channel());
+            final long count = counted.map(DispatchStatistics.Entry::count).orElse(0L);
+
             messageService.create()
                     .viewer(viewer)
-                    .notice(notice -> notice.commands.statsEntry)
-                    .placeholder("{MESSAGE}", entry.name())
-                    .placeholder("{COUNT}", Long.toString(entry.count()))
-                    .placeholder("{AGO}", DurationFormatter.formatReadable(entry.since()))
+                    .notice(notice -> channelLine(notice.commands, preview, count))
+                    .placeholder("{CHANNEL}", preview.channel())
+                    .placeholder("{COUNT}", Long.toString(count))
+                    .placeholder("{AGO}", counted
+                            .map(entry -> DurationFormatter.formatReadable(entry.since()))
+                            .orElse(""))
+                    .placeholder("{DELAY}", preview.due() == null
+                            ? ""
+                            : DurationFormatter.formatReadable(preview.due()))
                     .send();
         }
     }
 
-    private void sendChannelLine(Viewer viewer, ChannelPreview preview) {
-        final Optional<DispatchStatistics.Entry> counted = statistics.channel(preview.channel());
-        final long count = counted.map(DispatchStatistics.Entry::count).orElse(0L);
+    private void sendMessages(Viewer viewer) {
+        final List<DispatchStatistics.Entry> entries = statistics.snapshot();
 
-        messageService.create()
-                .viewer(viewer)
-                .notice(notice -> channelLine(notice.commands, preview, count))
-                .placeholder("{CHANNEL}", preview.channel())
-                .placeholder("{COUNT}", Long.toString(count))
-                .placeholder("{AGO}", counted
-                        .map(entry -> DurationFormatter.formatReadable(entry.since()))
-                        .orElse(""))
-                .placeholder("{DELAY}", preview.due() == null
-                        ? ""
-                        : DurationFormatter.formatReadable(preview.due()))
-                .send();
+        if (entries.isEmpty()) {
+            return;
+        }
+
+        messageService.send(viewer, notice -> notice.commands.statsMessagesHeader);
+
+        for (final DispatchStatistics.Entry entry : entries) {
+            messageService.create()
+                    .viewer(viewer)
+                    .notice(notice -> notice.commands.statsEntry)
+                    .placeholder("{MESSAGE}", entry.name())
+                    .placeholder("{CHANNEL}", entry.channel() == null ? "" : entry.channel())
+                    .placeholder("{COUNT}", Long.toString(entry.count()))
+                    .placeholder("{AGO}", DurationFormatter.formatReadable(entry.since()))
+                    .send();
+        }
     }
 
     // A channel with no countdown is switched off or has nothing assigned; /automessage next is

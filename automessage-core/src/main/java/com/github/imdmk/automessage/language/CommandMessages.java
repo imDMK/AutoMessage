@@ -64,43 +64,59 @@ public class CommandMessages extends OkaeriConfig {
     );
 
     @Comment({"#", "# /automessage next. {CHANNEL} - the channel, {MESSAGE} - the message name.", "#"})
+    @Comment({"#", "# /automessage next. {CHANNEL}, {MESSAGE} and {DELAY} until it fires.", "#"})
     public Notice nextHeader = Notice.chat("<dark_gray>• <gray>Next announcement on each channel:");
 
     public Notice nextEntry = Notice.chat(
-            "<dark_gray>  • <gold>{CHANNEL}<dark_gray>: <gray>{MESSAGE} <dark_gray>- in <green>{DELAY}"
+            "<dark_gray>  • <gold>{CHANNEL} <dark_gray>- <gray>{MESSAGE}<gray>, in <green>{DELAY}"
     );
 
     public Notice nextUnpredictable = Notice.chat(
-            "<dark_gray>  • <gold>{CHANNEL}<dark_gray>: <gray>drawn at random <dark_gray>- in <green>{DELAY}"
+            "<dark_gray>  • <gold>{CHANNEL} <dark_gray>- <gray>drawn at random, in <green>{DELAY}"
     );
 
-    public Notice nextDisabled = Notice.chat("<dark_gray>  • <gold>{CHANNEL}<dark_gray>: <red>disabled");
+    public Notice nextDisabled = Notice.chat(
+            "<dark_gray>  • <gold>{CHANNEL} <dark_gray>- <red>disabled in config.yml"
+    );
 
-    public Notice nextEmpty = Notice.chat("<dark_gray>  • <gold>{CHANNEL}<dark_gray>: <red>no messages");
+    public Notice nextEmpty = Notice.chat(
+            "<dark_gray>  • <gold>{CHANNEL} <dark_gray>- <red>no messages assigned"
+    );
 
-    @Comment({"#", "# /automessage stats. {TOTAL}, {MESSAGE}, {COUNT} and {AGO}.", "#"})
+    @Comment({
+            "#",
+            "# /automessage stats. {TOTAL}, {CHANNEL}, {MESSAGE}, {COUNT} and {AGO}.",
+            "# Channels are listed apart from messages, so a name is never ambiguous: a channel",
+            "# row says when the next one is due, a message row names the channel it goes out on.",
+            "#"
+    })
     public Notice statsHeader = Notice.chat(
-            "<dark_gray>• <gray>Announcements sent since startup: <green>{TOTAL}<gray>."
+            "<dark_gray>• <gray>AutoMessage has sent <green>{TOTAL} <gray>announcements since startup."
     );
+
+    public Notice statsEmpty = Notice.chat("<dark_gray>• <gray>AutoMessage has not announced anything yet.");
+
+    public Notice statsChannelsHeader = Notice.chat("<dark_gray>• <gray>Channels");
 
     public Notice statsChannel = Notice.chat(
-            "<dark_gray>  • <gold>{CHANNEL}<dark_gray>: <green>{COUNT}<gray>, last one <green>{AGO} <gray>ago, "
+            "<dark_gray>  • <gold>{CHANNEL} <dark_gray>- <green>{COUNT} <gray>sent, last <green>{AGO} <gray>ago, "
                     + "next in <green>{DELAY}"
     );
 
     public Notice statsChannelPending = Notice.chat(
-            "<dark_gray>  • <gold>{CHANNEL}<dark_gray>: <gray>nothing sent yet, next in <green>{DELAY}"
+            "<dark_gray>  • <gold>{CHANNEL} <dark_gray>- <gray>nothing sent yet, next in <green>{DELAY}"
     );
 
     public Notice statsChannelIdle = Notice.chat(
-            "<dark_gray>  • <gold>{CHANNEL}<dark_gray>: <green>{COUNT} <gray>sent, not counting down"
+            "<dark_gray>  • <gold>{CHANNEL} <dark_gray>- <green>{COUNT} <gray>sent, not counting down"
     );
+
+    public Notice statsMessagesHeader = Notice.chat("<dark_gray>• <gray>Messages");
 
     public Notice statsEntry = Notice.chat(
-            "<dark_gray>    - <yellow>{MESSAGE}<dark_gray>: <green>{COUNT}<gray>, last one <green>{AGO} <gray>ago"
+            "<dark_gray>  • <yellow>{MESSAGE} <dark_gray>(<gold>{CHANNEL}<dark_gray>) - "
+                    + "<green>{COUNT} <gray>sent, last <green>{AGO} <gray>ago"
     );
-
-    public Notice statsEmpty = Notice.chat("<dark_gray>• <gray>Nothing has been announced yet.");
 
     @Comment({"#", "# /automessage send. {CHANNEL}, {MESSAGE} and {DELAY} until the next one.", "#"})
     public Notice sendDone = Notice.chat(

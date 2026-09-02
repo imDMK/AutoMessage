@@ -3,6 +3,7 @@ package com.github.imdmk.automessage.scheduled.dispatcher;
 import com.github.imdmk.automessage.scheduled.ScheduledMessage;
 import com.github.imdmk.automessage.scheduled.channel.AnnouncementChannel;
 import com.github.imdmk.automessage.scheduled.placeholder.MessagePlaceholders;
+import org.jetbrains.annotations.Nullable;
 
 import java.time.Duration;
 import java.util.ArrayList;
@@ -38,8 +39,9 @@ public final class DispatchStatistics implements DispatchObserver {
     public void onDispatched(ScheduledMessage message, MessagePlaceholders placeholders) {
         final long now = clock.getAsLong();
 
-        byMessage.computeIfAbsent(message.name(), name -> new Counter()).record(now);
-        byChannel.computeIfAbsent(AnnouncementChannel.normalize(message.channel()), name -> new Counter()).record(now);
+        byMessage.computeIfAbsent(message.name(), name -> new Counter()).record(now, message.channel());
+        byChannel.computeIfAbsent(AnnouncementChannel.normalize(message.channel()), name -> new Counter())
+                .record(now, null);
         total.incrementAndGet();
     }
 
@@ -69,20 +71,30 @@ public final class DispatchStatistics implements DispatchObserver {
     }
 
     private static Entry entry(String name, Counter counter, long now) {
-        return new Entry(name, counter.count.get(), Duration.ofNanos(now - counter.lastNanos));
+        return new Entry(name, counter.channel, counter.count.get(), Duration.ofNanos(now - counter.lastNanos));
     }
 
-    public record Entry(String name, long count, Duration since) {
+    /**
+     * A count of one thing that was announced - a message, or a whole channel.
+     */
+    // A message names the channel it went out on, because a report that lists both without saying
+    // which is which leaves the reader guessing. A channel's own row has nothing to name.
+    public record Entry(String name, @Nullable String channel, long count, Duration since) {
     }
 
     private static final class Counter {
 
         private final AtomicLong count = new AtomicLong();
         private volatile long lastNanos;
+        private volatile String channel;
 
-        private void record(long now) {
+        private void record(long now, @Nullable String channel) {
             count.incrementAndGet();
             this.lastNanos = now;
+
+            if (channel != null) {
+                this.channel = channel;
+            }
         }
     }
 }
