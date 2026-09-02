@@ -47,6 +47,8 @@ class ShippedLanguagesTest {
         assertThat(text("pl", commands -> commands.nextDisabled)).contains("wyłączony");
         assertThat(text("pl", commands -> commands.statsChannelsHeader)).contains("Kanały");
         assertThat(text("pl", commands -> commands.statsMessagesHeader)).contains("Wiadomości");
+        assertThat(text("pl", commands -> commands.statsChannelDisabled)).contains("wyłączony w config.yml");
+        assertThat(text("pl", commands -> commands.statsChannelEmpty)).contains("brak przypisanych");
         assertThat(text("pl", commands -> commands.channelNotFound)).contains("nie istnieje");
     }
 
@@ -57,6 +59,8 @@ class ShippedLanguagesTest {
         assertThat(text("de", commands -> commands.nextDisabled)).contains("deaktiviert");
         assertThat(text("de", commands -> commands.statsChannelsHeader)).contains("Kanäle");
         assertThat(text("de", commands -> commands.statsMessagesHeader)).contains("Nachrichten");
+        assertThat(text("de", commands -> commands.statsChannelDisabled)).contains("deaktiviert");
+        assertThat(text("de", commands -> commands.statsChannelEmpty)).contains("keine Nachrichten");
         assertThat(text("de", commands -> commands.channelNotFound)).contains("keinen Kanal");
     }
 

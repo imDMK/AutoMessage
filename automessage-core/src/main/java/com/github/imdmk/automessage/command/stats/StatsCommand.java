@@ -99,13 +99,14 @@ public final class StatsCommand {
         }
     }
 
-    // A channel with no countdown is switched off or has nothing assigned; /automessage next is
-    // the command that explains which, so this one only says it is not counting down.
+    // A channel that is not counting down says why here rather than leaving the reader to run
+    // /automessage next to find out - "not counting down" described the missing timer, which is
+    // this command's problem and not the reader's.
     private static Notice channelLine(CommandMessages messages, ChannelPreview preview, long count) {
-        if (preview.due() == null) {
-            return messages.statsChannelIdle;
-        }
-
-        return count == 0 ? messages.statsChannelPending : messages.statsChannel;
+        return switch (preview.kind()) {
+            case DISABLED -> messages.statsChannelDisabled;
+            case EMPTY -> messages.statsChannelEmpty;
+            case NEXT, UNPREDICTABLE -> count == 0 ? messages.statsChannelPending : messages.statsChannel;
+        };
     }
 }

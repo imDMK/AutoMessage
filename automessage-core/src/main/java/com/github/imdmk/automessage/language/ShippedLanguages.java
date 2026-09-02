@@ -62,7 +62,8 @@ final class ShippedLanguages {
         config.commands.statsChannelsHeader = Notice.chat(commands.statsChannelsHeader());
         config.commands.statsChannel = Notice.chat(commands.statsChannel());
         config.commands.statsChannelPending = Notice.chat(commands.statsChannelPending());
-        config.commands.statsChannelIdle = Notice.chat(commands.statsChannelIdle());
+        config.commands.statsChannelDisabled = Notice.chat(commands.statsChannelDisabled());
+        config.commands.statsChannelEmpty = Notice.chat(commands.statsChannelEmpty());
         config.commands.statsMessagesHeader = Notice.chat(commands.statsMessagesHeader());
         config.commands.statsEntry = Notice.chat(commands.statsEntry());
         config.commands.sendDone = Notice.chat(commands.sendDone());
@@ -144,7 +145,8 @@ final class ShippedLanguages {
             String statsChannelsHeader,
             String statsChannel,
             String statsChannelPending,
-            String statsChannelIdle,
+            String statsChannelDisabled,
+            String statsChannelEmpty,
             String statsMessagesHeader,
             String statsEntry,
             String sendDone,
@@ -205,7 +207,10 @@ final class ShippedLanguages {
             "<dark_gray>  • <gold>{CHANNEL} <dark_gray>- <green>{COUNT} <gray>wysłanych, ostatnio "
                     + "<green>{AGO} <gray>temu, następna za <green>{DELAY}",
             "<dark_gray>  • <gold>{CHANNEL} <dark_gray>- <gray>nic jeszcze nie wysłano, następna za <green>{DELAY}",
-            "<dark_gray>  • <gold>{CHANNEL} <dark_gray>- <green>{COUNT} <gray>wysłanych, nie odlicza",
+            "<dark_gray>  • <gold>{CHANNEL} <dark_gray>- <green>{COUNT} <gray>wysłanych, "
+                    + "<red>wyłączony w config.yml",
+            "<dark_gray>  • <gold>{CHANNEL} <dark_gray>- <green>{COUNT} <gray>wysłanych, "
+                    + "<red>brak przypisanych wiadomości",
             "<dark_gray>• <gray>Wiadomości",
             "<dark_gray>  • <yellow>{MESSAGE} <dark_gray>(<gold>{CHANNEL}<dark_gray>) - "
                     + "<green>{COUNT} <gray>wysłanych, ostatnio <green>{AGO} <gray>temu",
@@ -255,7 +260,10 @@ final class ShippedLanguages {
             "<dark_gray>  • <gold>{CHANNEL} <dark_gray>- <green>{COUNT} <gray>gesendet, zuletzt vor "
                     + "<green>{AGO}<gray>, nächste in <green>{DELAY}",
             "<dark_gray>  • <gold>{CHANNEL} <dark_gray>- <gray>noch nichts gesendet, nächste in <green>{DELAY}",
-            "<dark_gray>  • <gold>{CHANNEL} <dark_gray>- <green>{COUNT} <gray>gesendet, zählt nicht herunter",
+            "<dark_gray>  • <gold>{CHANNEL} <dark_gray>- <green>{COUNT} <gray>gesendet, "
+                    + "<red>in config.yml deaktiviert",
+            "<dark_gray>  • <gold>{CHANNEL} <dark_gray>- <green>{COUNT} <gray>gesendet, "
+                    + "<red>keine Nachrichten zugewiesen",
             "<dark_gray>• <gray>Nachrichten",
             "<dark_gray>  • <yellow>{MESSAGE} <dark_gray>(<gold>{CHANNEL}<dark_gray>) - "
                     + "<green>{COUNT} <gray>gesendet, zuletzt vor <green>{AGO}",

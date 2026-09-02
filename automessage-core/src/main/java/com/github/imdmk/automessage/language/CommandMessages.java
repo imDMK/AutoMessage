@@ -107,8 +107,14 @@ public class CommandMessages extends OkaeriConfig {
             "<dark_gray>  • <gold>{CHANNEL} <dark_gray>- <gray>nothing sent yet, next in <green>{DELAY}"
     );
 
-    public Notice statsChannelIdle = Notice.chat(
-            "<dark_gray>  • <gold>{CHANNEL} <dark_gray>- <green>{COUNT} <gray>sent, not counting down"
+    public Notice statsChannelDisabled = Notice.chat(
+            "<dark_gray>  • <gold>{CHANNEL} <dark_gray>- <green>{COUNT} <gray>sent, "
+                    + "<red>disabled in config.yml"
+    );
+
+    public Notice statsChannelEmpty = Notice.chat(
+            "<dark_gray>  • <gold>{CHANNEL} <dark_gray>- <green>{COUNT} <gray>sent, "
+                    + "<red>no messages assigned"
     );
 
     public Notice statsMessagesHeader = Notice.chat("<dark_gray>• <gray>Messages");
