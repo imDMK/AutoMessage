@@ -25,17 +25,51 @@
   <sub><strong>6</strong> runtimes &nbsp;·&nbsp; <strong>8</strong> notice surfaces &nbsp;·&nbsp; <strong>8</strong> audience rules &nbsp;·&nbsp; <strong>3</strong> event triggers &nbsp;·&nbsp; <strong>3</strong> languages shipped &nbsp;·&nbsp; <strong>one</strong> render per language &nbsp;·&nbsp; <strong>no database</strong></sub>
 </p>
 
-<p align="center">
-  <a href="#get-automessage"><strong>Get AutoMessage</strong></a>
-  ·
-  <a href="#quick-start"><strong>Quick start</strong></a>
-  ·
-  <a href="#configuration-model"><strong>Configuration</strong></a>
-  ·
-  <a href="#platform-support"><strong>Platforms</strong></a>
-  ·
-  <a href="#reference"><strong>Reference</strong></a>
-</p>
+<table align="center">
+<tr>
+<td valign="top" width="34%">
+
+**Why AutoMessage**
+
+- [Broadcasts should earn attention](#broadcasts)
+- [More than a rotating list](#rotating-list)
+- [Reach exactly who should hear it](#audience-rules)
+- [Fire on an event, not a clock](#event-triggers)
+- [Costs your server almost nothing](#performance)
+- [One engine, six runtimes](#runtimes)
+
+</td>
+<td valign="top" width="33%">
+
+**Install and configure**
+
+- [**Get AutoMessage**](#get-automessage)
+- [Quick start](#quick-start)
+- [Build your first announcement](#first-announcement)
+- [Configuration model](#configuration-model)
+- [Platform support](#platform-support)
+- [Building from source](#building-from-source)
+- [Support the project](#support)
+
+</td>
+<td valign="top" width="33%">
+
+[**Reference**](#reference)
+
+- [Channels and selectors](#ref-channels)
+- [Audience rules](#ref-audience)
+- [Event triggers](#ref-triggers)
+- [Languages and fallback](#ref-languages)
+- [MiniMessage and placeholders](#ref-minimessage)
+- [Time format](#ref-time)
+- [Discord webhook mirror](#ref-discord)
+- [Commands and permissions](#commands)
+
+</td>
+</tr>
+</table>
+
+<a id="broadcasts"></a>
 
 ## 📣 Broadcasts should earn attention
 
@@ -86,6 +120,8 @@ And this is what the server does with them:
 That is the whole feature set in miniature: an event instead of a clock, an audience instead of
 everyone, and text that lives beside every other translation.
 
+<a id="rotating-list"></a>
+
 ## ⚖️ More than a rotating list
 
 The tagline is not marketing. A rotator answers one question - *what do I say next?* - and sends
@@ -108,6 +144,8 @@ the answer to everyone, in one language, on one clock.
 | **↗ Beyond the server**<br><br>Mirror chat content to a Discord webhook, with player-only placeholders stripped and automatic mentions disabled. | **♻ Reload, do not restart**<br><br>`/automessage reload` applies schedules, messages and languages in place - including a translation file added while the server was running. | **🪶 Lean dispatch path**<br><br>No database. An empty server short-circuits, placeholders are scanned once per message rather than once per announcement, and everyone reading the same text in the same language is served from a single render. |
 
 
+<a id="audience-rules"></a>
+
 ## 🎯 Reach exactly who should hear it
 
 Rules compose. Every top-level rule must pass, and `ANY_OF`, `NONE_OF` and `NOT` nest inside them
@@ -119,6 +157,8 @@ when the audience needs more than an AND.
 
 The same rules apply to a message sent by an event, so a join greeting restricted to a permission
 never reaches somebody who lacks it just because they walked through the door.
+
+<a id="event-triggers"></a>
 
 ## ⚡ Fire on an event, not a clock
 
@@ -132,7 +172,9 @@ A message with a trigger leaves its channel rotation entirely and waits for some
 after the server drops back below the threshold, so a population hovering on the boundary does not
 announce the same milestone every time somebody logs in.
 
-## 🚀 Costs your server almost nothing
+<a id="performance"></a>
+
+## 🪶 Costs your server almost nothing
 
 Formatting is the expensive part of an announcement. Colors, gradients, hover text and placeholders
 all have to be parsed before a single character reaches anybody - and the obvious way to do that is
@@ -170,6 +212,8 @@ Three more places the dispatch path refuses to do needless work:
   a reload - rather than re-derived every time the channel fires.
 - **An empty server short-circuits.** Nobody online means no selection, no formatting and no work.
 - **Nothing touches disk while announcing.** No database, no player records, no I/O on the hot path.
+
+<a id="runtimes"></a>
 
 ## 🌐 One engine. Six runtimes
 
@@ -275,6 +319,8 @@ flowchart LR
 > Start with the generated files. They are not empty templates: every available field is explained
 > next to a working example, and the contents adapt to the platform that created them.
 
+<a id="first-announcement"></a>
+
 ## 🛠 Build your first announcement
 
 The example below creates an independent event stream, adds one announcement to it, and renders
@@ -343,6 +389,8 @@ showcase announcement can combine every surface above.
 
 ## 📖 Reference
 
+<a id="ref-channels"></a>
+
 <details>
 <summary><strong>Announcement channels and selectors</strong></summary>
 
@@ -374,6 +422,8 @@ channels:
 `0` parks a message only in a `WEIGHTED` channel; other selectors do not consult weights.
 
 </details>
+
+<a id="ref-audience"></a>
 
 <details>
 <summary><strong>Audience rules</strong></summary>
@@ -413,6 +463,8 @@ where the runtime can supply the required data.
 
 </details>
 
+<a id="ref-triggers"></a>
+
 <details>
 <summary><strong>Event triggers</strong></summary>
 
@@ -446,6 +498,8 @@ signal.
 
 </details>
 
+<a id="ref-languages"></a>
+
 <details>
 <summary><strong>Languages and fallback behavior</strong></summary>
 
@@ -462,6 +516,8 @@ A missing announcement falls back individually, so a new translation does not ha
 before it is useful.
 
 </details>
+
+<a id="ref-minimessage"></a>
 
 <details>
 <summary><strong>MiniMessage, placeholders and notification parts</strong></summary>
@@ -497,6 +553,8 @@ generated notification to the language-file structure above.
 
 </details>
 
+<a id="ref-time"></a>
+
 <details>
 <summary><strong>Time format</strong></summary>
 
@@ -514,6 +572,8 @@ Every duration accepts an explicit unit, and units can be combined:
 are normalized, and tick-based runtimes ultimately execute on tick boundaries.
 
 </details>
+
+<a id="ref-discord"></a>
 
 <details>
 <summary><strong>Discord webhook mirror</strong></summary>
@@ -535,6 +595,8 @@ The webhook is opt-in and makes no outbound request while disabled or missing a 
 AutoMessage after changing the webhook's enabled state or URL so the connection is rebuilt.
 
 </details>
+
+<a id="commands"></a>
 
 ### Commands and permissions
 
@@ -593,6 +655,8 @@ artifacts into `build/dist`:
 
 If any verification fails, the distribution is not produced. A normal `./gradlew build` performs
 the same project checks but leaves artifacts inside their individual modules.
+
+<a id="support"></a>
 
 ## 💛 Support the project
 
