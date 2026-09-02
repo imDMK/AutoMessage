@@ -29,41 +29,41 @@
 <tr>
 <td valign="top" width="34%">
 
-**Why AutoMessage**
+**🧭 Why AutoMessage**
 
-- [Broadcasts should earn attention](#broadcasts)
-- [More than a rotating list](#rotating-list)
-- [Reach exactly who should hear it](#audience-rules)
-- [Fire on an event, not a clock](#event-triggers)
-- [Costs your server almost nothing](#performance)
-- [One engine, six runtimes](#runtimes)
-
-</td>
-<td valign="top" width="33%">
-
-**Install and configure**
-
-- [**Get AutoMessage**](#get-automessage)
-- [Quick start](#quick-start)
-- [Build your first announcement](#first-announcement)
-- [Configuration model](#configuration-model)
-- [Platform support](#platform-support)
-- [Building from source](#building-from-source)
-- [Support the project](#support)
+- [📣 Broadcasts should earn attention](#broadcasts)
+- [⚖️ More than a rotating list](#rotating-list)
+- [🎯 Reach exactly who should hear it](#audience-rules)
+- [⚡ Fire on an event, not a clock](#event-triggers)
+- [🪶 Costs your server almost nothing](#performance)
+- [🌐 One engine, six runtimes](#runtimes)
 
 </td>
 <td valign="top" width="33%">
 
-[**Reference**](#reference)
+**⚙️ Install and configure**
 
-- [Channels and selectors](#ref-channels)
-- [Audience rules](#ref-audience)
-- [Event triggers](#ref-triggers)
-- [Languages and fallback](#ref-languages)
-- [MiniMessage and placeholders](#ref-minimessage)
-- [Time format](#ref-time)
-- [Discord webhook mirror](#ref-discord)
-- [Commands and permissions](#commands)
+- [📥 **Get AutoMessage**](#get-automessage)
+- [🚀 Quick start](#quick-start)
+- [🛠 Build your first announcement](#first-announcement)
+- [🗂 Configuration model](#configuration-model)
+- [📋 Platform support](#platform-support)
+- [🔨 Building from source](#building-from-source)
+- [💛 Support the project](#support)
+
+</td>
+<td valign="top" width="33%">
+
+[**📖 Reference**](#reference)
+
+- [📡 Channels and selectors](#ref-channels)
+- [🎯 Audience rules](#ref-audience)
+- [⚡ Event triggers](#ref-triggers)
+- [🌍 Languages and fallback](#ref-languages)
+- [🎨 MiniMessage and placeholders](#ref-minimessage)
+- [⏱ Time format](#ref-time)
+- [💬 Discord webhook mirror](#ref-discord)
+- [⌨️ Commands and permissions](#commands)
 
 </td>
 </tr>
