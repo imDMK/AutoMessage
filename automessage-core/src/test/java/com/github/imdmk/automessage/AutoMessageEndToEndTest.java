@@ -257,25 +257,31 @@ class AutoMessageEndToEndTest {
     }
 
     @Test
-    @DisplayName("should shut down cleanly even when the configuration cannot be written")
-    void shouldShutDownWithAnUnwritableConfiguration() {
+    @DisplayName("should leave files edited while running as they are when the server shuts down")
+    void shouldNotOverwriteEditedFilesOnShutdown() throws IOException {
         start(TestPlatform.fullServer());
 
-        // A read-only file, not a read-only folder: the folder permission does not stop a write
-        // to a file that already exists, so a test built on it passes without ever failing.
-        final File config = new File(dataFolder.toFile(), "config.yml");
-        assertThat(config.setReadOnly()).isTrue();
+        // What a deploy or a git pull does to a running server: new files, and no reload.
+        final String editedLanguage = """
+                announcements:
+                  only-one:
+                    - "<red><click:suggest_command:'/warps'><hover:show_text:'Click'>/warps</hover></click>"
+                """;
+        final String editedMessages = """
+                messages:
+                  - name: only-one
+                """;
 
-        try {
-            assertThatCode(() -> automessage.shutdown()).doesNotThrowAnyException();
+        final Path language = dataFolder.resolve("lang/en.yml");
+        final Path messages = dataFolder.resolve("scheduledMessages.yml");
+        Files.writeString(language, editedLanguage);
+        Files.writeString(messages, editedMessages);
 
-            // The point of the fix: the steps after the failing save still ran, so nothing is
-            // left holding threads under a class loader nobody can collect.
-            assertThat(platform.scheduler().isShutdown()).isTrue();
-        } finally {
-            assertThat(config.setWritable(true)).isTrue();
-            this.automessage = null;
-        }
+        automessage.shutdown();
+        this.automessage = null;
+
+        assertThat(language).hasContent(editedLanguage);
+        assertThat(messages).hasContent(editedMessages);
     }
 
     @Test

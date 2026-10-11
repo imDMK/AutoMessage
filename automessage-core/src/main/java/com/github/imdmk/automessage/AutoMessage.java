@@ -150,7 +150,6 @@ public final class AutoMessage {
     public void shutdown() {
         close("stop the dispatcher", dispatcherService::stop);
         close("save who turned announcements off", optOut::save);
-        close("save the configuration", configManager::saveAll);
         close("release the configuration", configManager::clearAll);
         close("stop the scheduler", platform.scheduler()::shutdown);
         close("close the Discord webhook", dispatchObserver::shutdown);
