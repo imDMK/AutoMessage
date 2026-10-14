@@ -7,7 +7,7 @@ repositories {
 }
 
 dependencies {
-    implementation("org.ow2.asm:asm:9.10.1")
+    implementation("org.ow2.asm:asm:9.11")
 
     // Used by the automessage-platform convention, which every platform module applies.
     implementation("com.gradleup.shadow:shadow-gradle-plugin:9.6.1")
