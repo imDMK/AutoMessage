@@ -16,7 +16,7 @@ pluginManagement {
     plugins {
         id("xyz.jpenilla.run-paper") version "3.1.0"
         id("xyz.jpenilla.run-velocity") version "3.1.0"
-        id("org.spongepowered.gradle.plugin") version "2.3.0"
+        id("org.spongepowered.gradle.plugin") version "2.5.1"
         id("fabric-loom") version "1.17.20"
     }
 }
